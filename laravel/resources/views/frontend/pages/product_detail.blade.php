@@ -129,7 +129,7 @@
 																</button>
 															</div>
 															<input type="hidden" name="slug" value="{{$product_detail->slug}}">
-															<input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1" id="quantity">
+															<input type="text" name="quant[1]" class="input-number"  data-min="100" data-max="10000" value="100" id="quantity">
 															<div class="button plus">
 																<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
 																	<i class="ti-plus"></i>
@@ -563,5 +563,40 @@
             })
         });
     </script> --}}
+<script>
+$(document).ready(function(){
+    $('.btn-number').click(function(e){
+        e.preventDefault();
+        let fieldName = $(this).data('field');
+        let input = $("input[name='" + fieldName + "']");
+        let currentVal = parseInt(input.val()) || parseInt(input.data('min'));
+        let min = parseInt(input.data('min'));
+        let max = parseInt(input.data('max'));
 
+        if($(this).data('type') === 'plus' && currentVal < max){
+            currentVal += 100;
+        } else if($(this).data('type') === 'minus' && currentVal > min){
+            currentVal -= 100;
+        }
+
+        currentVal = Math.round(currentVal / 100) * 100;
+
+        input.val(currentVal);
+    });
+
+    $('.input-number').on('input', function(){
+        let min = parseInt($(this).data('min'));
+        let max = parseInt($(this).data('max'));
+        let val = parseInt($(this).val()) || min;
+
+        if(val < min) val = min;
+        if(val > max) val = max;
+
+        val = Math.round(val / 100) * 100;
+
+        $(this).val(val);
+    });
+});
+
+</script>
 @endpush
