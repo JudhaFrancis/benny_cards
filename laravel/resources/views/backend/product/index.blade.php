@@ -144,14 +144,16 @@
       <span class="badge badge-warning">{{$product->status}}</span>
       @endif
         </p>
-        <p><strong>Photo:</strong></p>
-        @if($product->photo)
-      <img src="{{asset($product->photo)}}" class="img-fluid" style="max-width:150px"
-      alt="{{$product->photo}}">
-      @else
-      <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid"
-      style="max-width:150px" alt="avatar.png">
-      @endif
+       <p><strong>All Photos:</strong></p>
+@if($product->photo)
+    @php $photos = explode(',', $product->photo); @endphp
+    @foreach($photos as $img)
+        <img src="{{ asset($img) }}" class="img-fluid mr-2 mb-2" style="max-width:100px" alt="product image">
+    @endforeach
+@else
+    <img src="{{ asset('backend/img/thumbnail-default.jpg') }}" class="img-fluid" style="max-width:100px" alt="avatar.png">
+@endif
+
         </div>
         </div>
         </div>

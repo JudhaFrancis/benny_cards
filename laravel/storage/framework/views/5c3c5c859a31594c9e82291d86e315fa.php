@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Add Product</h5>
     <div class="card-body">
-      <form method="post" action="<?php echo e(route('product.store')); ?>">
+<form method="post" action="<?php echo e(route('product.store')); ?>" enctype="multipart/form-data">
         <?php echo e(csrf_field()); ?>
 
         <div class="form-group">
@@ -176,6 +176,21 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         </div>
+
+                <div class="form-group">
+    <label for="product_images">Product Images</label>
+    <div class="input-group">
+        <span class="input-group-btn">
+            <a id="lfm_multi" data-input="product_images" data-preview="holder_images" class="btn btn-primary">
+                <i class="fa fa-picture-o"></i> Choose
+            </a>
+        </span>
+        <input id="product_images" class="form-control" type="text" name="images">
+    </div>
+    <div id="holder_images" style="margin-top:15px;max-height:100px;"></div>
+    <small class="text-muted">You can select multiple images</small>
+</div>
+
         
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
@@ -215,6 +230,26 @@ unset($__errorArgs, $__bag); ?>
 
 <script>
     $('#lfm').filemanager('image');
+
+        $('#lfm_multi').filemanager('image', { multiple: true });
+
+window.SetUrl = function (items) {
+    var filePaths = items.map(function (item) { return item.url; });
+
+    // Existing value
+    var existing = $input.val();
+    var allFiles = [];
+    if (existing) {
+        allFiles = existing.split(',').concat(filePaths);
+    } else {
+        allFiles = filePaths;
+    }
+
+    // remove duplicates
+    allFiles = [...new Set(allFiles)];
+
+    $input.val(allFiles.join(','));
+};
 
     $(document).ready(function() {
       $('#summary').summernote({

@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Edit Product</h5>
     <div class="card-body">
-      <form method="post" action="<?php echo e(route('product.update',$product->id)); ?>">
+<form method="post" action="<?php echo e(route('product.update',$product->id)); ?>" enctype="multipart/form-data">
         <?php echo csrf_field(); ?> 
         <?php echo method_field('PATCH'); ?>
         <div class="form-group">
@@ -184,7 +184,27 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         </div>
-        
+
+       <div class="form-group">
+    <label for="product_images">Product Images</label>
+    <div class="input-group">
+        <span class="input-group-btn">
+            <a id="lfm2" data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white">
+                <i class="fas fa-image"></i> Choose
+            </a>
+        </span>
+        <?php
+    $existingImages = $product->images()->pluck('image_path')->unique();
+    $existingImagesStr = $existingImages->implode(',');
+?>
+<input id="thumbnail2" class="form-control" type="text" name="images" value="<?php echo e($existingImagesStr); ?>">
+    </div>
+<div id="holder2" style="margin-top:15px;max-height:100px;">
+    <?php $__currentLoopData = $existingImages; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <img src="<?php echo e($img); ?>" style="height:80px;margin-right:5px;">
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+</div></div>
+
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
           <select name="status" class="form-control">
@@ -223,6 +243,30 @@ unset($__errorArgs, $__bag); ?>
 
 <script>
     $('#lfm').filemanager('image');
+
+    $('#lfm2').filemanager('image', {prefix: '/laravel-filemanager', multiple: true});
+
+    var $input = $('#thumbnail2'); // id of input
+$('#lfm2').filemanager('image', { multiple: true });
+
+window.SetUrl = function (items) {
+    var filePaths = items.map(function (item) { return item.url; });
+
+    // Existing value
+    var existing = $input.val();
+    var allFiles = [];
+    if (existing) {
+        allFiles = existing.split(',').concat(filePaths);
+    } else {
+        allFiles = filePaths;
+    }
+
+    // Remove duplicates
+    allFiles = [...new Set(allFiles)];
+
+    $input.val(allFiles.join(','));
+};
+
 
     $(document).ready(function() {
     $('#summary').summernote({

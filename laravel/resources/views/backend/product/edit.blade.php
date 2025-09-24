@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Edit Product</h5>
     <div class="card-body">
-      <form method="post" action="{{route('product.update',$product->id)}}">
+<form method="post" action="{{route('product.update',$product->id)}}" enctype="multipart/form-data">
         @csrf 
         @method('PATCH')
         <div class="form-group">
@@ -135,7 +135,29 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        
+
+       <div class="form-group">
+    <label for="product_images">Product Images</label>
+    <div class="input-group">
+        <span class="input-group-btn">
+            <a id="lfm2" data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white">
+                <i class="fas fa-image"></i> Choose
+            </a>
+        </span>
+        @php
+    $existingImages = 
+    
+    $product->images()->pluck('image_path')->unique();
+    $existingImagesStr = $existingImages->implode(',');
+@endphp
+<input id="thumbnail2" class="form-control" type="text" name="images" value="{{ $existingImagesStr }}">
+    </div>
+<div id="holder2" style="margin-top:15px;max-height:100px;">
+    @foreach($existingImages as $img)
+        <img src="{{ $img }}" style="height:80px;margin-right:5px;">
+    @endforeach
+</div></div>
+
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
           <select name="status" class="form-control">
@@ -167,6 +189,30 @@
 
 <script>
     $('#lfm').filemanager('image');
+
+    $('#lfm2').filemanager('image', {prefix: '/laravel-filemanager', multiple: true});
+
+    var $input = $('#thumbnail2'); // id of input
+$('#lfm2').filemanager('image', { multiple: true });
+
+window.SetUrl = function (items) {
+    var filePaths = items.map(function (item) { return item.url; });
+
+    // Existing value
+    var existing = $input.val();
+    var allFiles = [];
+    if (existing) {
+        allFiles = existing.split(',').concat(filePaths);
+    } else {
+        allFiles = filePaths;
+    }
+
+    // Remove duplicates
+    allFiles = [...new Set(allFiles)];
+
+    $input.val(allFiles.join(','));
+};
+
 
     $(document).ready(function() {
     $('#summary').summernote({

@@ -43,22 +43,25 @@
 									<div class="col-lg-6 col-12">
 										<!-- Product Slider -->
 										<div class="product-gallery">
-											<!-- Images slider -->
-											<div class="flexslider-thumbnails">
-												<ul class="slides">
-													@php 
-														$photo=explode(',',$product_detail->photo);
-													// dd($photo);
-													@endphp
-													@foreach($photo as $data)
-														<li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-															<img src="{{$data}}" alt="{{$data}}">
-														</li>
-													@endforeach
-												</ul>
-											</div>
-											<!-- End Images slider -->
-										</div>
+    <!-- Images slider -->
+    <div class="flexslider-thumbnails">
+        <ul class="slides">
+			
+            <li data-thumb="{{ $product_detail->photo }}" rel="adjustX:10, adjustY:">
+                <img src="{{ $product_detail->photo }}" alt="Main Product Image">
+            </li>
+
+            @if($product_detail->images && count($product_detail->images) > 0)
+                @foreach($product_detail->images as $img)
+                    <li data-thumb="{{ $img->image_path }}" rel="adjustX:10, adjustY:">
+                        <img src="{{ $img->image_path }}" alt="Product Thumbnail">
+                    </li>
+                @endforeach
+            @endif
+        </ul>
+    </div>
+</div>
+
 										<!-- End Product slider -->
 									</div>
 									<div class="col-lg-6 col-12">
