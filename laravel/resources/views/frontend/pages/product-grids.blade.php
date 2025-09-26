@@ -205,11 +205,11 @@
 
 
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-md-12 justify-content-center d-flex">
                                 {{$products->appends($_GET)->links()}}
                             </div>
-                          </div>
+                          </div> -->
 
                     </div>
                 </div>

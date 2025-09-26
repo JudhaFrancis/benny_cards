@@ -229,27 +229,34 @@ unset($__errorArgs, $__bag); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <script>
+
+    var route_prefix = "/laravel-filemanager";
+
     $('#lfm').filemanager('image');
 
-        $('#lfm_multi').filemanager('image', { multiple: true });
+  $('#lfm_multi').filemanager('image', {prefix: route_prefix, multiple: true});
 
-window.SetUrl = function (items) {
-    var filePaths = items.map(function (item) { return item.url; });
+$('#lfm_multi').on('click', function(){
+      window.SetUrl = function (items) {
+          var filePaths = items.map(function (item) {
+              return item.url;
+          }).join(',');
 
-    // Existing value
-    var existing = $input.val();
-    var allFiles = [];
-    if (existing) {
-        allFiles = existing.split(',').concat(filePaths);
-    } else {
-        allFiles = filePaths;
-    }
+          // Append instead of replace
+          var existing = $('#product_images').val();
+          if(existing){
+              $('#product_images').val(existing + ',' + filePaths);
+          }else{
+              $('#product_images').val(filePaths);
+          }
 
-    // remove duplicates
-    allFiles = [...new Set(allFiles)];
-
-    $input.val(allFiles.join(','));
-};
+          // Preview
+          $('#holder_images').html('');
+          items.forEach(function (item) {
+              $('#holder_images').append('<img src="'+item.url+'" style="height:80px; margin:5px;">');
+          });
+      };
+  });
 
     $(document).ready(function() {
       $('#summary').summernote({

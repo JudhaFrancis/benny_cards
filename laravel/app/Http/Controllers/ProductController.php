@@ -71,14 +71,14 @@ class ProductController extends Controller
 
         $product = Product::create($validatedData);
 
-        if($request->images){
-    $images = explode(',', $request->images); // comma separated paths from LFM
-    foreach($images as $img){
-        $product->images()->create([
-            'image_path' => $img
-        ]);
-    }
-}
+        if ($request->images) {
+            $images = explode(',', $request->images);
+            foreach ($images as $img) {
+                $product->images()->create([
+                    'image_path' => $img
+                ]);
+            }
+        }
 
 
         $message = $product
@@ -155,20 +155,16 @@ class ProductController extends Controller
         }
 
         $status = $product->update($validatedData);
-if($request->images){
-    // Delete old images
-    $product->images()->delete();
+        if ($request->images) {
+            $product->images()->delete();
 
-    // Save new images
-    $images = explode(',', $request->images);
-    foreach($images as $img){
-        $product->images()->create([
-            'image_path' => $img
-        ]);
-    }
-}
-
-
+            $images = explode(',', $request->images);
+            foreach ($images as $img) {
+                $product->images()->create([
+                    'image_path' => $img
+                ]);
+            }
+        }
 
         $message = $status
             ? 'Product Successfully updated'

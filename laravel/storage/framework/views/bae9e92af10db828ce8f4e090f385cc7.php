@@ -194,7 +194,9 @@ unset($__errorArgs, $__bag); ?>
             </a>
         </span>
         <?php
-    $existingImages = $product->images()->pluck('image_path')->unique();
+    $existingImages = 
+    
+    $product->images()->pluck('image_path')->unique();
     $existingImagesStr = $existingImages->implode(',');
 ?>
 <input id="thumbnail2" class="form-control" type="text" name="images" value="<?php echo e($existingImagesStr); ?>">
