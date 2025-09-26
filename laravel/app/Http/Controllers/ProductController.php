@@ -71,6 +71,16 @@ class ProductController extends Controller
 
         $product = Product::create($validatedData);
 
+        if ($request->images) {
+            $images = explode(',', $request->images);
+            foreach ($images as $img) {
+                $product->images()->create([
+                    'image_path' => $img
+                ]);
+            }
+        }
+
+
         $message = $product
             ? 'Product Successfully added'
             : 'Please try again!!';
@@ -145,6 +155,16 @@ class ProductController extends Controller
         }
 
         $status = $product->update($validatedData);
+        if ($request->images) {
+            $product->images()->delete();
+
+            $images = explode(',', $request->images);
+            foreach ($images as $img) {
+                $product->images()->create([
+                    'image_path' => $img
+                ]);
+            }
+        }
 
         $message = $status
             ? 'Product Successfully updated'

@@ -43,22 +43,25 @@
 									<div class="col-lg-6 col-12">
 										<!-- Product Slider -->
 										<div class="product-gallery">
-											<!-- Images slider -->
-											<div class="flexslider-thumbnails">
-												<ul class="slides">
-													@php 
-														$photo=explode(',',$product_detail->photo);
-													// dd($photo);
-													@endphp
-													@foreach($photo as $data)
-														<li data-thumb="{{$data}}" rel="adjustX:10, adjustY:">
-															<img src="{{$data}}" alt="{{$data}}">
-														</li>
-													@endforeach
-												</ul>
-											</div>
-											<!-- End Images slider -->
-										</div>
+    <!-- Images slider -->
+    <div class="flexslider-thumbnails">
+        <ul class="slides">
+			
+            <li data-thumb="{{ $product_detail->photo }}" rel="adjustX:10, adjustY:">
+                <img src="{{ $product_detail->photo }}" alt="Main Product Image">
+            </li>
+
+            @if($product_detail->images && count($product_detail->images) > 0)
+                @foreach($product_detail->images as $img)
+                    <li data-thumb="{{ $img->image_path }}" rel="adjustX:10, adjustY:">
+                        <img src="{{ $img->image_path }}" alt="Product Thumbnail">
+                    </li>
+                @endforeach
+            @endif
+        </ul>
+    </div>
+</div>
+
 										<!-- End Product slider -->
 									</div>
 									<div class="col-lg-6 col-12">
@@ -129,7 +132,7 @@
 																</button>
 															</div>
 															<input type="hidden" name="slug" value="{{$product_detail->slug}}">
-															<input type="text" name="quant[1]" class="input-number"  data-min="1" data-max="1000" value="1" id="quantity">
+															<input type="text" name="quant[1]" class="input-number"  data-min="100" data-max="10000" value="100" id="quantity">
 															<div class="button plus">
 																<button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
 																	<i class="ti-plus"></i>
@@ -563,5 +566,40 @@
             })
         });
     </script> --}}
+<script>
+$(document).ready(function(){
+    $('.btn-number').click(function(e){
+        e.preventDefault();
+        let fieldName = $(this).data('field');
+        let input = $("input[name='" + fieldName + "']");
+        let currentVal = parseInt(input.val()) || parseInt(input.data('min'));
+        let min = parseInt(input.data('min'));
+        let max = parseInt(input.data('max'));
 
+        if($(this).data('type') === 'plus' && currentVal < max){
+            currentVal += 100;
+        } else if($(this).data('type') === 'minus' && currentVal > min){
+            currentVal -= 100;
+        }
+
+        currentVal = Math.round(currentVal / 100) * 100;
+
+        input.val(currentVal);
+    });
+
+    $('.input-number').on('input', function(){
+        let min = parseInt($(this).data('min'));
+        let max = parseInt($(this).data('max'));
+        let val = parseInt($(this).val()) || min;
+
+        if(val < min) val = min;
+        if(val > max) val = max;
+
+        val = Math.round(val / 100) * 100;
+
+        $(this).val(val);
+    });
+});
+
+</script>
 @endpush

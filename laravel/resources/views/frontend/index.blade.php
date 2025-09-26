@@ -113,8 +113,8 @@
                                                     <span class="new">New</span
                                                 @elseif($product->condition=='hot')
                                                     <span class="hot">Hot</span>
-                                                @else
-                                                    <span class="price-dec">{{$product->discount}}% Off</span>
+                                                @elseif($product->discount > 0)
+                                                <span class="price-dec">{{$product->discount}}% Off</span>
                                                 @endif
                                             </a>
                                             <div class="button-head">
@@ -562,45 +562,35 @@
     transition: transform .5s ease;  
 }
 
-. .card-img-overlay {
-    background: rgba(0,0,0,0.3);
-    position: absolute;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
-    
-}
+
 
 .category-card:hover img {
     transform: scale(1.1);
 }
 
 .category-card .btn {
-    background: #28a745;
+    background: #F7941D;
     border: none;
     font-weight: 600;
     font-size: 9px;
-    padding: 2px 4px;
+    padding: 2px 6px;
     color: white;
     position: absolute;
     bottom: 10px;       
     right: 10px;        
-    border-radius: 4px;
+    border-radius: 24px;
 }
 
 
+.category-card .card-img-overlay {
+    background: rgba(0, 0, 0, 0.1); 
+    
+}
 .category-card .card-img-overlay h5, 
 .category-card .card-img-overlay p {
     color: #fff;              
-    font-weight: 400;  
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);  
+    font-weight: 600;  
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.7);  
 }
 
 .price-card {

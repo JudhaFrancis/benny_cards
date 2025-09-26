@@ -48,6 +48,16 @@ class FrontendController extends Controller
     //     return view('frontend.pages.about-us');
     // }
 
+    public function gifts()
+    {
+        return view('frontend.pages.gifts');
+    }
+
+    public function corporate()
+    {
+        return view('frontend.pages.corporate');
+    }
+
     public function contact()
     {
         return view('frontend.pages.contact');
