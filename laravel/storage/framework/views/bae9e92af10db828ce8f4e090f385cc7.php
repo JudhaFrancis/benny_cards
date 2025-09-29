@@ -248,13 +248,12 @@ unset($__errorArgs, $__bag); ?>
 
     $('#lfm2').filemanager('image', {prefix: '/laravel-filemanager', multiple: true});
 
-    var $input = $('#thumbnail2'); // id of input
+    var $input = $('#thumbnail2');
 $('#lfm2').filemanager('image', { multiple: true });
 
 window.SetUrl = function (items) {
     var filePaths = items.map(function (item) { return item.url; });
 
-    // Existing value
     var existing = $input.val();
     var allFiles = [];
     if (existing) {
@@ -263,7 +262,6 @@ window.SetUrl = function (items) {
         allFiles = filePaths;
     }
 
-    // Remove duplicates
     allFiles = [...new Set(allFiles)];
 
     $input.val(allFiles.join(','));

@@ -1021,7 +1021,7 @@ Version:1.0
 	display: inline-block;
 	padding: 0;
 	margin: 0;
-	top: 20px;
+	/* top: 20px; */
 	float: right;
 	position: relative;
 }
@@ -1657,9 +1657,9 @@ Version:1.0
 	position: relative;
 	text-align: center;
 }
-.most-popular .section-title{
+/* .most-popular .section-title{
 	margin-bottom:40px;
-}
+} */
 .pro-tab-viewmore-wrap .pro-viewmore {
   position: absolute;
   right: 40px;
@@ -2917,7 +2917,7 @@ Version:1.0
 .shop-home-list .single-list .content .price {
 	margin-top: 15px;
 	font-weight: 500;
-	background: #f7941d;
+	background:#f7941d;
 	display: inline-block;
 	color: #fff;
 	padding: 2px 18px;

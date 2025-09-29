@@ -324,7 +324,9 @@ unset($__errorArgs, $__bag); ?>
 											?>
                                             <img class="default-img" src="<?php echo e($photo[0]); ?>" alt="<?php echo e($photo[0]); ?>">
                                             <img class="hover-img" src="<?php echo e($photo[0]); ?>" alt="<?php echo e($photo[0]); ?>">
+                                            <?php if($data->discount > 0): ?>
                                             <span class="price-dec"><?php echo e($data->discount); ?> % Off</span>
+                                            <?php endif; ?>
                                                                     
                                         </a>
                                         <div class="button-head">

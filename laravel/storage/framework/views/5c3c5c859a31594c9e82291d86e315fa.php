@@ -2,25 +2,22 @@
 
 <?php $__env->startSection('main-content'); ?>
 
-<div class="card">
+  <div class="card">
     <h5 class="card-header">Add Product</h5>
     <div class="card-body">
-<<<<<<< HEAD
-      <form method="post" action="<?php echo e(route('product.store')); ?>">
-=======
-<form method="post" action="<?php echo e(route('product.store')); ?>" enctype="multipart/form-data">
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
+      <form method="post" action="<?php echo e(route('product.store')); ?>" enctype="multipart/form-data">
         <?php echo e(csrf_field()); ?>
 
         <div class="form-group">
           <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>
-          <input id="inputTitle" type="text" name="title" placeholder="Enter title"  value="<?php echo e(old('title')); ?>" class="form-control">
+          <input id="inputTitle" type="text" name="title" placeholder="Enter title" value="<?php echo e(old('title')); ?>"
+            class="form-control">
           <?php $__errorArgs = ['title'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -35,7 +32,7 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -50,7 +47,7 @@ $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -60,37 +57,38 @@ unset($__errorArgs, $__bag); ?>
 
         <div class="form-group">
           <label for="is_featured">Is Featured</label><br>
-          <input type="checkbox" name='is_featured' id='is_featured' value='1' checked> Yes                        
+          <input type="checkbox" name='is_featured' id='is_featured' value='1' checked> Yes
         </div>
-              
+        
 
         <div class="form-group">
           <label for="cat_id">Category <span class="text-danger">*</span></label>
           <select name="cat_id" id="cat_id" class="form-control">
-              <option value="">--Select any category--</option>
-              <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$cat_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                  <option value='<?php echo e($cat_data->id); ?>'><?php echo e($cat_data->title); ?></option>
-              <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <option value="">--Select any category--</option>
+            <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key => $cat_data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <option value='<?php echo e($cat_data->id); ?>'><?php echo e($cat_data->title); ?></option>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
 
         <div class="form-group d-none" id="child_cat_div">
           <label for="child_cat_id">Sub Category</label>
           <select name="child_cat_id" id="child_cat_id" class="form-control">
-              <option value="">--Select any category--</option>
-              
+            <option value="">--Select any category--</option>
+            
           </select>
         </div>
 
         <div class="form-group">
           <label for="price" class="col-form-label">Price(NRS) <span class="text-danger">*</span></label>
-          <input id="price" type="number" name="price" placeholder="Enter price"  value="<?php echo e(old('price')); ?>" class="form-control">
+          <input id="price" type="number" name="price" placeholder="Enter price" value="<?php echo e(old('price')); ?>"
+            class="form-control">
           <?php $__errorArgs = ['price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -99,13 +97,14 @@ unset($__errorArgs, $__bag); ?>
 
         <div class="form-group">
           <label for="discount" class="col-form-label">Discount(%)</label>
-          <input id="discount" type="number" name="discount" min="0" max="100" placeholder="Enter discount"  value="<?php echo e(old('discount')); ?>" class="form-control">
+          <input id="discount" type="number" name="discount" min="0" max="100" placeholder="Enter discount"
+            value="<?php echo e(old('discount')); ?>" class="form-control">
           <?php $__errorArgs = ['discount'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -113,12 +112,12 @@ unset($__errorArgs, $__bag); ?>
         </div>
         <div class="form-group">
           <label for="size">Size</label>
-          <select name="size[]" class="form-control selectpicker"  multiple data-live-search="true">
-              <option value="">--Select any size--</option>
-              <option value="S">Small (S)</option>
-              <option value="M">Medium (M)</option>
-              <option value="L">Large (L)</option>
-              <option value="XL">Extra Large (XL)</option>
+          <select name="size[]" class="form-control selectpicker" multiple data-live-search="true">
+            <option value="">--Select any size--</option>
+            <option value="S">Small (S)</option>
+            <option value="M">Medium (M)</option>
+            <option value="L">Large (L)</option>
+            <option value="XL">Extra Large (XL)</option>
           </select>
         </div>
 
@@ -127,32 +126,33 @@ unset($__errorArgs, $__bag); ?>
           
 
           <select name="brand_id" class="form-control">
-              <option value="">--Select Brand--</option>
-             <?php $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brand): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <option value="">--Select Brand--</option>
+            <?php $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brand): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
               <option value="<?php echo e($brand->id); ?>"><?php echo e($brand->title); ?></option>
-             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
           </select>
         </div>
 
         <div class="form-group">
           <label for="condition">Condition</label>
           <select name="condition" class="form-control">
-              <option value="">--Select Condition--</option>
-              <option value="default">Default</option>
-              <option value="new">New</option>
-              <option value="hot">Hot</option>
+            <option value="">--Select Condition--</option>
+            <option value="default">Default</option>
+            <option value="new">New</option>
+            <option value="hot">Hot</option>
           </select>
         </div>
 
         <div class="form-group">
           <label for="stock">Quantity <span class="text-danger">*</span></label>
-          <input id="quantity" type="number" name="stock" min="0" placeholder="Enter quantity"  value="<?php echo e(old('stock')); ?>" class="form-control">
+          <input id="quantity" type="number" name="stock" min="0" placeholder="Enter quantity" value="<?php echo e(old('stock')); ?>"
+            class="form-control">
           <?php $__errorArgs = ['stock'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -161,56 +161,53 @@ unset($__errorArgs, $__bag); ?>
         <div class="form-group">
           <label for="inputPhoto" class="col-form-label">Photo <span class="text-danger">*</span></label>
           <div class="input-group">
-              <span class="input-group-btn">
-                  <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
-                  <i class="fa fa-picture-o"></i> Choose
-                  </a>
-              </span>
-          <input id="thumbnail" class="form-control" type="text" name="photo" value="<?php echo e(old('photo')); ?>">
-        </div>
-        <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+            <span class="input-group-btn">
+              <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary">
+                <i class="fa fa-picture-o"></i> Choose
+              </a>
+            </span>
+            <input id="thumbnail" class="form-control" type="text" name="photo" value="<?php echo e(old('photo')); ?>">
+          </div>
+          <div id="holder" style="margin-top:15px;max-height:100px;"></div>
           <?php $__errorArgs = ['photo'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         </div>
-<<<<<<< HEAD
-=======
 
-                <div class="form-group">
-    <label for="product_images">Product Images</label>
-    <div class="input-group">
-        <span class="input-group-btn">
-            <a id="lfm_multi" data-input="product_images" data-preview="holder_images" class="btn btn-primary">
+        <div class="form-group">
+          <label for="product_images">Product Images</label>
+          <div class="input-group">
+            <span class="input-group-btn">
+              <a id="lfm_multi" data-input="product_images" data-preview="holder_images" class="btn btn-primary">
                 <i class="fa fa-picture-o"></i> Choose
-            </a>
-        </span>
-        <input id="product_images" class="form-control" type="text" name="images">
-    </div>
-    <div id="holder_images" style="margin-top:15px;max-height:100px;"></div>
-    <small class="text-muted">You can select multiple images</small>
-</div>
+              </a>
+            </span>
+            <input id="product_images" class="form-control" type="text" name="images">
+          </div>
+          <div id="holder_images" style="margin-top:15px;max-height:100px;"></div>
+          <small class="text-muted">You can select multiple images</small>
+        </div>
 
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
-        
+
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
           <select name="status" class="form-control">
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
           </select>
           <?php $__errorArgs = ['status'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
 $message = $__bag->first($__errorArgs[0]); ?>
-          <span class="text-danger"><?php echo e($message); ?></span>
+            <span class="text-danger"><?php echo e($message); ?></span>
           <?php unset($message);
 if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
@@ -218,118 +215,113 @@ unset($__errorArgs, $__bag); ?>
         </div>
         <div class="form-group mb-3">
           <button type="reset" class="btn btn-warning">Reset</button>
-           <button class="btn btn-success" type="submit">Submit</button>
+          <button class="btn btn-success" type="submit">Submit</button>
         </div>
       </form>
     </div>
-</div>
+  </div>
 
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('styles'); ?>
-<link rel="stylesheet" href="<?php echo e(asset('backend/summernote/summernote.min.css')); ?>">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+  <link rel="stylesheet" href="<?php echo e(asset('backend/summernote/summernote.min.css')); ?>">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 <?php $__env->stopPush(); ?>
 <?php $__env->startPush('scripts'); ?>
-<script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
-<script src="<?php echo e(asset('backend/summernote/summernote.min.js')); ?>"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+  <script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+  <script src="<?php echo e(asset('backend/summernote/summernote.min.js')); ?>"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
-<script>
-<<<<<<< HEAD
-    $('#lfm').filemanager('image');
-
-=======
+  <script>
 
     var route_prefix = "/laravel-filemanager";
 
     $('#lfm').filemanager('image');
 
-  $('#lfm_multi').filemanager('image', {prefix: route_prefix, multiple: true});
+    $('#lfm_multi').filemanager('image', { prefix: route_prefix, multiple: true });
 
-$('#lfm_multi').on('click', function(){
+    $('#lfm_multi').on('click', function () {
       window.SetUrl = function (items) {
-          var filePaths = items.map(function (item) {
-              return item.url;
-          }).join(',');
+        var filePaths = items.map(function (item) {
+          return item.url;
+        }).join(',');
 
-          // Append instead of replace
-          var existing = $('#product_images').val();
-          if(existing){
-              $('#product_images').val(existing + ',' + filePaths);
-          }else{
-              $('#product_images').val(filePaths);
-          }
+        // Append instead of replace
+        var existing = $('#product_images').val();
+        if (existing) {
+          $('#product_images').val(existing + ',' + filePaths);
+        } else {
+          $('#product_images').val(filePaths);
+        }
 
-          // Preview
-          $('#holder_images').html('');
-          items.forEach(function (item) {
-              $('#holder_images').append('<img src="'+item.url+'" style="height:80px; margin:5px;">');
-          });
+        // Preview
+        $('#holder_images').html('');
+        items.forEach(function (item) {
+          $('#holder_images').append('<img src="' + item.url + '" style="height:80px; margin:5px;">');
+        });
       };
-  });
+    });
 
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('#summary').summernote({
         placeholder: "Write short description.....",
-          tabsize: 2,
-          height: 100
+        tabsize: 2,
+        height: 100
       });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       $('#description').summernote({
         placeholder: "Write detail description.....",
-          tabsize: 2,
-          height: 150
+        tabsize: 2,
+        height: 150
       });
     });
     // $('select').selectpicker();
 
-</script>
+  </script>
 
-<script>
-  $('#cat_id').change(function(){
-    var cat_id=$(this).val();
-    // alert(cat_id);
-    if(cat_id !=null){
-      // Ajax call
-      $.ajax({
-        url:"/admin/category/"+cat_id+"/child",
-        data:{
-          _token:"<?php echo e(csrf_token()); ?>",
-          id:cat_id
-        },
-        type:"POST",
-        success:function(response){
-          if(typeof(response) !='object'){
-            response=$.parseJSON(response)
-          }
-          // console.log(response);
-          var html_option="<option value=''>----Select sub category----</option>"
-          if(response.status){
-            var data=response.data;
-            // alert(data);
-            if(response.data){
-              $('#child_cat_div').removeClass('d-none');
-              $.each(data,function(id,title){
-                html_option +="<option value='"+id+"'>"+title+"</option>"
-              });
+  <script>
+    $('#cat_id').change(function () {
+      var cat_id = $(this).val();
+      // alert(cat_id);
+      if (cat_id != null) {
+        // Ajax call
+        $.ajax({
+          url: "/admin/category/" + cat_id + "/child",
+          data: {
+            _token: "<?php echo e(csrf_token()); ?>",
+            id: cat_id
+          },
+          type: "POST",
+          success: function (response) {
+            if (typeof (response) != 'object') {
+              response = $.parseJSON(response)
             }
-            else{
+            // console.log(response);
+            var html_option = "<option value=''>----Select sub category----</option>"
+            if (response.status) {
+              var data = response.data;
+              // alert(data);
+              if (response.data) {
+                $('#child_cat_div').removeClass('d-none');
+                $.each(data, function (id, title) {
+                  html_option += "<option value='" + id + "'>" + title + "</option>"
+                });
+              }
+              else {
+              }
             }
+            else {
+              $('#child_cat_div').addClass('d-none');
+            }
+            $('#child_cat_id').html(html_option);
           }
-          else{
-            $('#child_cat_div').addClass('d-none');
-          }
-          $('#child_cat_id').html(html_option);
-        }
-      });
-    }
-    else{
-    }
-  })
-</script>
+        });
+      }
+      else {
+      }
+    })
+  </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/backend/product/create.blade.php ENDPATH**/ ?>

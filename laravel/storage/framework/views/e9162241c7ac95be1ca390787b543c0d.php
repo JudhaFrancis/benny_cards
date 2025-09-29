@@ -114,13 +114,8 @@
                                                     <span class="new">New</span
                                                 <?php elseif($product->condition=='hot'): ?>
                                                     <span class="hot">Hot</span>
-<<<<<<< HEAD
-                                                <?php else: ?>
-                                                    <span class="price-dec"><?php echo e($product->discount); ?>% Off</span>
-=======
                                                 <?php elseif($product->discount > 0): ?>
                                                 <span class="price-dec"><?php echo e($product->discount); ?>% Off</span>
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
                                                 <?php endif; ?>
                                             </a>
                                             <div class="button-head">
@@ -281,8 +276,8 @@
             <div class="col-lg-12 col-md-12 col-12">
                 <div class="row">
                     <div class="col-12">
-                        <div class="shop-section-title">
-                            <h1>Latest Items</h1>
+                        <div class="section-title">
+                            <h2>Latest Items</h2>
                         </div>
                     </div>
                 </div>
@@ -554,59 +549,22 @@
     transition: transform .5s ease;  
 }
 
-<<<<<<< HEAD
-. .card-img-overlay {
-    background: rgba(0,0,0,0.3);
-    position: absolute;
-    top: 0; 
-    left: 0;
-    width: 100%; 
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
-    
-}
-=======
 
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
 
 .category-card:hover img {
     transform: scale(1.1);
 }
 
 .category-card .btn {
-<<<<<<< HEAD
-    background: #28a745;
-    border: none;
-    font-weight: 600;
-    font-size: 9px;
-    padding: 2px 4px;
-=======
     background: #F7941D;
     border: none;
     font-weight: 600;
     font-size: 9px;
     padding: 2px 6px;
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
     color: white;
     position: absolute;
     bottom: 10px;       
     right: 10px;        
-<<<<<<< HEAD
-    border-radius: 4px;
-}
-
-
-.category-card .card-img-overlay h5, 
-.category-card .card-img-overlay p {
-    color: #fff;              
-    font-weight: 400;  
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.6);  
-=======
     border-radius: 24px;
 }
 
@@ -620,7 +578,6 @@
     color: #fff;              
     font-weight: 600;  
     text-shadow: 2px 2px 5px rgba(0,0,0,0.7);  
->>>>>>> 3b8b4b8d6a0fa5ecd40690c4dc355b6229a0f94f
 }
 
 .price-card {
@@ -650,12 +607,14 @@
     color: #fff;
 }
 .price-card .btn {
-    background: #28a745;
-    border: none;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 10px 10px;
-    color: black; 
+    background: #f7941d;        
+    color: #fff;               
+    font-weight: 500;          
+    font-size: 14px;           
+    padding: 6px 20px;          
+    border-radius: 30px;       
+    border: none;              
+    display: inline-block;      
 }
 
     </style>
