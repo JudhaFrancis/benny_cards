@@ -485,7 +485,7 @@
                             </div>
                         </div>
                     </div>
-              </div>
+                </div>
         </div>
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <?php endif; ?>
@@ -547,6 +547,8 @@
     transition: transform .5s ease;  
 }
 
+
+
 .category-card:hover img {
     transform: scale(1.1);
 }
@@ -563,6 +565,7 @@
     right: 10px;        
     border-radius: 24px;
 }
+
 
 .category-card .card-img-overlay {
     background: rgba(0, 0, 0, 0.1); 
@@ -611,9 +614,9 @@
     border: none;              
     display: inline-block;      
 }
+
 </style>
 <?php $__env->stopPush(); ?>
-
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>

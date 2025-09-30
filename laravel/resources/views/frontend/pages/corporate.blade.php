@@ -4,7 +4,7 @@
 
 @section('main-content')
 <div class="container mt-5">
-    <h3>Corporate Page</h3>
+    <h4>Corporate Page</h4>
 </div>
 @endsection
 
