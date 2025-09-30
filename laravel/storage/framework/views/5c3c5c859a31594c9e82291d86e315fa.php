@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Add Product</h5>
     <div class="card-body">
-      <form method="post" action="<?php echo e(route('product.store')); ?>">
+<form method="post" action="<?php echo e(route('product.store')); ?>" enctype="multipart/form-data">
         <?php echo e(csrf_field()); ?>
 
         <div class="form-group">
@@ -176,6 +176,21 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
         </div>
+
+                <div class="form-group">
+    <label for="product_images">Product Images</label>
+    <div class="input-group">
+        <span class="input-group-btn">
+            <a id="lfm_multi" data-input="product_images" data-preview="holder_images" class="btn btn-primary">
+                <i class="fa fa-picture-o"></i> Choose
+            </a>
+        </span>
+        <input id="product_images" class="form-control" type="text" name="images">
+    </div>
+    <div id="holder_images" style="margin-top:15px;max-height:100px;"></div>
+    <small class="text-muted">You can select multiple images</small>
+</div>
+
         
         <div class="form-group">
           <label for="status" class="col-form-label">Status <span class="text-danger">*</span></label>
@@ -214,7 +229,34 @@ unset($__errorArgs, $__bag); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <script>
+
+    var route_prefix = "/laravel-filemanager";
+
     $('#lfm').filemanager('image');
+
+  $('#lfm_multi').filemanager('image', {prefix: route_prefix, multiple: true});
+
+$('#lfm_multi').on('click', function(){
+      window.SetUrl = function (items) {
+          var filePaths = items.map(function (item) {
+              return item.url;
+          }).join(',');
+
+          // Append instead of replace
+          var existing = $('#product_images').val();
+          if(existing){
+              $('#product_images').val(existing + ',' + filePaths);
+          }else{
+              $('#product_images').val(filePaths);
+          }
+
+          // Preview
+          $('#holder_images').html('');
+          items.forEach(function (item) {
+              $('#holder_images').append('<img src="'+item.url+'" style="height:80px; margin:5px;">');
+          });
+      };
+  });
 
     $(document).ready(function() {
       $('#summary').summernote({

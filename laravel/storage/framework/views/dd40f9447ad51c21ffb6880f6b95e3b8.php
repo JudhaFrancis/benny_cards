@@ -43,22 +43,25 @@
 									<div class="col-lg-6 col-12">
 										<!-- Product Slider -->
 										<div class="product-gallery">
-											<!-- Images slider -->
-											<div class="flexslider-thumbnails">
-												<ul class="slides">
-													<?php 
-														$photo=explode(',',$product_detail->photo);
-													// dd($photo);
-													?>
-													<?php $__currentLoopData = $photo; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-														<li data-thumb="<?php echo e($data); ?>" rel="adjustX:10, adjustY:">
-															<img src="<?php echo e($data); ?>" alt="<?php echo e($data); ?>">
-														</li>
-													<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-												</ul>
-											</div>
-											<!-- End Images slider -->
-										</div>
+    <!-- Images slider -->
+    <div class="flexslider-thumbnails">
+        <ul class="slides">
+			
+            <li data-thumb="<?php echo e($product_detail->photo); ?>" rel="adjustX:10, adjustY:">
+                <img src="<?php echo e($product_detail->photo); ?>" alt="Main Product Image">
+            </li>
+
+            <?php if($product_detail->images && count($product_detail->images) > 0): ?>
+                <?php $__currentLoopData = $product_detail->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <li data-thumb="<?php echo e($img->image_path); ?>" rel="adjustX:10, adjustY:">
+                        <img src="<?php echo e($img->image_path); ?>" alt="Product Thumbnail">
+                    </li>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+            <?php endif; ?>
+        </ul>
+    </div>
+</div>
+
 										<!-- End Product slider -->
 									</div>
 									<div class="col-lg-6 col-12">
@@ -542,7 +545,6 @@ $(document).ready(function(){
             currentVal -= 100;
         }
 
-        // enforce multiples of 100
         currentVal = Math.round(currentVal / 100) * 100;
 
         input.val(currentVal);
@@ -556,7 +558,6 @@ $(document).ready(function(){
         if(val < min) val = min;
         if(val > max) val = max;
 
-        // enforce multiples of 100
         val = Math.round(val / 100) * 100;
 
         $(this).val(val);

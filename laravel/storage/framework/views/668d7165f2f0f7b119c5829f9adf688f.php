@@ -1,0 +1,1 @@
+<?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/pages/gifts.blade.php ENDPATH**/ ?>

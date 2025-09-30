@@ -148,14 +148,16 @@
       <span class="badge badge-warning"><?php echo e($product->status); ?></span>
       <?php endif; ?>
         </p>
-        <p><strong>Photo:</strong></p>
-        <?php if($product->photo): ?>
-      <img src="<?php echo e(asset($product->photo)); ?>" class="img-fluid" style="max-width:150px"
-      alt="<?php echo e($product->photo); ?>">
-      <?php else: ?>
-      <img src="<?php echo e(asset('backend/img/thumbnail-default.jpg')); ?>" class="img-fluid"
-      style="max-width:150px" alt="avatar.png">
-      <?php endif; ?>
+       <p><strong>All Photos:</strong></p>
+<?php if($product->photo): ?>
+    <?php $photos = explode(',', $product->photo); ?>
+    <?php $__currentLoopData = $photos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+        <img src="<?php echo e(asset($img)); ?>" class="img-fluid mr-2 mb-2" style="max-width:100px" alt="product image">
+    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+<?php else: ?>
+    <img src="<?php echo e(asset('backend/img/thumbnail-default.jpg')); ?>" class="img-fluid" style="max-width:100px" alt="avatar.png">
+<?php endif; ?>
+
         </div>
         </div>
         </div>
