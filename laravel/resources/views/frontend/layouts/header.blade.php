@@ -44,14 +44,14 @@
     <!-- End Topbar -->
     <div class="middle-inner">
         <div class="container">
-            <div class="row">
+            <div class="row align-items-center">
                 <div class="col-lg-2 col-md-2 col-12">
                     <!-- Logo -->
-                    <div class="logo">
+                    <div class="logo m-0">
                         @php
                             $settings=DB::table('settings')->get();
                         @endphp                    
-                        <a href="{{route('home')}}"><img src="@foreach($settings as $data) {{$data->logo}} @endforeach" alt="logo"></a>
+                        <a href="{{route('home')}}"><img src="@foreach($settings as $data) {{$data->logo}} @endforeach" width='110' alt="logo"></a>
                     </div>
                     <!--/ End Logo -->
                     <!-- Search Form -->
@@ -86,7 +86,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-3 col-12">
+                <div class="col-lg-2 col-md-3 col-12 d-flex mt-2 h-100 justify-content-end">
                     <div class="right-bar">
                         <!-- Search Form -->
                         <div class="sinlge-bar shopping">

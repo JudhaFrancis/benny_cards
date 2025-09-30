@@ -94,7 +94,7 @@ unset($__errorArgs, $__bag); ?>
 <link rel="stylesheet" href="<?php echo e(asset('backend/summernote/summernote.min.css')); ?>">
 <?php $__env->stopPush(); ?>
 <?php $__env->startPush('scripts'); ?>
-<script src="/laravel/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
+<script src="/vendor/laravel-filemanager/js/stand-alone-button.js"></script>
 <script src="<?php echo e(asset('backend/summernote/summernote.min.js')); ?>"></script>
 <script>
     $('#lfm').filemanager('image');

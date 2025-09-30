@@ -276,8 +276,8 @@
             <div class="col-lg-12 col-md-12 col-12">
                 <div class="row">
                     <div class="col-12">
-                        <div class="shop-section-title">
-                            <h1>Latest Items</h1>
+                        <div class="section-title">
+                            <h2>Latest Items</h2>
                         </div>
                     </div>
                 </div>
@@ -605,17 +605,18 @@
     color: #fff;
 }
 .price-card .btn {
-    background: #28a745;
-    border: none;
-    font-weight: 700;
-    font-size: 12px;
-    padding: 10px 10px;
-    color: black; 
+    background: #f7941d;        
+    color: #fff;               
+    font-weight: 500;          
+    font-size: 14px;           
+    padding: 6px 20px;          
+    border-radius: 30px;       
+    border: none;              
+    display: inline-block;      
 }
 
-    </style>
+</style>
 <?php $__env->stopPush(); ?>
-
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
     <script>
