@@ -498,7 +498,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+              </div>
         </div>
     @endforeach
 @endif
@@ -560,8 +560,6 @@
     transition: transform .5s ease;  
 }
 
-
-
 .category-card:hover img {
     transform: scale(1.1);
 }
@@ -578,7 +576,6 @@
     right: 10px;        
     border-radius: 24px;
 }
-
 
 .category-card .card-img-overlay {
     background: rgba(0, 0, 0, 0.1); 
@@ -627,8 +624,7 @@
     border: none;              
     display: inline-block;      
 }
-
-    </style>
+</style>
 @endpush
 
 @push('scripts')
