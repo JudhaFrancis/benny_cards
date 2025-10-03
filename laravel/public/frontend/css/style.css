@@ -3700,8 +3700,8 @@ Version:1.0
    Start Shop Services CSS
 ========================================*/
 .shop-services.section {
-	padding: 80px 0 0px 0;
-	background: #fff;
+	padding: 60px 0;
+	background: #F6F7FB;
 }
 .shop-services.home{
 	padding:60px 0;

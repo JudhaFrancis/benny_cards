@@ -43,10 +43,10 @@ class FrontendController extends Controller
             ->with('category_lists', $category);
     }
 
-    // public function aboutUs()
-    // {
-    //     return view('frontend.pages.about-us');
-    // }
+    public function aboutUs()
+    {
+        return view('frontend.pages.about-us');
+    }
 
     public function gifts()
     {
