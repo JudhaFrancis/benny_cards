@@ -60,7 +60,7 @@
 <!-- End Small Banner -->
 
 <!-- Start Product Area -->
-<div class="product-area section">
+<div class="product-area section" style="padding-top:0px;">
         <div class="container">
             <div class="row">
                 <div class="col-12">
@@ -185,7 +185,7 @@
 <!-- End Midium Banner -->
 
 <!-- Start Most Popular -->
-<div class="product-area most-popular section">
+<div class="product-area most-popular section" >
     <div class="container">
         <div class="row">
             <div class="col-12">
@@ -243,7 +243,7 @@
 <!-- End Most Popular Area -->
 
 <!-- Start Price Range Section -->
-<section class="price-range section">
+<section class="price-range section" style="padding-top:0px;">
     <div class="container">
         <div class="row justify-content-center">
             @php
@@ -271,7 +271,7 @@
 
 
 <!-- Start Shop Home List  -->
-<section class="shop-home-list section">
+<section class="shop-home-list section" style="padding-top:0px;">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-12">
