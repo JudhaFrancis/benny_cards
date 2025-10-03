@@ -108,7 +108,8 @@
 	<!-- Map Section -->
 	<div class="map-section">
 		<div id="myMap">
-			<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d14130.857353934944!2d85.36529494999999!3d27.6952226!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sne!2snp!4v1595323330171!5m2!1sne!2snp" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3949.1190546175408!2d77.42595921036668!3d8.190760516526549!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3b04f129b8de3cd1%3A0x3b0e01a63af6384c!2s103%2C%20Subash%20St%2C%20Puthukudierupu%2C%20Krishnankovil%2C%20Nagercoil%2C%20Tamil%20Nadu%20629001!5e0!3m2!1sen!2sin!4v1759488856974!5m2!1sen!2sin" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+
 		</div>
 	</div>
 	<!--/ End Map Section -->
