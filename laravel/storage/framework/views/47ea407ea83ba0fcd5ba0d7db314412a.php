@@ -36,14 +36,14 @@
             </thead>
             <tbody>
 
-              <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+              <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                 <?php
                   $sub_cat_info = DB::table('categories')->select('title')->where('id', $product->child_cat_id)->get();
                   // dd($sub_cat_info);
                   $brands = DB::table('brands')->select('title')->where('id', $product->brand_id)->get();
                 ?>
                 <tr>
-                  <td><?php echo e($product->id); ?></td>
+                  <td><?php echo e($products->firstItem() + $index); ?></td>
                   <td><?php echo e($product->title); ?></td>
                   <td><?php echo e($product->cat_info['title']); ?>
 
