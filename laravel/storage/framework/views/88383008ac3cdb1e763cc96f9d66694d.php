@@ -4,7 +4,7 @@
 
 <?php $__env->startSection('main-content'); ?>
 <div class="container mt-5">
-    <h1>Corporate Page</h1>
+    <h4>Corporate Page</h4>
 </div>
 <?php $__env->stopSection(); ?>
 

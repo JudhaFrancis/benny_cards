@@ -36,14 +36,14 @@
             </thead>
             <tbody>
 
-              @foreach($products as $product)
+              @foreach($products as $index => $product)
                 @php
                   $sub_cat_info = DB::table('categories')->select('title')->where('id', $product->child_cat_id)->get();
                   // dd($sub_cat_info);
                   $brands = DB::table('brands')->select('title')->where('id', $product->brand_id)->get();
                 @endphp
                 <tr>
-                  <td>{{$product->id}}</td>
+                  <td>{{$products->firstItem() + $index }}</td>
                   <td>{{$product->title}}</td>
                   <td>{{$product->cat_info['title']}}
                     <sub>
