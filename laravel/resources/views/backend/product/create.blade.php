@@ -105,6 +105,7 @@
             <option value="">--Select Condition--</option>
             <option value="default">Default</option>
             <option value="new">New</option>
+            <option value="trending">Trending</option>
             <option value="hot">Hot</option>
           </select>
         </div>

@@ -10,8 +10,8 @@
             <div class="col-12">
                 <div class="bread-inner">
                     <ul class="bread-list">
-                        <li><a href="index.php">Home<i class="ti-arrow-right"></i></a></li>
-                        <li class="active"><a href="blog-single.html">{{ $category_name }}</a></li>
+                        <li><a href="{{ url('/') }}">Home<i class="ti-arrow-right"></i></a></li>
+                        <li class="active"><span>{{ $category_name }}</span></li>
                     </ul>
                 </div>
             </div>
@@ -141,7 +141,7 @@
                         {{-- {{$products}} --}}
                         @if(count($products)>0)
                         @foreach($products as $product)
-                        <div class="col-lg-4 col-md-6 col-12">
+                        <div class="col-lg-3 col-md-4 col-12">
                             <div class="single-product">
                                 <div class="product-img">
                                     <a href="{{route('product-detail',$product->slug)}}">
@@ -175,7 +175,7 @@
                                     $after_discount=($product->price-($product->price*$product->discount)/100);
                                     @endphp
                                     <span>₹{{number_format($after_discount,2)}}</span>
-                                    <del style="padding-left:4%;">₹{{number_format($product->price,2)}}</del>
+                                    <!-- <del style="padding-left:4%;">₹{{number_format($product->price,2)}}</del> -->
                                 </div>
                             </div>
                         </div>
@@ -187,11 +187,11 @@
 
 
                     </div>
-                    <!-- <div class="row">
+                    <div class="row">
                             <div class="col-md-12 justify-content-center d-flex">
                                 {{$products->appends($_GET)->links()}}
                             </div>
-                          </div> -->
+                          </div>
 
                 </div>
             </div>

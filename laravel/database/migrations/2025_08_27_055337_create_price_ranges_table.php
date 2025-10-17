@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('title');
             $table->string('slug')->unique();
-            $table->integer('min_price')->nullable();
-            $table->integer('max_price')->nullable();
+            $table->decimal('min_price', 8, 2)->nullable();
+            $table->decimal('max_price', 8, 2)->nullable();
             $table->string('photo')->nullable();
             $table->enum('status', ['active', 'inactive'])->default('inactive');
             $table->timestamps();

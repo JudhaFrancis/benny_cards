@@ -10,8 +10,8 @@
             <div class="col-12">
                 <div class="bread-inner">
                     <ul class="bread-list">
-                        <li><a href="index.php">Home<i class="ti-arrow-right"></i></a></li>
-                        <li class="active"><a href="blog-single.html"><?php echo e($category_name); ?></a></li>
+                        <li><a href="<?php echo e(url('/')); ?>">Home<i class="ti-arrow-right"></i></a></li>
+                        <li class="active"><span><?php echo e($category_name); ?></span></li>
                     </ul>
                 </div>
             </div>
@@ -145,7 +145,7 @@
                         
                         <?php if(count($products)>0): ?>
                         <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <div class="col-lg-4 col-md-6 col-12">
+                        <div class="col-lg-3 col-md-4 col-12">
                             <div class="single-product">
                                 <div class="product-img">
                                     <a href="<?php echo e(route('product-detail',$product->slug)); ?>">
@@ -179,7 +179,7 @@
                                     $after_discount=($product->price-($product->price*$product->discount)/100);
                                     ?>
                                     <span>₹<?php echo e(number_format($after_discount,2)); ?></span>
-                                    <del style="padding-left:4%;">₹<?php echo e(number_format($product->price,2)); ?></del>
+                                    <!-- <del style="padding-left:4%;">₹<?php echo e(number_format($product->price,2)); ?></del> -->
                                 </div>
                             </div>
                         </div>
@@ -191,12 +191,12 @@
 
 
                     </div>
-                    <!-- <div class="row">
+                    <div class="row">
                             <div class="col-md-12 justify-content-center d-flex">
                                 <?php echo e($products->appends($_GET)->links()); ?>
 
                             </div>
-                          </div> -->
+                          </div>
 
                 </div>
             </div>
