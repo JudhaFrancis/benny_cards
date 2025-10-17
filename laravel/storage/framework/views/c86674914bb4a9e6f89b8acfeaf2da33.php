@@ -100,10 +100,6 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="form-group login-btn">
                                         <button class="btn" type="submit">Register</button>
                                         <a href="<?php echo e(route('login.form')); ?>" class="btn">Login</a>
-                                        OR
-                                        <a href="<?php echo e(route('login.redirect','facebook')); ?>" class="btn btn-facebook"><i class="ti-facebook"></i></a>
-                                        <a href="<?php echo e(route('login.redirect','github')); ?>" class="btn btn-github"><i class="ti-github"></i></a>
-                                        <a href="<?php echo e(route('login.redirect','google')); ?>" class="btn btn-google"><i class="ti-google"></i></a>
                                     </div>
                                 </div>
                             </div>

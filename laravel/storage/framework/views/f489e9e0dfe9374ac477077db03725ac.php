@@ -25,7 +25,7 @@
                             <?php if(Auth::user()->role=='admin'): ?>
                             <li><i class="ti-user"></i><a href="<?php echo e(route('admin')); ?>" target="_blank">Dashboard</a></li>
                             <?php else: ?>
-                            <li><i class="ti-user"></i><a href="<?php echo e(route('user')); ?>" target="_blank">Dashboard</a></li>
+                            <li><i class="ti-package"></i><a href="<?php echo e(route('user')); ?>" target="_blank">My Orders</a></li>
                             <?php endif; ?>
                             <li><i class="ti-power-off"></i><a href="<?php echo e(route('user.logout')); ?>">Logout</a></li>
                             <?php else: ?>

@@ -6254,7 +6254,7 @@ Version:1.0
 	display: inline-block;
 	padding: 8px 20px;
 	background: #F7941D;
-	color: #fff;
+	color: #fff !important;
 	border-radius: 25px;
 	text-decoration: none;
 	font-weight: 500;

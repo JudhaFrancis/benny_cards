@@ -68,20 +68,15 @@ unset($__errorArgs, $__bag); ?>
                                     <div class="form-group login-btn">
                                         <button class="btn" type="submit">Login</button>
                                         <a href="<?php echo e(route('register.form')); ?>" class="btn">Register</a>
-                                        OR
-                                        <a href="<?php echo e(route('login.redirect','facebook')); ?>" class="btn btn-facebook"><i class="ti-facebook"></i></a>
-                                        <a href="<?php echo e(route('login.redirect','github')); ?>" class="btn btn-github"><i class="ti-github"></i></a>
-                                        <a href="<?php echo e(route('login.redirect','google')); ?>" class="btn btn-google"><i class="ti-google"></i></a>
-
                                     </div>
                                     <div class="checkbox">
                                         <label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox">Remember me</label>
                                     </div>
-                                    <?php if(Route::has('password.request')): ?>
+                                    <!-- <?php if(Route::has('password.request')): ?>
                                         <a class="lost-pass" href="<?php echo e(route('password.request')); ?>">
                                             Lost your password?
                                         </a>
-                                    <?php endif; ?>
+                                    <?php endif; ?> -->
                                 </div>
                             </div>
                         </form>
