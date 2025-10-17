@@ -144,6 +144,7 @@ unset($__errorArgs, $__bag); ?>
               <option value="">--Select Condition--</option>
               <option value="default" <?php echo e((($product->condition=='default')? 'selected':'')); ?>>Default</option>
               <option value="new" <?php echo e((($product->condition=='new')? 'selected':'')); ?>>New</option>
+              <option value="trending" <?php echo e(($product->condition == 'trending') ? 'selected' : ''); ?>>Trending</option>
               <option value="hot" <?php echo e((($product->condition=='hot')? 'selected':'')); ?>>Hot</option>
           </select>
         </div>
