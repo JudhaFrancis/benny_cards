@@ -71,71 +71,69 @@ class FrontendController extends Controller
     }
 
     public function productGrids()
-    {
-        $products = Product::query();
+{
+    $products = Product::query();
+    $category_name = ''; // default empty
 
-        if (!empty($_GET['category'])) {
-            $slug = explode(',', $_GET['category']);
-            // dd($slug);
-            $cat_ids = Category::select('id')->whereIn('slug', $slug)->pluck('id')->toArray();
-            // dd($cat_ids);
-            $products->whereIn('cat_id', $cat_ids);
-            // return $products;
+    if (!empty($_GET['category'])) {
+        $cat_id = Category::where('slug', $_GET['category'])->value('id');
+        if ($cat_id) {
+            $products->where('cat_id', $cat_id);
+            $category_name = Category::where('id', $cat_id)->value('title'); // assign name
         }
-        if (!empty($_GET['brand'])) {
-            $slugs = explode(',', $_GET['brand']);
-            $brand_ids = Brand::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
-            return $brand_ids;
-            $products->whereIn('brand_id', $brand_ids);
-        }
-        if (!empty($_GET['sortBy'])) {
-            if ($_GET['sortBy'] == 'title') {
-                $products = $products->where('status', 'active')->orderBy('title', 'ASC');
-            }
-            if ($_GET['sortBy'] == 'price') {
-                $products = $products->orderBy('price', 'ASC');
-            }
-        }
-
-        if (!empty($_GET['price'])) {
-            $price = explode('-', $_GET['price']);
-            // return $price;
-            // if(isset($price[0]) && is_numeric($price[0])) $price[0]=floor(Helper::base_amount($price[0]));
-            // if(isset($price[1]) && is_numeric($price[1])) $price[1]=ceil(Helper::base_amount($price[1]));
-
-            $products->whereBetween('price', $price);
-        }
-
-        $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-        // Sort by number
-        if (!empty($_GET['show'])) {
-            $products = $products->where('status', 'active')->paginate($_GET['show']);
-        } else {
-            $products = $products->where('status', 'active')->paginate(9);
-        }
-        // Sort by name , price, category
-
-
-        return view('frontend.pages.product-grids')->with('products', $products)->with('recent_products', $recent_products);
     }
+
+    if (!empty($_GET['brand'])) {
+        $slugs = explode(',', $_GET['brand']);
+        $brand_ids = Brand::whereIn('slug', $slugs)->pluck('id')->toArray();
+        $products->whereIn('brand_id', $brand_ids);
+    }
+
+    if (!empty($_GET['sortBy'])) {
+        if ($_GET['sortBy'] == 'title') {
+            $products = $products->where('status', 'active')->orderBy('title', 'ASC');
+        }
+        if ($_GET['sortBy'] == 'price') {
+            $products = $products->orderBy('price', 'ASC');
+        }
+    }
+
+    if (!empty($_GET['price'])) {
+        $price = explode('-', $_GET['price']);
+        $products->whereBetween('price', $price);
+    }
+
+    $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+
+    if (!empty($_GET['show'])) {
+        $products = $products->where('status', 'active')->paginate($_GET['show']);
+    } else {
+        $products = $products->where('status', 'active')->paginate(9);
+    }
+
+    return view('frontend.pages.product-grids')
+            ->with('products', $products)
+            ->with('recent_products', $recent_products)
+            ->with('category_name', $category_name);
+}
+
     public function productLists()
     {
         $products = Product::query();
 
         if (!empty($_GET['category'])) {
-            $slug = explode(',', $_GET['category']);
-            // dd($slug);
-            $cat_ids = Category::select('id')->whereIn('slug', $slug)->pluck('id')->toArray();
-            // dd($cat_ids);
-            $products->whereIn('cat_id', $cat_ids)->paginate;
-            // return $products;
-        }
+    $cat_id = Category::where('slug', $_GET['category'])->value('id');
+    if ($cat_id) {
+        $products->where('cat_id', $cat_id);
+    }
+}
+
         if (!empty($_GET['brand'])) {
-            $slugs = explode(',', $_GET['brand']);
-            $brand_ids = Brand::select('id')->whereIn('slug', $slugs)->pluck('id')->toArray();
-            return $brand_ids;
-            $products->whereIn('brand_id', $brand_ids);
-        }
+    $slugs = explode(',', $_GET['brand']);
+    $brand_ids = Brand::whereIn('slug', $slugs)->pluck('id')->toArray();
+    $products->whereIn('brand_id', $brand_ids);
+}
+
         if (!empty($_GET['sortBy'])) {
             if ($_GET['sortBy'] == 'title') {
                 $products = $products->where('status', 'active')->orderBy('title', 'ASC');
@@ -167,52 +165,25 @@ class FrontendController extends Controller
         return view('frontend.pages.product-lists')->with('products', $products)->with('recent_products', $recent_products);
     }
     public function productFilter(Request $request)
-    {
-        $data = $request->all();
-        // return $data;
-        $showURL = "";
-        if (!empty($data['show'])) {
-            $showURL .= '&show=' . $data['show'];
-        }
+{
+    $data = $request->all();
 
-        $sortByURL = '';
-        if (!empty($data['sortBy'])) {
-            $sortByURL .= '&sortBy=' . $data['sortBy'];
-        }
+    $showURL = !empty($data['show']) ? '&show=' . $data['show'] : '';
+    $sortByURL = !empty($data['sortBy']) ? '&sortBy=' . $data['sortBy'] : '';
+    $catURL = !empty($data['category']) ? '&category=' . $data['category'] : '';
+    $brandURL = !empty($data['brand']) ? '&brand=' . $data['brand'] : '';
+    $priceRangeURL = !empty($data['price_range']) ? '&price=' . $data['price_range'] : '';
 
-        $catURL = "";
-        if (!empty($data['category'])) {
-            foreach ($data['category'] as $category) {
-                if (empty($catURL)) {
-                    $catURL .= '&category=' . $category;
-                } else {
-                    $catURL .= ',' . $category;
-                }
-            }
-        }
-
-        $brandURL = "";
-        if (!empty($data['brand'])) {
-            foreach ($data['brand'] as $brand) {
-                if (empty($brandURL)) {
-                    $brandURL .= '&brand=' . $brand;
-                } else {
-                    $brandURL .= ',' . $brand;
-                }
-            }
-        }
-        // return $brandURL;
-
-        $priceRangeURL = "";
-        if (!empty($data['price_range'])) {
-            $priceRangeURL .= '&price=' . $data['price_range'];
-        }
-        if (request()->is('.loc/product-grids')) {
-            return redirect()->route('product-grids', $catURL . $brandURL . $priceRangeURL . $showURL . $sortByURL);
-        } else {
-            return redirect()->route('product-lists', $catURL . $brandURL . $priceRangeURL . $showURL . $sortByURL);
-        }
+    // Get category name if exists
+    $category_name = '';
+    if (!empty($data['category'])) {
+        $category_name = Category::where('slug', $data['category'])->value('title');
     }
+
+    // Redirect to product-grids with query string
+    return redirect()->route('product-grids', $catURL . $brandURL . $priceRangeURL . $showURL . $sortByURL);
+}
+
     public function productSearch(Request $request)
     {
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
@@ -239,15 +210,17 @@ class FrontendController extends Controller
     }
     public function productCat(Request $request)
     {
-        $products = Category::getProductByCat($request->slug);
-        // return $request->slug;
+
+        $category = Category::where('slug', $request->slug)->firstOrFail();
+
+        $products = Product::where('cat_id', $category->id)->where('status', 'active')->orderBy('id', 'DESC')->paginate(9);        // return $request->slug;
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
-        if (request()->is('e-shop.loc/product-grids')) {
-            return view('frontend.pages.product-grids')->with('products', $products->products)->with('recent_products', $recent_products);
-        } else {
-            return view('frontend.pages.product-lists')->with('products', $products->products)->with('recent_products', $recent_products);
-        }
+        return view('frontend.pages.product-grids', [
+        'products' => $products,
+        'recent_products' => $recent_products,
+        'category_name' => $category->title,
+    ]);
 
     }
 
@@ -447,25 +420,21 @@ class FrontendController extends Controller
     }
 
     public function productPriceRange($slug)
-    {
-        $priceRange = PriceRange::where('slug', $slug)->firstOrFail();
+{
+    $priceRange = PriceRange::where('slug', $slug)->firstOrFail();
 
-        $products = Product::where('status', 'active')
-            ->where('price', '>=', $priceRange->min_price)
-            ->when($priceRange->max_price, function ($query) use ($priceRange) {
-                $query->where('price', '<=', $priceRange->max_price);
-            })
-            ->orderBy('price', 'ASC')
-            ->paginate(12);
+    $products = Product::where('status', 'active')
+        ->whereBetween('price', [$priceRange->min_price, $priceRange->max_price])
+        ->orderBy('price', 'ASC')
+        ->paginate(12);
 
-        $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
+    $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
-        if (request()->is('product-grids') || request()->is('price-range/*')) {
-            return view('frontend.pages.product-grids', compact('products', 'recent_products', 'priceRange'));
-        } else {
-            return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange'));
-        }
+    if (request()->is('product-grids') || request()->is('price-range/*')) {
+        return view('frontend.pages.product-grids', compact('products', 'recent_products', 'priceRange'));
+    } else {
+        return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange'));
     }
-
+}
 
 }
