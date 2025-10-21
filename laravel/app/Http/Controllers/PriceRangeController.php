@@ -85,8 +85,8 @@ class PriceRangeController extends Controller
 
         $validatedData = $request->validate([
             'title' => 'required|string|max:255',
-            'min_price' => 'nullable|integer',
-            'max_price' => 'nullable|integer',
+            'min_price' => 'nullable|numeric',
+            'max_price' => 'nullable|numeric',
             'photo' => 'nullable|string',
             'status' => 'required|in:active,inactive',
         ]);

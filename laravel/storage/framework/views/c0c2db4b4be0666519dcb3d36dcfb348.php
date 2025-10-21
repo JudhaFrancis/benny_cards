@@ -14,10 +14,11 @@
 							$settings = DB::table('settings')->get();
 						?>
 						<p class="text"><?php $__currentLoopData = $settings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <?php echo e($data->short_des); ?> <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></p>
-						<p class="call">Got Question? Call us 24/7<span><a
-									href="tel:123456789"><?php $__currentLoopData = $settings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?> <?php echo e($data->phone); ?>
+						<p class="call">Got Question? Call us 24/7<span>
+							<?php $__currentLoopData = $settings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                      <a href="tel:<?php echo e($data->phone); ?>"><?php echo e($data->phone); ?></a>
+									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></span></p>
 
-									<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?></a></span></p>
 					</div>
 					<!-- End Single Widget -->
 				</div>

@@ -28,6 +28,7 @@ class FrontendController extends Controller
 
     public function home()
     {
+        
         $featured = Product::where('status', 'active')->where('is_featured', 1)->orderBy('price', 'DESC')->limit(2)->get();
         $posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         $banners = Banner::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
@@ -73,7 +74,7 @@ class FrontendController extends Controller
     public function productGrids()
 {
     $products = Product::query();
-$category_name = ''; // default empty
+$category_name = '';
 
 // Category filter
 if (!empty($_GET['category'])) {
@@ -91,9 +92,9 @@ if (!empty($_GET['brand'])) {
     $products->whereIn('brand_id', $brand_ids);
 }
 
-// Price filter via price_ranges slug
-if (!empty($_GET['price'])) {
-    $priceSlug = $_GET['price'];
+// Price filter
+if (!empty($_GET['price_range'])) {
+    $priceSlug = $_GET['price_range'];
     $priceRange = PriceRange::where('slug', $priceSlug)->first();
     if ($priceRange) {
         $products->whereBetween('price', [$priceRange->min_price, $priceRange->max_price]);
@@ -170,9 +171,9 @@ return view('frontend.pages.product-grids', compact('products', 'recent_products
     $sortByURL = !empty($data['sortBy']) ? '&sortBy=' . $data['sortBy'] : '';
     $catURL = !empty($data['category']) ? '&category=' . $data['category'] : '';
     $brandURL = !empty($data['brand']) ? '&brand=' . $data['brand'] : '';
-    $priceRangeURL = !empty($data['price_range']) ? '&price=' . $data['price_range'] : '';
+    $priceRangeURL = !empty($data['price_range']) ? '&price_range=' . $data['price_range'] : '';
 
-    // Get category name if exists
+    // Get category name
     $category_name = '';
     if (!empty($data['category'])) {
         $category_name = Category::where('slug', $data['category'])->value('title');
@@ -428,10 +429,12 @@ return view('frontend.pages.product-grids', compact('products', 'recent_products
 
     $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
+    $category_name = $priceRange->title ?? '';
+
     if (request()->is('product-grids') || request()->is('price-range/*')) {
-        return view('frontend.pages.product-grids', compact('products', 'recent_products', 'priceRange'));
+        return view('frontend.pages.product-grids', compact('products', 'recent_products', 'priceRange','category_name'));
     } else {
-        return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange'));
+        return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange','category_name'));
     }
 }
 
