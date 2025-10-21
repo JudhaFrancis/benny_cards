@@ -144,7 +144,7 @@
             @endforeach
 
             @if($productsByCategory->count() == 0)
-            <div class="col-12 text-center no-products-message" style="display:none;">
+            <div class="col-12 text-center mt-4">
                 <p class="text-muted fs-5">No products available in this category right now.</p>
             </div>
             @endif
@@ -212,10 +212,6 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
- @php
-$trendingItems = $product_lists->where('condition','new');
-@endphp
-@if($trendingItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -287,15 +283,8 @@ $trendingItems = $product_lists->where('condition','new');
         </div>
     </div>
 </section>
-@endif
-
 
 <!-- Start Latest Items -->
-<!-- Start Trending Items -->
-@php
-$latestItems = $product_lists->where('condition','new');
-@endphp
-@if($latestItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -367,14 +356,8 @@ $latestItems = $product_lists->where('condition','new');
         </div>
     </div>
 </section>
-@endif
-
 
 <!-- Start Hot Items -->
- @php
-$hotItems = $product_lists->where('condition','hot');
-@endphp
-@if($hotItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
