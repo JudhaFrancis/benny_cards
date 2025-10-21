@@ -27,7 +27,7 @@ unset($__errorArgs, $__bag); ?>
 
         <div class="form-group">
           <label for="min_price" class="col-form-label">Minimum Price</label>
-          <input id="min_price" type="number" name="min_price" placeholder="Enter minimum price" value="<?php echo e($priceRange->min_price); ?>" class="form-control">
+          <input id="min_price" type="number" step="0.01" name="min_price" placeholder="Enter minimum price" value="<?php echo e($priceRange->min_price); ?>" class="form-control">
           <?php $__errorArgs = ['min_price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
@@ -42,7 +42,7 @@ unset($__errorArgs, $__bag); ?>
 
         <div class="form-group">
           <label for="max_price" class="col-form-label">Maximum Price</label>
-          <input id="max_price" type="number" name="max_price" placeholder="Enter maximum price" value="<?php echo e($priceRange->max_price); ?>" class="form-control">
+          <input id="max_price" type="number" step="0.01" name="max_price" placeholder="Enter maximum price" value="<?php echo e($priceRange->max_price); ?>" class="form-control">
           <?php $__errorArgs = ['max_price'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :

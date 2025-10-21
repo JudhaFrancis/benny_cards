@@ -20,7 +20,7 @@
 
         <div class="form-group">
           <label for="min_price" class="col-form-label">Minimum Price</label>
-          <input id="min_price" type="number" name="min_price" placeholder="Enter minimum price" value="{{$priceRange->min_price}}" class="form-control">
+          <input id="min_price" type="number" step="0.01" name="min_price" placeholder="Enter minimum price" value="{{$priceRange->min_price}}" class="form-control">
           @error('min_price')
             <span class="text-danger">{{$message}}</span>
           @enderror
@@ -28,7 +28,7 @@
 
         <div class="form-group">
           <label for="max_price" class="col-form-label">Maximum Price</label>
-          <input id="max_price" type="number" name="max_price" placeholder="Enter maximum price" value="{{$priceRange->max_price}}" class="form-control">
+          <input id="max_price" type="number" step="0.01" name="max_price" placeholder="Enter maximum price" value="{{$priceRange->max_price}}" class="form-control">
           @error('max_price')
             <span class="text-danger">{{$message}}</span>
           @enderror

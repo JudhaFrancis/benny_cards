@@ -10,8 +10,10 @@
                             @php
                             $settings = DB::table('settings')->get();
                             @endphp
-                            <li><i class="ti-headphone-alt"></i>@foreach($settings as $data) {{$data->phone}} @endforeach</li>
-                            <li><i class="ti-email"></i>@foreach($settings as $data) {{$data->email}} @endforeach</li>
+                            @foreach($settings as $data)
+                            <li><i class="ti-mobile"></i><a href="tel:{{$data->phone}}">{{$data->phone}}</a></li>
+                            <li><i class="ti-email"></i><a href="mailto:{{$data->email}}">{{$data->email}}</a></li>
+                              @endforeach
                         </ul>
                     </div>
                 </div>

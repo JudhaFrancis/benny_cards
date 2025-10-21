@@ -213,6 +213,10 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
+ <?php
+$trendingItems = $product_lists->where('condition','new');
+?>
+<?php if($trendingItems->count() > 0): ?>
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -284,8 +288,15 @@
         </div>
     </div>
 </section>
+<?php endif; ?>
+
 
 <!-- Start Latest Items -->
+<!-- Start Trending Items -->
+<?php
+$latestItems = $product_lists->where('condition','new');
+?>
+<?php if($latestItems->count() > 0): ?>
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -357,8 +368,14 @@
         </div>
     </div>
 </section>
+<?php endif; ?>
+
 
 <!-- Start Hot Items -->
+ <?php
+$hotItems = $product_lists->where('condition','hot');
+?>
+<?php if($hotItems->count() > 0): ?>
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -430,6 +447,12 @@
         </div>
     </div>
 </section>
+<<<<<<< HEAD
+=======
+<?php endif; ?>
+
+
+>>>>>>> 65822bff6d214b0e00ed2e4f722839b7a35542f3
 <!-- End Shop Home List  -->
 
 <!-- Modal -->

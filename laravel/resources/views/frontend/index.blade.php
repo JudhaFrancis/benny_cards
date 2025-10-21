@@ -212,6 +212,10 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
+ @php
+$trendingItems = $product_lists->where('condition','new');
+@endphp
+@if($trendingItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -283,8 +287,15 @@
         </div>
     </div>
 </section>
+@endif
+
 
 <!-- Start Latest Items -->
+<!-- Start Trending Items -->
+@php
+$latestItems = $product_lists->where('condition','new');
+@endphp
+@if($latestItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -356,8 +367,14 @@
         </div>
     </div>
 </section>
+@endif
+
 
 <!-- Start Hot Items -->
+ @php
+$hotItems = $product_lists->where('condition','hot');
+@endphp
+@if($hotItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
