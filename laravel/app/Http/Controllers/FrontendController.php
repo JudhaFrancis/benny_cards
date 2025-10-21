@@ -28,12 +28,11 @@ class FrontendController extends Controller
 
     public function home()
     {
-        
         $featured = Product::where('status', 'active')->where('is_featured', 1)->orderBy('price', 'DESC')->limit(2)->get();
         $posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         $banners = Banner::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         // return $banner;
-        $products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(8)->get();
+        $products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(12)->get();
         $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'ASC')->get();
         // return $category;
         return view('frontend.index')

@@ -1,291 +1,179 @@
 @extends('frontend.layouts.master')
 @section('title', 'Cart Page')
 @section('main-content')
-	<!-- Breadcrumbs -->
-	<div class="breadcrumbs">
-		<div class="container">
-			<div class="row">
-				<div class="col-12">
-					<div class="bread-inner">
-						<ul class="bread-list">
-							<li><a href="{{('home')}}">Home<i class="ti-arrow-right"></i></a></li>
-							<li class="active"><a href="">Cart</a></li>
-						</ul>
-					</div>
+
+<!-- Breadcrumbs -->
+<div class="breadcrumbs">
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<div class="bread-inner">
+					<ul class="bread-list">
+						<li><a href="{{route('home')}}">Home <i class="ti-arrow-right"></i></a></li>
+						<li class="active">Shopping Cart</li>
+					</ul>
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- End Breadcrumbs -->
+</div>
 
-	<!-- Shopping Cart -->
-	<div class="shopping-cart section">
-		<div class="container">
-			<div class="row">
-				<div class="col-12">
-					<!-- Shopping Summery -->
-					<table class="table shopping-summery">
-						<thead>
-							<tr class="main-hading">
-								<th>PRODUCT</th>
-								<th>NAME</th>
-								<th class="text-center">UNIT PRICE</th>
-								<th class="text-center">QUANTITY</th>
-								<th class="text-center">TOTAL</th>
-								<th class="text-center"><i class="ti-trash remove-icon"></i></th>
-							</tr>
-						</thead>
-						<tbody id="cart_item_list">
-							<form action="{{route('cart.update')}}" method="POST">
-								@csrf
-								@if(Helper::getAllProductFromCart())
-									@foreach(Helper::getAllProductFromCart() as $key => $cart)
-										<tr>
-											@php
-												$photo = explode(',', $cart->product['photo']);
-											@endphp
-											<td class="image" data-title="No"><img src="{{$photo[0]}}" alt="{{$photo[0]}}"></td>
-											<td class="product-des" data-title="Description">
-												<p class="product-name"><a href="{{route('product-detail', $cart->product['slug'])}}"
-														target="_blank">{{$cart->product['title']}}</a></p>
-												<p class="product-des">{!!($cart['summary']) !!}</p>
-											</td>
-											<td class="price" data-title="Price"><span>₹{{number_format($cart['price'], 2)}}</span>
-											</td>
-											<td class="qty" data-title="Qty"><!-- Input Order -->
-												<div class="input-group">
-													<div class="button minus">
-														<button type="button" class="btn btn-primary btn-number" disabled="disabled"
-															data-type="minus" data-field="quant[{{$key}}]">
-															<i class="ti-minus"></i>
-														</button>
-													</div>
-													<input type="text" name="quant[{{$key}}]" class="input-number" data-min="1"
-														data-max="100" value="{{$cart->quantity}}">
-													<input type="hidden" name="qty_id[]" value="{{$cart->id}}">
-													<div class="button plus">
-														<button type="button" class="btn btn-primary btn-number" data-type="plus"
-															data-field="quant[{{$key}}]">
-															<i class="ti-plus"></i>
-														</button>
-													</div>
-												</div>
-												<!--/ End Input Order -->
-											</td>
-											<td class="total-amount cart_single_price" data-title="Total"><span
-													class="money">${{$cart['amount']}}</span></td>
+<!-- Flipkart-style Cart Layout -->
+<div class="shopping-cart section py-4">
+	<div class="container">
+		@if(Helper::getAllProductFromCart()->count() > 0)
+		<div class="row">
+			<!-- Cart Items -->
+			<div class="col-lg-8">
+				<form action="{{route('cart.update')}}" method="POST">
+					@csrf
+					@foreach(Helper::getAllProductFromCart() as $key => $cart)
+					@php $photo = explode(',', $cart->product['photo']); @endphp
 
-											<td class="action" data-title="Remove"><a href="{{route('cart-delete', $cart->id)}}"><i
-														class="ti-trash remove-icon"></i></a></td>
-										</tr>
-									@endforeach
-									<track>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td></td>
-									<td class="float-right">
-										<button class="btn float-right" type="submit">Update</button>
-									</td>
-									</track>
-								@else
-									<tr>
-										<td class="text-center">
-											There are no any carts available. <a href="{{route('product-grids')}}"
-												style="color:blue;">Continue shopping</a>
+					<div class="cart-card shadow-sm mb-3 p-3 rounded d-flex align-items-center justify-content-between">
+						<!-- Product Image -->
+						<div class="cart-img me-3 flex-shrink-0">
+							<img src="{{$photo[0]}}" class="img-fluid rounded" alt="{{$cart->product['title']}}" style="width: 80px; height: 80px; object-fit: cover;">
+						</div>
 
-										</td>
-									</tr>
-								@endif
+						<!-- Product Info -->
+						<div class="cart-details flex-grow-1 me-3" style="width: 50%; padding-left:15px">
+							<h6 class="mb-1">
+								<a href="{{route('product-detail',$cart->product['slug'])}}" class="text-dark fw-bold">
+									{{$cart->product['title']}}
+								</a>
+							</h6>
+							<p class="small text-muted mb-1">{!! $cart->product['summary'] !!}</p>
+							@if($cart->product['discount'] > 0)
+							<span class="badge bg-danger">{{$cart->product['discount']}}% OFF</span>
+							@endif
+						</div>
 
-							</form>
-						</tbody>
-					</table>
-					<!--/ End Shopping Summery -->
-				</div>
-			</div>
-			<div class="row">
-				<div class="col-12">
-					<!-- Total Amount -->
-					<div class="total-amount">
-						<div class="row">
-							<div class="col-lg-8 col-md-5 col-12">
-								<div class="left">
-									<div class="coupon">
-										<form action="{{route('coupon-store')}}" method="POST">
-											@csrf
-											<input name="code" placeholder="Enter Your Coupon">
-											<button class="btn">Apply</button>
-										</form>
-									</div>
-									{{-- <div class="checkbox">`
-										@php
-										$shipping=DB::table('shippings')->where('status','active')->limit(1)->get();
-										@endphp
-										<label class="checkbox-inline" for="2"><input name="news" id="2" type="checkbox"
-												onchange="showMe('shipping');"> Shipping</label>
-									</div> --}}
-								</div>
-							</div>
-							<div class="col-lg-4 col-md-7 col-12">
-								<div class="right">
-									<ul>
-										<li class="order_subtotal" data-price="{{Helper::totalCartPrice()}}">Cart
-											Subtotal<span>₹{{number_format(Helper::totalCartPrice(), 2)}}</span></li>
+						<!-- Quantity Selector -->
+						<div class="input-group quantity-wrapper">
+							<!-- Minus Button -->
+							<button type="button" class="btn btn-outline-primary btn-number minus" data-type="minus" data-field="quant[{{$key}}]">
+								<i class="ti-minus"></i>
+							</button>
 
-										@if(session()->has('coupon'))
-											<li class="coupon_price" data-price="{{Session::get('coupon')['value']}}">You
-												Save<span>₹{{number_format(Session::get('coupon')['value'], 2)}}</span></li>
-										@endif
-										@php
-											$total_amount = Helper::totalCartPrice();
-											if (session()->has('coupon')) {
-												$total_amount = $total_amount - Session::get('coupon')['value'];
-											}
-										@endphp
-										@if(session()->has('coupon'))
-											<li class="last" id="order_total_price">You
-												Pay<span>₹{{number_format($total_amount, 2)}}</span></li>
-										@else
-											<li class="last" id="order_total_price">You
-												Pay<span>₹{{number_format($total_amount, 2)}}</span></li>
-										@endif
-									</ul>
-									<div class="button5">
-										<a href="{{route('checkout')}}" class="btn">Checkout</a>
-										<a href="{{route('product-grids')}}" class="btn">Continue shopping</a>
-									</div>
-								</div>
-							</div>
+							<!-- Quantity Input -->
+							<input type="text" name="quant[{{$key}}]" class="input-number text-center" data-min="1" data-max="1000" value="{{$cart->quantity}}">
+
+							<!-- Plus Button -->
+							<button type="button" class="btn btn-outline-primary btn-number plus" data-type="plus" data-field="quant[{{$key}}]">
+								<i class="ti-plus"></i>
+							</button>
+
+							<!-- Hidden ID -->
+							<input type="hidden" name="qty_id[]" value="{{$cart->id}}">
+						</div>
+
+						<!-- Price -->
+						<div class="cart-price text-center me-3" style="min-width: 100px;">
+							<strong>₹{{number_format($cart['amount'],2)}}</strong>
+						</div>
+
+						<!-- Remove -->
+						<div class="cart-remove text-center flex-shrink-0">
+							<a href="{{route('cart-delete',$cart->id)}}" class="text-danger fs-5"><i class="ti-trash" style="font-size: 20px;"></i></a>
 						</div>
 					</div>
-					<!--/ End Total Amount -->
+					@endforeach
+
+					<!-- Update Cart Button -->
+					<div class="d-flex justify-content-end mt-3">
+						<button type="submit" class="btn btn-primary checkout-btn px-4">Update Cart</button>
+					</div>
+				</form>
+			</div>
+
+
+			<!-- Price Details & Coupon -->
+			<div class="col-lg-4">
+				<div class="card shadow-sm p-3 sticky-top price-card" style="top:80px; z-index:1;">
+					<h5 class="mb-3 text-uppercase fw-bold">Price Details</h5>
+
+					<!-- Coupon Section -->
+					<div class="coupon-section mb-3">
+						<form action="{{route('coupon-store')}}" method="POST" class="d-flex">
+							@csrf
+							<input type="text" name="code" class="form-control me-2" placeholder="Enter Coupon Code">
+							<button class="btn btn-primary">Apply</button>
+						</form>
+					</div>
+
+					<!-- Price Summary -->
+					<div class="price-summary-section">
+						<div class="d-flex justify-content-between mb-2">
+							<span>Price ({{Helper::cartCount()}} items)</span>
+							<span>₹{{number_format(Helper::totalCartPrice(),2)}}</span>
+						</div>
+						@if(session()->has('coupon'))
+						<div class="d-flex justify-content-between mb-2 text-success">
+							<span>Discount</span>
+							<span>- ₹{{number_format(Session::get('coupon')['value'],2)}}</span>
+						</div>
+						@endif
+
+						@php
+						$total_amount = Helper::totalCartPrice();
+						if(session()->has('coupon')) $total_amount -= Session::get('coupon')['value'];
+						@endphp
+
+						<div class="d-flex justify-content-between fw-bold fs-5 border-top pt-2 mt-2">
+							<span>Total Payable</span>
+							<span>₹{{number_format($total_amount,2)}}</span>
+						</div>
+					</div>
+
+					<!-- Buttons -->
+					<div class="cart-buttons mt-3">
+						<a href="{{route('checkout')}}" class="btn btn-primary checkout-btn w-100 mb-2">
+							<i class="ti-shopping-cart me-2"></i> Proceed to Checkout
+						</a>
+						<a href="{{route('product-grids')}}" class="btn btn-outline-dark continue-btn w-100">
+							<i class="ti-arrow-left me-2"></i> Continue Shopping
+						</a>
+					</div>
+
 				</div>
 			</div>
+
 		</div>
+		@else
+		<div class="text-center py-5">
+			<h5>Your cart is empty!</h5>
+			<a href="{{route('product-grids')}}" class="price-btn-new">Shop Now</a>
+		</div>
+		@endif
 	</div>
-	<!--/ End Shopping Cart -->
-
-	<!-- Start Shop Services Area  -->
-	<section class="shop-services section">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-rocket"></i>
-						<h4>Free shiping</h4>
-						<p>Orders over $100</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-reload"></i>
-						<h4>Free Return</h4>
-						<p>Within 30 days returns</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-lock"></i>
-						<h4>Sucure Payment</h4>
-						<p>100% secure payment</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-				<div class="col-lg-3 col-md-6 col-12">
-					<!-- Start Single Service -->
-					<div class="single-service">
-						<i class="ti-tag"></i>
-						<h4>Best Peice</h4>
-						<p>Guaranteed price</p>
-					</div>
-					<!-- End Single Service -->
-				</div>
-			</div>
-		</div>
-	</section>
-	<!-- End Shop Newsletter -->
-
-	<!-- Start Shop Newsletter  -->
-	@include('frontend.layouts.newsletter')
-	<!-- End Shop Newsletter -->
+</div>
 
 @endsection
+
 @push('styles')
-	<style>
-		li.shipping {
-			display: inline-flex;
-			width: 100%;
-			font-size: 14px;
-		}
-
-		li.shipping .input-group-icon {
-			width: 100%;
-			margin-left: 10px;
-		}
-
-		.input-group-icon .icon {
-			position: absolute;
-			left: 20px;
-			top: 0;
-			line-height: 40px;
-			z-index: 3;
-		}
-
-		.form-select {
-			height: 30px;
-			width: 100%;
-		}
-
-		.form-select .nice-select {
-			border: none;
-			border-radius: 0px;
-			height: 40px;
-			background: #f6f6f6 !important;
-			padding-left: 45px;
-			padding-right: 40px;
-			width: 100%;
-		}
-
-		.list li {
-			margin-bottom: 0 !important;
-		}
-
-		.list li:hover {
-			background: #F7941D !important;
-			color: white !important;
-		}
-
-		.form-select .nice-select::after {
-			top: 14px;
-		}
-	</style>
 @endpush
-@push('scripts')
-	<script src="{{asset('frontend/js/nice-select/js/jquery.nice-select.min.js')}}"></script>
-	<script src="{{ asset('frontend/js/select2/js/select2.min.js') }}"></script>
-	<script>
-		$(document).ready(function () { $("select.select2").select2(); });
-		$('select.nice-select').niceSelect();
-	</script>
-	<script>
-		$(document).ready(function () {
-			$('.shipping select[name=shipping]').change(function () {
-				let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
-				let subtotal = parseFloat($('.order_subtotal').data('price'));
-				let coupon = parseFloat($('.coupon_price').data('price')) || 0;
-				// alert(coupon);
-				$('#order_total_price span').text('$' + (subtotal + cost - coupon).toFixed(2));
-			});
 
+@push('scripts')
+<script src="{{asset('frontend/js/nice-select/js/jquery.nice-select.min.js')}}"></script>
+<script src="{{ asset('frontend/js/select2/js/select2.min.js') }}"></script>
+<script>
+	$(document).ready(function() {
+		$("select.select2").select2();
+	});
+	$('select.nice-select').niceSelect();
+</script>
+<script>
+	$(document).ready(function() {
+		$('.shipping select[name=shipping]').change(function() {
+			let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
+			let subtotal = parseFloat($('.order_subtotal').data('price'));
+			let coupon = parseFloat($('.coupon_price').data('price')) || 0;
+			// alert(coupon);
+			$('#order_total_price span').text('$' + (subtotal + cost - coupon).toFixed(2));
 		});
 
-	</script>
+	});
+</script>
 
 @endpush

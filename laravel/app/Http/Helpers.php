@@ -91,10 +91,10 @@ class Helper
     // Cart Count
     public static function cartCount($user_id = '')
     {
-
         if (Auth::check()) {
             if ($user_id == "") $user_id = auth()->user()->id;
-            return Cart::where('user_id', $user_id)->where('order_id', null)->sum('quantity');
+            // Count total unique products instead of sum of quantity
+            return Cart::where('user_id', $user_id)->where('order_id', null)->count();
         } else {
             return 0;
         }
