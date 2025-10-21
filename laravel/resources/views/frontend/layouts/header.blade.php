@@ -1,7 +1,7 @@
 <header class="header shop">
     <!-- Topbar -->
     <div class="topbar">
-        <div class="container">
+        <div class="section-container">
             <div class="row align-items-center">
                 <!-- Left Section -->
                 <div class="aligncenter col-lg-6 col-md-12 col-12">
@@ -20,12 +20,10 @@
                 <div class="col-lg-4 col-md-12 col-12">
                     <div class="right-content">
                         <ul class="list-main">
-                            <li><i class="ti-location-pin"></i><a href="{{route('order.track')}}">Track Order</a></li>
+                            <li><i class="ti-package"></i><a href="{{route('order.track')}}">My Orders</a></li>
                             @auth
                             @if(Auth::user()->role=='admin')
                             <li><i class="ti-user"></i><a href="{{route('admin')}}" target="_blank">Dashboard</a></li>
-                            @else
-                            <li><i class="ti-package"></i><a href="{{route('user')}}" target="_blank">My Orders</a></li>
                             @endif
                             <li><i class="ti-power-off"></i><a href="{{route('user.logout')}}">Logout</a></li>
                             @else
@@ -134,25 +132,27 @@
                                 <div class="navbar-collapse">
                                     <div class="nav-inner">
                                         <ul class="nav main-menu menu navbar-nav">
-                                            <li class="{{Request::path()=='home' ? 'active' : ''}}">
-                                                <a href="{{route('home')}}">Home</a>
+                                            <li class="{{ Request::is('/') ? 'active' : '' }}">
+                                                <a href="{{ route('home') }}">Home</a>
                                             </li>
-                                            <li class="{{Request::path()=='about-us' ? 'active' : ''}}">
-                                                <a href="{{route('about-us')}}">About Us</a>
+                                            <li class="{{ Request::is('about-us') ? 'active' : '' }}">
+                                                <a href="{{ route('about-us') }}">About Us</a>
                                             </li>
-                                            <li class="@if(Request::path()=='product-grids'||Request::path()=='product-lists') active @endif">
-                                                <a href="{{route('product-grids')}}">Products</a>
+                                            <li class="{{ Request::is('product-grids') || Request::is('product-lists') ? 'active' : '' }}">
+                                                <a href="{{ route('product-grids') }}">Products</a>
                                                 <span class="new">New</span>
                                             </li>
-                                            {{Helper::getHeaderCategory()}}
-                                            <li class="{{Request::path()=='gifts' ? 'active' : ''}}">
-                                                <a href="{{route('gifts')}}">Gifts</a>
+                                            <li>
+                                                {!! Helper::getHeaderCategory() !!}
                                             </li>
-                                            <li class="{{Request::path()=='corporate' ? 'active' : ''}}">
-                                                <a href="{{route('corporate')}}">Corporate</a>
+                                            <li class="{{ Request::is('gifts') ? 'active' : '' }}">
+                                                <a href="{{ route('gifts') }}">Gifts</a>
                                             </li>
-                                            <li class="{{Request::path()=='contact' ? 'active' : ''}}">
-                                                <a href="{{route('contact')}}">Contact Us</a>
+                                            <li class="{{ Request::is('corporate') ? 'active' : '' }}">
+                                                <a href="{{ route('corporate') }}">Corporate</a>
+                                            </li>
+                                            <li class="{{ Request::is('contact') ? 'active' : '' }}">
+                                                <a href="{{ route('contact') }}">Contact Us</a>
                                             </li>
                                         </ul>
                                     </div>

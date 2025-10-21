@@ -1,7 +1,7 @@
 <header class="header shop">
     <!-- Topbar -->
     <div class="topbar">
-        <div class="container">
+        <div class="section-container">
             <div class="row align-items-center">
                 <!-- Left Section -->
                 <div class="aligncenter col-lg-6 col-md-12 col-12">
@@ -20,12 +20,10 @@
                 <div class="col-lg-4 col-md-12 col-12">
                     <div class="right-content">
                         <ul class="list-main">
-                            <li><i class="ti-location-pin"></i><a href="<?php echo e(route('order.track')); ?>">Track Order</a></li>
+                            <li><i class="ti-package"></i><a href="<?php echo e(route('order.track')); ?>">My Orders</a></li>
                             <?php if(auth()->guard()->check()): ?>
                             <?php if(Auth::user()->role=='admin'): ?>
                             <li><i class="ti-user"></i><a href="<?php echo e(route('admin')); ?>" target="_blank">Dashboard</a></li>
-                            <?php else: ?>
-                            <li><i class="ti-package"></i><a href="<?php echo e(route('user')); ?>" target="_blank">My Orders</a></li>
                             <?php endif; ?>
                             <li><i class="ti-power-off"></i><a href="<?php echo e(route('user.logout')); ?>">Logout</a></li>
                             <?php else: ?>
@@ -134,25 +132,27 @@
                                 <div class="navbar-collapse">
                                     <div class="nav-inner">
                                         <ul class="nav main-menu menu navbar-nav">
-                                            <li class="<?php echo e(Request::path()=='home' ? 'active' : ''); ?>">
+                                            <li class="<?php echo e(Request::is('/') ? 'active' : ''); ?>">
                                                 <a href="<?php echo e(route('home')); ?>">Home</a>
                                             </li>
-                                            <li class="<?php echo e(Request::path()=='about-us' ? 'active' : ''); ?>">
+                                            <li class="<?php echo e(Request::is('about-us') ? 'active' : ''); ?>">
                                                 <a href="<?php echo e(route('about-us')); ?>">About Us</a>
                                             </li>
-                                            <li class="<?php if(Request::path()=='product-grids'||Request::path()=='product-lists'): ?> active <?php endif; ?>">
+                                            <li class="<?php echo e(Request::is('product-grids') || Request::is('product-lists') ? 'active' : ''); ?>">
                                                 <a href="<?php echo e(route('product-grids')); ?>">Products</a>
                                                 <span class="new">New</span>
                                             </li>
-                                            <?php echo e(Helper::getHeaderCategory()); ?>
+                                            <li>
+                                                <?php echo Helper::getHeaderCategory(); ?>
 
-                                            <li class="<?php echo e(Request::path()=='gifts' ? 'active' : ''); ?>">
+                                            </li>
+                                            <li class="<?php echo e(Request::is('gifts') ? 'active' : ''); ?>">
                                                 <a href="<?php echo e(route('gifts')); ?>">Gifts</a>
                                             </li>
-                                            <li class="<?php echo e(Request::path()=='corporate' ? 'active' : ''); ?>">
+                                            <li class="<?php echo e(Request::is('corporate') ? 'active' : ''); ?>">
                                                 <a href="<?php echo e(route('corporate')); ?>">Corporate</a>
                                             </li>
-                                            <li class="<?php echo e(Request::path()=='contact' ? 'active' : ''); ?>">
+                                            <li class="<?php echo e(Request::is('contact') ? 'active' : ''); ?>">
                                                 <a href="<?php echo e(route('contact')); ?>">Contact Us</a>
                                             </li>
                                         </ul>
