@@ -102,8 +102,7 @@
                         </a>
 
                         <!-- Badges -->
-                        <?php if($product->stock<=0): ?>
-                            <span class="badge out-of-stock">Sold Out</span>
+                        <?php if($product->stock<=0): ?> <span class="badge out-of-stock">Sold Out</span>
                             <?php elseif($product->condition=='new'): ?>
                             <span class="badge new">New</span>
                             <?php elseif($product->condition=='hot'): ?>
@@ -113,21 +112,24 @@
                             <?php endif; ?>
 
                             <!-- Wishlist Top Right -->
-                            <a href="<?php echo e(route('add-to-wishlist',$product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                            <a href="<?php echo e(route('add-to-wishlist',$product->slug)); ?>" class="btn-wishlist-top"><i
+                                    class="ti-heart"></i></a>
 
                             <!-- Add to Cart Bottom Right -->
-                            <a href="<?php echo e(route('add-to-cart',$product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
+                            <a href="<?php echo e(route('add-to-cart',$product->slug)); ?>" class="btn-add-cart-bottom">Add to
+                                Cart</a>
                     </div>
 
                     <!-- Product Info -->
                     <div class="product-info-modern text-center">
-                        <h3 class="product-title"><a href="<?php echo e(route('product-detail',$product->slug)); ?>"><?php echo e($product->title); ?></a></h3>
+                        <h3 class="product-title"><a
+                                href="<?php echo e(route('product-detail',$product->slug)); ?>"><?php echo e($product->title); ?></a></h3>
                         <div class="product-price">
                             <?php
                             $after_discount=($product->price-($product->price*$product->discount)/100);
                             ?>
                             <span class="current-price">₹<?php echo e(number_format($after_discount,2)); ?></span>
-                            <del class="original-price">₹<?php echo e(number_format($product->price,2)); ?></del>
+                            <!-- <del class="original-price">₹<?php echo e(number_format($product->price,2)); ?></del> -->
                         </div>
                     </div>
                 </div>
@@ -219,8 +221,7 @@
                         </a>
 
                         <!-- Badges -->
-                        <?php if($product->stock <= 0): ?>
-                            <span class="badge out-of-stock">Sold Out</span>
+                        <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
                             <?php elseif($product->condition == 'new'): ?>
                             <span class="badge new">New</span>
                             <?php elseif($product->condition == 'hot'): ?>
@@ -252,7 +253,7 @@
                             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
                             ?>
                             <span class="current-price">₹<?php echo e(number_format($after_discount, 2)); ?></span>
-                            <del class="original-price">₹<?php echo e(number_format($product->price, 2)); ?></del>
+                            <!-- <del class="original-price">₹<?php echo e(number_format($product->price, 2)); ?></del> -->
                         </div>
                     </div>
                 </div>
@@ -286,8 +287,7 @@
                         </a>
 
                         <!-- Badges -->
-                        <?php if($product->stock <= 0): ?>
-                            <span class="badge out-of-stock">Sold Out</span>
+                        <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
                             <?php elseif($product->condition == 'new'): ?>
                             <span class="badge new">New</span>
                             <?php elseif($product->condition == 'hot'): ?>
@@ -319,7 +319,7 @@
                             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
                             ?>
                             <span class="current-price">₹<?php echo e(number_format($after_discount, 2)); ?></span>
-                            <del class="original-price">₹<?php echo e(number_format($product->price, 2)); ?></del>
+                            <!-- <del class="original-price">₹<?php echo e(number_format($product->price, 2)); ?></del> -->
                         </div>
                     </div>
                 </div>
@@ -353,8 +353,7 @@
                         </a>
 
                         <!-- Badges -->
-                        <?php if($product->stock <= 0): ?>
-                            <span class="badge out-of-stock">Sold Out</span>
+                        <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
                             <?php elseif($product->condition == 'new'): ?>
                             <span class="badge new">New</span>
                             <?php elseif($product->condition == 'hot'): ?>
@@ -386,7 +385,7 @@
                             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
                             ?>
                             <span class="current-price">₹<?php echo e(number_format($after_discount, 2)); ?></span>
-                            <del class="original-price">₹<?php echo e(number_format($product->price, 2)); ?></del>
+                            <!-- <del class="original-price">₹<?php echo e(number_format($product->price, 2)); ?></del> -->
                         </div>
                     </div>
                 </div>
@@ -406,7 +405,8 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close" aria-hidden="true"></span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close"
+                        aria-hidden="true"></span></button>
             </div>
             <div class="modal-body">
                 <div class="row no-gutters">
@@ -438,8 +438,7 @@
                                         $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
                                         $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
                                         ?>
-                                        <?php for($i=1; $i<=5; $i++): ?>
-                                            <?php if($rate>=$i): ?>
+                                        <?php for($i=1; $i<=5; $i++): ?> <?php if($rate>=$i): ?>
                                             <i class="yellow fa fa-star"></i>
                                             <?php else: ?>
                                             <i class="fa fa-star"></i>
@@ -452,14 +451,16 @@
                                     <?php if($product->stock >0): ?>
                                     <span><i class="fa fa-check-circle-o"></i> <?php echo e($product->stock); ?> in stock</span>
                                     <?php else: ?>
-                                    <span><i class="fa fa-times-circle-o text-danger"></i> <?php echo e($product->stock); ?> out stock</span>
+                                    <span><i class="fa fa-times-circle-o text-danger"></i> <?php echo e($product->stock); ?> out
+                                        stock</span>
                                     <?php endif; ?>
                                 </div>
                             </div>
                             <?php
                             $after_discount=($product->price-($product->price*$product->discount)/100);
                             ?>
-                            <h3><small><del class="text-muted">₹<?php echo e(number_format($product->price,2)); ?></del></small> $<?php echo e(number_format($after_discount,2)); ?> </h3>
+                            <h3><small><del class="text-muted">₹<?php echo e(number_format($product->price,2)); ?></del></small>
+                                $<?php echo e(number_format($after_discount,2)); ?> </h3>
                             <div class="quickview-peragraph">
                                 <p><?php echo html_entity_decode($product->summary); ?></p>
                             </div>
@@ -488,14 +489,17 @@
                                     <!-- Input Order -->
                                     <div class="input-group">
                                         <div class="button minus">
-                                            <button type="button" class="btn btn-primary btn-number" disabled="disabled" data-type="minus" data-field="quant[1]">
+                                            <button type="button" class="btn btn-primary btn-number" disabled="disabled"
+                                                data-type="minus" data-field="quant[1]">
                                                 <i class="ti-minus"></i>
                                             </button>
                                         </div>
                                         <input type="hidden" name="slug" value="<?php echo e($product->slug); ?>">
-                                        <input type="text" name="quant[1]" class="input-number" data-min="1" data-max="1000" value="1">
+                                        <input type="text" name="quant[1]" class="input-number" data-min="1"
+                                            data-max="1000" value="1">
                                         <div class="button plus">
-                                            <button type="button" class="btn btn-primary btn-number" data-type="plus" data-field="quant[1]">
+                                            <button type="button" class="btn btn-primary btn-number" data-type="plus"
+                                                data-field="quant[1]">
                                                 <i class="ti-plus"></i>
                                             </button>
                                         </div>
@@ -504,7 +508,8 @@
                                 </div>
                                 <div class="add-to-cart">
                                     <button type="submit" class="btn">Add to cart</button>
-                                    <a href="<?php echo e(route('add-to-wishlist',$product->slug)); ?>" class="btn min"><i class="ti-heart"></i></a>
+                                    <a href="<?php echo e(route('add-to-wishlist',$product->slug)); ?>" class="btn min"><i
+                                            class="ti-heart"></i></a>
                                 </div>
                             </form>
                             <div class="default-social">
@@ -525,238 +530,239 @@
 
 <?php $__env->startPush('styles'); ?>
 <style>
-    /* Banner Sliding */
-    #Gslider .carousel-inner {
-        background: #000000;
-        color: black;
-    }
+/* Banner Sliding */
+#Gslider .carousel-inner {
+    background: #000000;
+    color: black;
+}
 
-    #Gslider .carousel-inner {
-        height: 550px;
-    }
+#Gslider .carousel-inner {
+    height: 550px;
+}
 
-    #Gslider .carousel-inner img {
-        width: 100% !important;
-        opacity: .8;
-        height: 550px;
-        object-fit: cover;
-    }
+#Gslider .carousel-inner img {
+    width: 100% !important;
+    opacity: .8;
+    height: 550px;
+    object-fit: cover;
+}
 
-    #Gslider .carousel-inner .carousel-caption {
-        bottom: 60%;
-    }
+#Gslider .carousel-inner .carousel-caption {
+    bottom: 60%;
+}
 
-    #Gslider .carousel-inner .carousel-caption h1 {
-        font-size: 50px;
-        font-weight: bold;
-        line-height: 100%;
-        color: #F7941D;
-    }
+#Gslider .carousel-inner .carousel-caption h1 {
+    font-size: 50px;
+    font-weight: bold;
+    line-height: 100%;
+    color: #F7941D;
+}
 
-    #Gslider .carousel-inner .carousel-caption p {
-        font-size: 18px;
-        color: black;
-        margin: 28px 0 28px 0;
-    }
+#Gslider .carousel-inner .carousel-caption p {
+    font-size: 18px;
+    color: black;
+    margin: 28px 0 28px 0;
+}
 
-    #Gslider .carousel-indicators {
-        bottom: 70px;
-    }
+#Gslider .carousel-indicators {
+    bottom: 70px;
+}
 
-    .category-card {
-        border: none;
-        overflow: hidden;
-        position: relative;
-        width: 180px;
-        height: 200px;
-        border-radius: 0;
+.category-card {
+    border: none;
+    overflow: hidden;
+    position: relative;
+    width: 180px;
+    height: 200px;
+    border-radius: 0;
 
-    }
+}
 
-    .category-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform .5s ease;
-    }
-
-
-
-    .category-card:hover img {
-        transform: scale(1.1);
-    }
-
-    .category-card .btn {
-        background: #F7941D;
-        border: none;
-        font-weight: 600;
-        font-size: 9px;
-        padding: 2px 6px;
-        color: white;
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        border-radius: 24px;
-    }
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform .5s ease;
+}
 
 
-    .category-card .card-img-overlay {
-        background: rgba(0, 0, 0, 0.1);
 
-    }
+.category-card:hover img {
+    transform: scale(1.1);
+}
 
-    .category-card .card-img-overlay h5,
-    .category-card .card-img-overlay p {
-        color: #fff;
-        font-weight: 600;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    }
+.category-card .btn {
+    background: #F7941D;
+    border: none;
+    font-weight: 600;
+    font-size: 9px;
+    padding: 2px 6px;
+    color: white;
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    border-radius: 24px;
+}
 
-    .price-card {
-        border: none;
-        overflow: hidden;
-        position: relative;
-        width: 250px;
-        height: 250px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: transform .3s ease-in-out;
-    }
 
-    .price-card:hover img {
-        transform: scale(1.1);
-    }
+.category-card .card-img-overlay {
+    background: rgba(0, 0, 0, 0.1);
 
-    .price-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.8;
-    }
+}
 
-    .price-card .card-img-overlay {
-        background: rgba(0, 0, 0, 0.5);
-    }
+.category-card .card-img-overlay h5,
+.category-card .card-img-overlay p {
+    color: #fff;
+    font-weight: 600;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
 
-    .price-card .card-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #fff;
-    }
+.price-card {
+    border: none;
+    overflow: hidden;
+    position: relative;
+    width: 250px;
+    height: 250px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform .3s ease-in-out;
+}
 
-    .price-card .btn {
-        background: #f7941d;
-        color: #fff;
-        font-weight: 500;
-        font-size: 14px;
-        padding: 6px 20px;
-        border-radius: 30px;
-        border: none;
-        display: inline-block;
-    }
+.price-card:hover img {
+    transform: scale(1.1);
+}
+
+.price-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+}
+
+.price-card .card-img-overlay {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.price-card .card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.price-card .btn {
+    background: #f7941d;
+    color: #fff;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 6px 20px;
+    border-radius: 30px;
+    border: none;
+    display: inline-block;
+}
 </style>
 <?php $__env->stopPush(); ?>
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    /*==================================================================
+/*==================================================================
         [ Isotope ]*/
-    var $topeContainer = $('.isotope-grid');
-    var $filter = $('.filter-tope-group');
+var $topeContainer = $('.isotope-grid');
+var $filter = $('.filter-tope-group');
 
-    // filter items on button click
-    $filter.each(function() {
-        $filter.on('click', 'button', function() {
-            var filterValue = $(this).attr('data-filter');
-            $topeContainer.isotope({
-                filter: filterValue
-            });
-        });
-
-    });
-
-    // init Isotope
-    $(window).on('load', function() {
-        var $grid = $topeContainer.each(function() {
-            $(this).isotope({
-                itemSelector: '.isotope-item',
-                layoutMode: 'fitRows',
-                percentPosition: true,
-                animationEngine: 'best-available',
-                masonry: {
-                    columnWidth: '.isotope-item'
-                }
-            });
+// filter items on button click
+$filter.each(function() {
+    $filter.on('click', 'button', function() {
+        var filterValue = $(this).attr('data-filter');
+        $topeContainer.isotope({
+            filter: filterValue
         });
     });
 
-    var isotopeButton = $('.filter-tope-group button');
+});
 
-    $(isotopeButton).each(function() {
-        $(this).on('click', function() {
-            for (var i = 0; i < isotopeButton.length; i++) {
-                $(isotopeButton[i]).removeClass('how-active1');
-            }
-
-            $(this).addClass('how-active1');
-        });
-    });
-
-    function setEqualHeight() {
-        var maxHeight = 0;
-        $('.product-card-modern').css('height', 'auto'); // reset
-
-        $('.product-card-modern').each(function() {
-            var cardHeight = $(this).outerHeight();
-            if (cardHeight > maxHeight) {
-                maxHeight = cardHeight;
+// init Isotope
+$(window).on('load', function() {
+    var $grid = $topeContainer.each(function() {
+        $(this).isotope({
+            itemSelector: '.isotope-item',
+            layoutMode: 'fitRows',
+            percentPosition: true,
+            animationEngine: 'best-available',
+            masonry: {
+                columnWidth: '.isotope-item'
             }
         });
+    });
+});
 
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
+var isotopeButton = $('.filter-tope-group button');
 
-    // Run on page load and window resize
-    $(document).ready(setEqualHeight);
-    $(window).resize(setEqualHeight);
+$(isotopeButton).each(function() {
+    $(this).on('click', function() {
+        for (var i = 0; i < isotopeButton.length; i++) {
+            $(isotopeButton[i]).removeClass('how-active1');
+        }
+
+        $(this).addClass('how-active1');
+    });
+});
+
+function setEqualHeight() {
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
+
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
+        }
+    });
+
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
+
+// Run on page load and window resize
+$(document).ready(setEqualHeight);
+$(window).resize(setEqualHeight);
 </script>
 <script>
-    function cancelFullScreen(el) {
-        var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
-        if (requestMethod) { // cancel full screen.
-            requestMethod.call(el);
-        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
-            }
+function cancelFullScreen(el) {
+    var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
+    if (requestMethod) { // cancel full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
         }
     }
+}
 
-    function requestFullScreen(el) {
-        // Supports most browsers and their versions.
-        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el.msRequestFullscreen;
+function requestFullScreen(el) {
+    // Supports most browsers and their versions.
+    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
+        .msRequestFullscreen;
 
-        if (requestMethod) { // Native full screen.
-            requestMethod.call(el);
-        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
-            }
+    if (requestMethod) { // Native full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
         }
-        return false
     }
-    const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
+    return false
+}
+const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
 
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // Remove 'active' from all buttons
-            filterButtons.forEach(b => b.classList.remove('active'));
-            // Add 'active' to clicked button
-            this.classList.add('active');
-        });
+filterButtons.forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove 'active' from all buttons
+        filterButtons.forEach(b => b.classList.remove('active'));
+        // Add 'active' to clicked button
+        this.classList.add('active');
     });
+});
 </script>
 
 <?php $__env->stopPush(); ?>
