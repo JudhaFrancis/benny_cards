@@ -299,7 +299,32 @@ big {
 .section {
 	padding: 80px 0;
 	position: relative;
+	background-color: #fafdff;
+	background-image: url('/images/background.jpg');
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-position: center center;
+	background-attachment: fixed;
+	overflow: hidden; /* ensures overlay stays inside */
 }
+
+.section::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255, 255, 255, 0.9); /* white overlay with 60% opacity */
+	z-index: 1;
+}
+
+/* Make sure content inside .section stays above overlay */
+.section > * {
+	position: relative;
+	z-index: 2;
+}
+
 
 .section-title {
 	text-align: center;
@@ -323,7 +348,7 @@ big {
 	content: "";
 	height: 2px;
 	width: 50px;
-	background: #F7941D;
+	background: #ec1176;
 	left: 50%;
 	bottom: 0;
 	margin-left: -25px;
@@ -2085,6 +2110,136 @@ object {
 
 .cart-remove i:hover {
 	color: #dc3545;
+}
+
+/* Banner Sliding */
+#Gslider .carousel-inner {
+	background: #000000;
+	color: black;
+}
+
+#Gslider .carousel-inner {
+	height: 550px;
+}
+
+#Gslider .carousel-inner img {
+	width: 100% !important;
+	opacity: .8;
+	height: 550px;
+	object-fit: cover;
+}
+
+#Gslider .carousel-inner .carousel-caption {
+	bottom: 60%;
+}
+
+#Gslider .carousel-inner .carousel-caption h1 {
+	font-size: 50px;
+	font-weight: bold;
+	line-height: 100%;
+	color: #F7941D;
+}
+
+#Gslider .carousel-inner .carousel-caption p {
+	font-size: 18px;
+	color: black;
+	margin: 28px 0 28px 0;
+}
+
+#Gslider .carousel-indicators {
+	bottom: 70px;
+}
+
+.category-card {
+	border: none;
+	overflow: hidden;
+	position: relative;
+	width: 180px;
+	height: 200px;
+	border-radius: 0;
+
+}
+
+.category-card img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform .5s ease;
+}
+
+
+
+.category-card:hover img {
+	transform: scale(1.1);
+}
+
+.category-card .btn {
+	background: #F7941D;
+	border: none;
+	font-weight: 600;
+	font-size: 9px;
+	padding: 2px 6px;
+	color: white;
+	position: absolute;
+	bottom: 10px;
+	right: 10px;
+	border-radius: 24px;
+}
+
+
+.category-card .card-img-overlay {
+	background: rgba(0, 0, 0, 0.1);
+
+}
+
+.category-card .card-img-overlay h5,
+.category-card .card-img-overlay p {
+	color: #fff;
+	font-weight: 600;
+	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.price-card {
+	border: none;
+	overflow: hidden;
+	position: relative;
+	width: 250px;
+	height: 250px;
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+	transition: transform .3s ease-in-out;
+}
+
+.price-card:hover img {
+	transform: scale(1.1);
+}
+
+.price-card img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0.8;
+}
+
+.price-card .card-img-overlay {
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.price-card .card-title {
+	font-size: 18px;
+	font-weight: 700;
+	color: #fff;
+}
+
+.price-card .btn {
+	background: #f7941d;
+	color: #fff;
+	font-weight: 500;
+	font-size: 14px;
+	padding: 6px 20px;
+	border-radius: 30px;
+	border: none;
+	display: inline-block;
 }
 
 .quantity-selector .btn-number {

@@ -193,29 +193,9 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             <a href="<?php echo e($urlWithoutFilter); ?>" class="text-decoration-none fw-bold" style="line-height:1;">&times;</a>
                         </span>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-<<<<<<< HEAD
-=======
-                        <?php else: ?>
-                        <h4 class="text-warning" style="margin:100px auto;">There are no products.</h4>
-                        <?php endif; ?>
-                    </div>
-                    <div class="row">
-<<<<<<< HEAD
-                            <div class="col-md-12 justify-content-center d-flex">
-                                <?php echo e($products->appends($_GET)->links()); ?>
-
-                            </div>
-                    </div>
-=======
-                        <div class="col-md-12 justify-content-center d-flex">
-                            <?php echo e($products->appends($_GET)->links()); ?>
-
-                        </div>
->>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
                     </div>
                     <?php endif; ?>
 
->>>>>>> a7e52c3faa7299694fb1684abe1e3bf8a959ca9b
                 </div>
             </div>
 

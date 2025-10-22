@@ -27,10 +27,8 @@
     </a>
 </section>
 <?php endif; ?>
-
 <!--/ End Slider Area -->
 
-<!-- Start Small Banner  -->
 <!-- Wedding Cards by Religion Section -->
 <section class="section">
     <div class="section-container ">
@@ -81,9 +79,9 @@
             $categories = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
             ?>
             <?php if($categories): ?>
-            <button class="btn active" style="background:none;color:black;" data-filter="*">All Categories</button>
+            <button class="btn active" style="background:white;color:black;" data-filter="*">All Categories</button>
             <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $key=>$cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <button class="btn" style="background:none;color:black;" data-filter=".<?php echo e($cat->id); ?>">
+            <button class="btn" style="background:white;color:black;" data-filter=".<?php echo e($cat->id); ?>">
                 <?php echo e($cat->title); ?>
 
             </button>
@@ -213,84 +211,77 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
-<<<<<<< HEAD
-=======
- <?php
-$trendingItems = $product_lists->where('condition','new');
-?>
-<?php if($trendingItems->count() > 0): ?>
-<!-- Trending Item Area Start -->
-<?php if($product_lists->where('condition', 'trending')->count() > 0): ?>
->>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
 <section class="product-area most-popular section" style="padding-top:0px;">
-    <div class="container">
+    <div class="section-container">
         <div class="row">
             <div class="col-12">
-                <div class="section-title text-center mb-4">
+                <div class="section-title">
                     <h2>Trending Items</h2>
                 </div>
             </div>
         </div>
 
-        <div class="trending-slider">
+        <div class="row">
+            <?php $hasTrending = false; ?>
             <?php $__currentLoopData = $product_lists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                <?php if($product->condition == 'trending'): ?>
-                <?php
-                    $photo = explode(',', $product->photo);
-                    $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-                ?>
+            <?php if($product->condition == 'trending'): ?>
+            <?php
+            $hasTrending = true;
+            $photo = explode(',', $product->photo);
+            $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+            ?>
 
-                <div class="product-card-modern text-center px-2">
-                    <div class="product-image-modern position-relative">
+            <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="product-card-modern">
+                    <div class="product-image-modern">
                         <a href="<?php echo e(route('product-detail', $product->slug)); ?>">
-                            <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>" style="width:100%;border-radius:12px;">
+                            <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                         </a>
 
+                        <!-- Badges (except discount) -->
                         <?php if($product->stock <= 0): ?>
                             <span class="badge out-of-stock">Sold Out</span>
-                        <?php elseif($product->condition == 'new'): ?>
+                            <?php elseif($product->condition == 'new'): ?>
                             <span class="badge new">New</span>
-                        <?php elseif($product->condition == 'hot'): ?>
+                            <?php elseif($product->condition == 'hot'): ?>
                             <span class="badge hot">Hot</span>
-                        <?php elseif($product->condition == 'trending'): ?>
+                            <?php elseif($product->condition == 'trending'): ?>
                             <span class="badge trending">Trending</span>
-                        <?php endif; ?>
+                            <?php endif; ?>
 
-                        <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                        <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
+                            <!-- Wishlist Top Right -->
+                            <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top">
+                                <i class="ti-heart"></i>
+                            </a>
+
+                            <!-- Add to Cart Bottom Right -->
+                            <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">
+                                Add to Cart
+                            </a>
                     </div>
 
-                    <div class="product-info-modern mt-3">
+                    <!-- Product Info -->
+                    <div class="product-info-modern text-center">
                         <h3 class="product-title">
                             <a href="<?php echo e(route('product-detail', $product->slug)); ?>"><?php echo e($product->title); ?></a>
                         </h3>
-                        <div class="product-price">
+
+                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
                             <span class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
+
                             <?php if($product->discount > 0): ?>
-                                <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
-                                <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
+                            <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
+                            <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-                <?php endif; ?>
+            </div>
+            <?php endif; ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-
-        <div class="trending-slider-nav text-center mt-3">
-    <button class="trending-prev  mx-2">&lt;</button>
-    <button class="trending-next  mx-2">&gt;</button>
-</div>
     </div>
 </section>
-<<<<<<< HEAD
-=======
-<?php endif; ?>
-<!-- Trending Item Area End -->
-
-<?php endif; ?>
-
->>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
 
 <!-- Start Latest Items -->
 <section class="product-area most-popular section" style="padding-top:0px;">
@@ -437,15 +428,6 @@ $trendingItems = $product_lists->where('condition','new');
         </div>
     </div>
 </section>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-<?php endif; ?>
-
-
-=======
->>>>>>> a7e52c3faa7299694fb1684abe1e3bf8a959ca9b
->>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
 <!-- End Shop Home List  -->
 
 <!-- Modal -->
@@ -578,139 +560,6 @@ $trendingItems = $product_lists->where('condition','new');
 <!-- Modal end -->
 <?php $__env->stopSection(); ?>
 
-<?php $__env->startPush('styles'); ?>
-<style>
-    /* Banner Sliding */
-    #Gslider .carousel-inner {
-        background: #000000;
-        color: black;
-    }
-
-    #Gslider .carousel-inner {
-        height: 550px;
-    }
-
-    #Gslider .carousel-inner img {
-        width: 100% !important;
-        opacity: .8;
-        height: 550px;
-        object-fit: cover;
-    }
-
-    #Gslider .carousel-inner .carousel-caption {
-        bottom: 60%;
-    }
-
-    #Gslider .carousel-inner .carousel-caption h1 {
-        font-size: 50px;
-        font-weight: bold;
-        line-height: 100%;
-        color: #F7941D;
-    }
-
-    #Gslider .carousel-inner .carousel-caption p {
-        font-size: 18px;
-        color: black;
-        margin: 28px 0 28px 0;
-    }
-
-    #Gslider .carousel-indicators {
-        bottom: 70px;
-    }
-
-    .category-card {
-        border: none;
-        overflow: hidden;
-        position: relative;
-        width: 180px;
-        height: 200px;
-        border-radius: 0;
-
-    }
-
-    .category-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        display: block;
-        transition: transform .5s ease;
-    }
-
-
-
-    .category-card:hover img {
-        transform: scale(1.1);
-    }
-
-    .category-card .btn {
-        background: #F7941D;
-        border: none;
-        font-weight: 600;
-        font-size: 9px;
-        padding: 2px 6px;
-        color: white;
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        border-radius: 24px;
-    }
-
-
-    .category-card .card-img-overlay {
-        background: rgba(0, 0, 0, 0.1);
-
-    }
-
-    .category-card .card-img-overlay h5,
-    .category-card .card-img-overlay p {
-        color: #fff;
-        font-weight: 600;
-        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
-    }
-
-    .price-card {
-        border: none;
-        overflow: hidden;
-        position: relative;
-        width: 250px;
-        height: 250px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        transition: transform .3s ease-in-out;
-    }
-
-    .price-card:hover img {
-        transform: scale(1.1);
-    }
-
-    .price-card img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        opacity: 0.8;
-    }
-
-    .price-card .card-img-overlay {
-        background: rgba(0, 0, 0, 0.5);
-    }
-
-    .price-card .card-title {
-        font-size: 18px;
-        font-weight: 700;
-        color: #fff;
-    }
-
-    .price-card .btn {
-        background: #f7941d;
-        color: #fff;
-        font-weight: 500;
-        font-size: 14px;
-        padding: 6px 20px;
-        border-radius: 30px;
-        border: none;
-        display: inline-block;
-    }
-</style>
-<?php $__env->stopPush(); ?>
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
@@ -856,31 +705,5 @@ $trendingItems = $product_lists->where('condition','new');
     });
 </script>
 
-<script>
-var $slider = $('.trending-slider');
-
-$slider.slick({
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: false,
-    arrows: false,  // hide default arrows
-    dots: false,
-    infinite: false,
-    responsive: [
-        { breakpoint: 1200, settings: { slidesToShow: 3 } },
-        { breakpoint: 768, settings: { slidesToShow: 2 } },
-        { breakpoint: 480, settings: { slidesToShow: 1 } }
-    ]
-});
-
-// Custom arrow controls
-$('.trending-prev').on('click', function(){
-    $slider.slick('slickPrev');
-});
-$('.trending-next').on('click', function(){
-    $slider.slick('slickNext');
-});
-
-    </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/index.blade.php ENDPATH**/ ?>
