@@ -103,16 +103,38 @@ if (!empty($_GET['price_range'])) {
 
 // Sorting
 if (!empty($_GET['sortBy'])) {
-    if ($_GET['sortBy'] == 'title') $products->orderBy('title', 'ASC');
-    if ($_GET['sortBy'] == 'price') $products->orderBy('price', 'ASC');
+    switch ($_GET['sortBy']) {
+        case 'price_asc':
+            $products->orderBy('price', 'ASC');
+            break;
+
+        case 'price_desc':
+            $products->orderBy('price', 'DESC');
+            break;
+
+        case 'latest':
+            $products->where('condition', 'new')->orderBy('id', 'DESC');
+            break;
+
+        case 'trending':
+            $products->where('condition', 'trending')->orderBy('id', 'DESC');
+            break;
+
+        default:
+            $products->orderBy('id', 'DESC');
+            break;
+    }
 }
+
 
 // Pagination
 $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 $products = $products->where('status', 'active')->paginate(!empty($_GET['show']) ? $_GET['show'] : 20);
 
+$allCategories = Category::where('status', 'active')->get();
+
 // Return view
-return view('frontend.pages.product-grids', compact('products', 'recent_products', 'category_name'));
+return view('frontend.pages.product-grids', compact('products', 'recent_products', 'category_name','allCategories'));
 
 }
 
@@ -215,10 +237,13 @@ return view('frontend.pages.product-grids', compact('products', 'recent_products
         $products = Product::where('cat_id', $category->id)->where('status', 'active')->orderBy('id', 'DESC')->paginate(9);        // return $request->slug;
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
+        $allCategories = Category::where('status', 'active')->get();
+
         return view('frontend.pages.product-grids', [
         'products' => $products,
         'recent_products' => $recent_products,
         'category_name' => $category->title,
+        'allCategories' => $allCategories,
     ]);
 
     }

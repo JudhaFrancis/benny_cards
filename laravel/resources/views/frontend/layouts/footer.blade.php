@@ -1,7 +1,7 @@
 <!-- Start Footer Area -->
 <footer class="footer">
 	<!-- Footer Top -->
-	<div class="footer-top section" style="padding-bottom: 60px;">
+	<div class="footer-top" style="padding: 60px 0px;background-color:#222;">
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-5 col-md-6 col-12">

@@ -29,7 +29,17 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
 <!-- Product Style -->
 <div class="section-container mt-5 mb-3">
-    <h3 class="text-start text-uppercase">{{ $category_name }}</h3>
+    <h3 class="text-start text-uppercase">
+        @if(request('category'))
+        @php
+        $catSlug = request('category');
+        $cat = $allCategories->firstWhere('slug', $catSlug);
+        @endphp
+        {{ $cat ? $cat->title : $category_name }}
+        @else
+        {{ $category_name }}
+        @endif
+    </h3>
 </div>
 
 <section class="product-area shop-sidebar shop">
@@ -42,27 +52,42 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                     <div class="d-flex flex-wrap gap-2">
                         <!-- Ratings Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Ratings
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 5]) }}">5 Stars</a></li>
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 4]) }}">4 Stars & Up</a></li>
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 3]) }}">3 Stars & Up</a></li>
+                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 5]) }}">5
+                                        Stars</a></li>
+                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 4]) }}">4
+                                        Stars & Up</a></li>
+                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 3]) }}">3
+                                        Stars & Up</a></li>
                             </ul>
                         </div>
 
                         <!-- Categories Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Categories
                             </button>
                             <ul class="dropdown-menu">
                                 @foreach($categories as $cat)
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['category' => $cat->slug]) }}">{{ $cat->title }}</a></li>
+                                <li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['category' => $cat->slug]) }}">
+                                        {{ $cat->title }}
+                                    </a>
+                                </li>
+
+                                </li>
                                 @if($cat->child_cat->count())
                                 @foreach($cat->child_cat as $sub)
-                                <li><a class="dropdown-item ps-4" href="{{ request()->fullUrlWithQuery(['category' => $sub->slug]) }}">— {{ $sub->title }}</a></li>
+                                <li><a class="dropdown-item ps-4"
+                                        href="{{ request()->fullUrlWithQuery(['category' => $sub->slug]) }}">—
+                                        {{ $sub->title }}</a></li>
                                 @endforeach
                                 @endif
                                 @endforeach
@@ -71,24 +96,36 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
                         <!-- Brands Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Brands
                             </button>
                             <ul class="dropdown-menu">
                                 @foreach($brands as $brand)
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['brand' => $brand->slug]) }}">{{ $brand->title }}</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['brand' => $brand->slug]) }}">
+                                        {{ $brand->title }}
+                                    </a>
+                                </li>
                                 @endforeach
                             </ul>
                         </div>
 
                         <!-- Price Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Price
                             </button>
                             <ul class="dropdown-menu">
                                 @foreach($price_ranges as $range)
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['price_range' => $range->slug]) }}">{{ $range->title }}</a></li>
+                                <li>
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => $range->slug]) }}">
+                                        {{ $range->title }}
+                                    </a></li>
+
+                                </li>
                                 @endforeach
                             </ul>
                         </div>
@@ -100,10 +137,24 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             Sort by
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'default']) }}">Default sorting</a></li>
-                            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'price_asc']) }}">Price: Low to High</a></li>
-                            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'price_desc']) }}">Price: High to Low</a></li>
-                            <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['sort' => 'latest']) }}">Newest</a></li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sort' => 'default']) }}">
+                                    Default sorting
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'price_asc']) }}">
+                                    Price: Low to High
+                                </a></li>
+
+                            <li><a class="dropdown-item"
+                                    href="{{ route('product-grids', ['sortBy' => 'price_desc']) }}">
+                                    Price: High to Low
+                                </a></li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'latest']) }}">
+                                    Newest
+                                </a></li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'trending']) }}">
+                                    Trending
+                                </a></li>
                         </ul>
                     </div>
                     @php
@@ -176,7 +227,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
                     @if(count($selectedFilters) > 0)
                     <div class="w-100 mt-2 d-flex align-items-center gap-2 flex-wrap">
-                        <a href="{{ route('home') }}" class="clear_filter small">
+                        <a href="{{ route('product-grids') }}" class="clear_filter small">
                             ✕ Clear All Filters
                         </a>
 
@@ -189,7 +240,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                         @endphp
                         <span class="badge small d-flex align-items-center gap-1">
                             {{ $filter['title'] }}
-                            <a href="{{ $urlWithoutFilter }}" class="text-decoration-none fw-bold" style="line-height:1;">&times;</a>
+                            <a href="{{ $urlWithoutFilter }}" class="text-decoration-none fw-bold"
+                                style="line-height:1;">&times;</a>
                         </span>
                         @endforeach
                     </div>
@@ -203,11 +255,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                 <div class="row">
                     @if(count($products) > 0)
                     @foreach($products as $product)
-                    @php $hasTrending = false; @endphp
-                    @foreach($products as $product)
-                    @if($product->condition == 'trending')
                     @php
-                    $hasTrending = true;
                     $photo = explode(',', $product->photo);
                     $after_discount = ($product->price - ($product->price * $product->discount) / 100);
                     @endphp
@@ -219,9 +267,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                     <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                                 </a>
 
-                                <!-- Badges (except discount) -->
-                                @if($product->stock <= 0)
-                                    <span class="badge out-of-stock">Sold Out</span>
+                                <!-- Badges -->
+                                @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                                     @elseif($product->condition == 'new')
                                     <span class="badge new">New</span>
                                     @elseif($product->condition == 'hot')
@@ -230,12 +277,10 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                     <span class="badge trending">Trending</span>
                                     @endif
 
-                                    <!-- Wishlist Top Right -->
+                                    <!-- Wishlist & Add to Cart -->
                                     <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
                                         <i class="ti-heart"></i>
                                     </a>
-
-                                    <!-- Add to Cart Bottom Right -->
                                     <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
                                         Add to Cart
                                     </a>
@@ -248,7 +293,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 </h3>
 
                                 <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                    <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                    <span
+                                        class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
 
                                     @if($product->discount > 0)
                                     <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
@@ -258,12 +304,11 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             </div>
                         </div>
                     </div>
-                    @endif
-                    @endforeach
                     @endforeach
                     @else
                     <h4 class="text-warning text-center my-5">There are no products.</h4>
                     @endif
+
                 </div>
 
                 <!-- Pagination -->
@@ -281,53 +326,53 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 @endsection
 @push('styles')
 <style>
-    .pagination {
-        display: inline-flex;
-    }
+.pagination {
+    display: inline-flex;
+}
 
-    .filter_button {
-        /* height:20px; */
-        text-align: center;
-        background: #F7941D;
-        padding: 8px 16px;
-        margin-top: 10px;
-        color: white;
-    }
+.filter_button {
+    /* height:20px; */
+    text-align: center;
+    background: #F7941D;
+    padding: 8px 16px;
+    margin-top: 10px;
+    color: white;
+}
 </style>
 @endpush
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    $(document).ready(function() {
-        /*----------------------------------------------------*/
-        /*  Jquery Ui slider js
-        /*----------------------------------------------------*/
-        if ($("#slider-range").length > 0) {
-            const max_value = parseInt($("#slider-range").data('max')) || 500;
-            const min_value = parseInt($("#slider-range").data('min')) || 0;
-            const currency = $("#slider-range").data('currency') || '';
-            let price_range = min_value + '-' + max_value;
-            if ($("#price_range").length > 0 && $("#price_range").val()) {
-                price_range = $("#price_range").val().trim();
-            }
+$(document).ready(function() {
+    /*----------------------------------------------------*/
+    /*  Jquery Ui slider js
+    /*----------------------------------------------------*/
+    if ($("#slider-range").length > 0) {
+        const max_value = parseInt($("#slider-range").data('max')) || 500;
+        const min_value = parseInt($("#slider-range").data('min')) || 0;
+        const currency = $("#slider-range").data('currency') || '';
+        let price_range = min_value + '-' + max_value;
+        if ($("#price_range").length > 0 && $("#price_range").val()) {
+            price_range = $("#price_range").val().trim();
+        }
 
-            let price = price_range.split('-');
-            $("#slider-range").slider({
-                range: true,
-                min: min_value,
-                max: max_value,
-                values: price,
-                slide: function(event, ui) {
-                    $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
-                    $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
-                }
-            });
-        }
-        if ($("#amount").length > 0) {
-            const m_currency = $("#slider-range").data('currency') || '';
-            $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
-                "  -  " + m_currency + $("#slider-range").slider("values", 1));
-        }
-    })
+        let price = price_range.split('-');
+        $("#slider-range").slider({
+            range: true,
+            min: min_value,
+            max: max_value,
+            values: price,
+            slide: function(event, ui) {
+                $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
+                $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+            }
+        });
+    }
+    if ($("#amount").length > 0) {
+        const m_currency = $("#slider-range").data('currency') || '';
+        $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
+            "  -  " + m_currency + $("#slider-range").slider("values", 1));
+    }
+})
 </script>
 @endpush
