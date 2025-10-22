@@ -143,7 +143,7 @@
 		@else
 		<div class="text-center py-5">
 			<h5>Your cart is empty!</h5>
-			<a href="{{route('product-grids')}}" class="price-btn-new">Shop Now</a>
+			<a href="{{route('product-grids')}}" class="price-btn-new mt-4">Shop Now</a>
 		</div>
 		@endif
 	</div>

@@ -305,7 +305,8 @@ big {
 	background-size: cover;
 	background-position: center center;
 	background-attachment: fixed;
-	overflow: hidden; /* ensures overlay stays inside */
+	overflow: hidden;
+	/* ensures overlay stays inside */
 }
 
 .section::before {
@@ -315,12 +316,13 @@ big {
 	left: 0;
 	width: 100%;
 	height: 100%;
-	background-color: rgba(255, 255, 255, 0.9); /* white overlay with 60% opacity */
+	background-color: rgba(255, 255, 255, 0.9);
+	/* white overlay with 60% opacity */
 	z-index: 1;
 }
 
 /* Make sure content inside .section stays above overlay */
-.section > * {
+.section>* {
 	position: relative;
 	z-index: 2;
 }
@@ -2446,4 +2448,50 @@ object {
 
 .badge a:hover {
 	color: #F7941D;
+}
+
+/* Container for navigation buttons */
+.swiper-navigation {
+	display: flex;
+	justify-content: flex-end;
+	/* or center, depending on your design */
+	gap: 30px;
+	margin-top: 20px;
+}
+
+/* Style for Prev & Next buttons */
+.swiper-navigation .swiper-button-prev,
+.swiper-navigation .swiper-button-next {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	background-color: #3cc0c2;
+	color: #fff;
+	border-radius: 50%;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+/* Properly center and size the default Swiper arrow icon */
+.swiper-navigation .swiper-button-prev::after,
+.swiper-navigation .swiper-button-next::after {
+	font-size: 16px;
+	font-weight: bold;
+	line-height: 1;
+	color: #fff;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
+/* Hover effect */
+.swiper-navigation .swiper-button-prev:hover,
+.swiper-navigation .swiper-button-next:hover {
+	background-color: #ec1176;
+	transform: scale(1.1);
 }

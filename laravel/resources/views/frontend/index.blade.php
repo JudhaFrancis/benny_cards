@@ -78,24 +78,16 @@
             @php
             $categories = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
             @endphp
-            @if($categories)
-            <button class="btn active" style="background:white;color:black;" data-filter="*">All Categories</button>
-            @foreach($categories as $key=>$cat)
+            @foreach($categories as $cat)
             <button class="btn" style="background:white;color:black;" data-filter=".{{$cat->id}}">
                 {{$cat->title}}
             </button>
             @endforeach
-            @endif
         </ul>
 
         <!-- Products Grid -->
         <div class="row trending-products-grid isotope-grid">
-            @foreach($categories as $key => $cat)
-            @php
-            $productsByCategory = $product_lists->where('cat_id', $cat->id)->take(8);
-            @endphp
-
-            @foreach($productsByCategory as $product)
+            @foreach($product_lists as $key => $product)
             @php
             $photo = explode(',', $product->photo);
             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
@@ -106,8 +98,6 @@
                         <a href="{{ route('product-detail', $product->slug) }}">
                             <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                         </a>
-
-                        <!-- Badges -->
                         @if($product->stock <= 0)
                             <span class="badge out-of-stock">Sold Out</span>
                             @elseif($product->condition == 'trending')
@@ -118,13 +108,10 @@
                             <span class="badge hot">Hot</span>
                             @endif
 
-                            <!-- Wishlist -->
                             <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                            <!-- Add to Cart -->
                             <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
                     </div>
 
-                    <!-- Product Info -->
                     <div class="product-info-modern text-center">
                         <h3 class="product-title">
                             <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
@@ -139,13 +126,6 @@
                     </div>
                 </div>
             </div>
-            @endforeach
-
-            @if($productsByCategory->count() == 0)
-            <div class="col-12 text-center mt-4">
-                <p class="text-muted fs-5">No products available in this category right now.</p>
-            </div>
-            @endif
             @endforeach
         </div>
     </div>
@@ -210,6 +190,11 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
+@php
+$trendingProducts = $product_lists->where('condition', 'trending');
+@endphp
+
+@if($trendingProducts->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -220,69 +205,71 @@
             </div>
         </div>
 
-        <div class="row">
-            @php $hasTrending = false; @endphp
-            @foreach($product_lists as $product)
-            @if($product->condition == 'trending')
-            @php
-            $hasTrending = true;
-            $photo = explode(',', $product->photo);
-            $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-            @endphp
+        <!-- Swiper Slider -->
+        <div class="swiper latest-items-swiper">
+            <div class="swiper-wrapper">
+                @foreach($trendingProducts as $product)
+                @php
+                $photo = explode(',', $product->photo);
+                $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+                @endphp
 
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="product-card-modern">
-                    <div class="product-image-modern">
-                        <a href="{{ route('product-detail', $product->slug) }}">
-                            <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
-                        </a>
-
-                        <!-- Badges (except discount) -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
-                            @elseif($product->condition == 'new')
-                            <span class="badge new">New</span>
-                            @elseif($product->condition == 'hot')
-                            <span class="badge hot">Hot</span>
-                            @elseif($product->condition == 'trending')
-                            <span class="badge trending">Trending</span>
-                            @endif
-
-                            <!-- Wishlist Top Right -->
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
-                                <i class="ti-heart"></i>
+                <div class="swiper-slide">
+                    <div class="product-card-modern">
+                        <div class="product-image-modern">
+                            <a href="{{ route('product-detail', $product->slug) }}">
+                                <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            <!-- Add to Cart Bottom Right -->
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
-                                Add to Cart
-                            </a>
-                    </div>
+                            @if($product->stock <= 0)
+                                <span class="badge out-of-stock">Sold Out</span>
+                                @elseif($product->condition == 'new')
+                                <span class="badge new">New</span>
+                                @elseif($product->condition == 'hot')
+                                <span class="badge hot">Hot</span>
+                                @elseif($product->condition == 'trending')
+                                <span class="badge trending">Trending</span>
+                                @endif
 
-                    <!-- Product Info -->
-                    <div class="product-info-modern text-center">
-                        <h3 class="product-title">
-                            <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
-                        </h3>
+                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                        </div>
 
-                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
-
-                            @if($product->discount > 0)
-                            <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
-                            <span class="badge discount-badge">{{ $product->discount }}% Off</span>
-                            @endif
+                        <div class="product-info-modern text-center">
+                            <h3 class="product-title">
+                                <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                            </h3>
+                            <div class="product-price d-flex justify-content-center align-items-center gap-2">
+                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                @if($product->discount > 0)
+                                <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
+                                <span class="badge discount-badge">{{ $product->discount }}% Off</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endif
-            @endforeach
+
+            <!-- Navigation Arrows BELOW the slider -->
+            <div class="swiper-navigation text-center mt-3">
+                <div class="swiper-button-prev d-inline-block me-2"></div>
+                <div class="swiper-button-next d-inline-block"></div>
+            </div>
+
         </div>
+
     </div>
 </section>
+@endif
 
-<!-- Start Latest Items -->
+<!-- Start New Items -->
+@php
+$newProducts = $product_lists->where('condition', 'new');
+@endphp
+
+@if($newProducts->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -293,69 +280,71 @@
             </div>
         </div>
 
-        <div class="row">
-            @php $hasTrending = false; @endphp
-            @foreach($product_lists as $product)
-            @if($product->condition == 'new')
-            @php
-            $hasTrending = true;
-            $photo = explode(',', $product->photo);
-            $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-            @endphp
+        <!-- Swiper Slider -->
+        <div class="swiper latest-items-swiper">
+            <div class="swiper-wrapper">
+                @foreach($newProducts as $product)
+                @php
+                $photo = explode(',', $product->photo);
+                $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+                @endphp
 
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="product-card-modern">
-                    <div class="product-image-modern">
-                        <a href="{{ route('product-detail', $product->slug) }}">
-                            <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
-                        </a>
-
-                        <!-- Badges (except discount) -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
-                            @elseif($product->condition == 'new')
-                            <span class="badge new">New</span>
-                            @elseif($product->condition == 'hot')
-                            <span class="badge hot">Hot</span>
-                            @elseif($product->condition == 'trending')
-                            <span class="badge trending">Trending</span>
-                            @endif
-
-                            <!-- Wishlist Top Right -->
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
-                                <i class="ti-heart"></i>
+                <div class="swiper-slide">
+                    <div class="product-card-modern">
+                        <div class="product-image-modern">
+                            <a href="{{ route('product-detail', $product->slug) }}">
+                                <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            <!-- Add to Cart Bottom Right -->
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
-                                Add to Cart
-                            </a>
-                    </div>
+                            @if($product->stock <= 0)
+                                <span class="badge out-of-stock">Sold Out</span>
+                                @elseif($product->condition == 'new')
+                                <span class="badge new">New</span>
+                                @elseif($product->condition == 'hot')
+                                <span class="badge hot">Hot</span>
+                                @elseif($product->condition == 'trending')
+                                <span class="badge trending">Trending</span>
+                                @endif
 
-                    <!-- Product Info -->
-                    <div class="product-info-modern text-center">
-                        <h3 class="product-title">
-                            <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
-                        </h3>
+                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                        </div>
 
-                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
-
-                            @if($product->discount > 0)
-                            <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
-                            <span class="badge discount-badge">{{ $product->discount }}% Off</span>
-                            @endif
+                        <div class="product-info-modern text-center">
+                            <h3 class="product-title">
+                                <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                            </h3>
+                            <div class="product-price d-flex justify-content-center align-items-center gap-2">
+                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                @if($product->discount > 0)
+                                <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
+                                <span class="badge discount-badge">{{ $product->discount }}% Off</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endif
-            @endforeach
+
+            <!-- Navigation Arrows BELOW the slider -->
+            <div class="swiper-navigation text-center mt-3">
+                <div class="swiper-button-prev d-inline-block me-2"></div>
+                <div class="swiper-button-next d-inline-block"></div>
+            </div>
+
         </div>
+
     </div>
 </section>
+@endif
 
 <!-- Start Hot Items -->
+@php
+$hotProducts = $product_lists->where('condition', 'hot');
+@endphp
+
+@if($hotProducts->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -366,209 +355,67 @@
             </div>
         </div>
 
-        <div class="row">
-            @php $hasTrending = false; @endphp
-            @foreach($product_lists as $product)
-            @if($product->condition == 'hot')
-            @php
-            $hasTrending = true;
-            $photo = explode(',', $product->photo);
-            $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-            @endphp
+        <!-- Swiper Slider -->
+        <div class="swiper latest-items-swiper">
+            <div class="swiper-wrapper">
+                @foreach($hotProducts as $product)
+                @php
+                $photo = explode(',', $product->photo);
+                $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+                @endphp
 
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="product-card-modern">
-                    <div class="product-image-modern">
-                        <a href="{{ route('product-detail', $product->slug) }}">
-                            <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
-                        </a>
-
-                        <!-- Badges (except discount) -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
-                            @elseif($product->condition == 'new')
-                            <span class="badge new">New</span>
-                            @elseif($product->condition == 'hot')
-                            <span class="badge hot">Hot</span>
-                            @elseif($product->condition == 'trending')
-                            <span class="badge trending">Trending</span>
-                            @endif
-
-                            <!-- Wishlist Top Right -->
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
-                                <i class="ti-heart"></i>
+                <div class="swiper-slide">
+                    <div class="product-card-modern">
+                        <div class="product-image-modern">
+                            <a href="{{ route('product-detail', $product->slug) }}">
+                                <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            <!-- Add to Cart Bottom Right -->
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
-                                Add to Cart
-                            </a>
-                    </div>
+                            @if($product->stock <= 0)
+                                <span class="badge out-of-stock">Sold Out</span>
+                                @elseif($product->condition == 'new')
+                                <span class="badge new">New</span>
+                                @elseif($product->condition == 'hot')
+                                <span class="badge hot">Hot</span>
+                                @elseif($product->condition == 'trending')
+                                <span class="badge trending">Trending</span>
+                                @endif
 
-                    <!-- Product Info -->
-                    <div class="product-info-modern text-center">
-                        <h3 class="product-title">
-                            <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
-                        </h3>
+                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                        </div>
 
-                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
-
-                            @if($product->discount > 0)
-                            <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
-                            <span class="badge discount-badge">{{ $product->discount }}% Off</span>
-                            @endif
+                        <div class="product-info-modern text-center">
+                            <h3 class="product-title">
+                                <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                            </h3>
+                            <div class="product-price d-flex justify-content-center align-items-center gap-2">
+                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                @if($product->discount > 0)
+                                <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
+                                <span class="badge discount-badge">{{ $product->discount }}% Off</span>
+                                @endif
+                            </div>
                         </div>
                     </div>
                 </div>
+                @endforeach
             </div>
-            @endif
-            @endforeach
+
+            <!-- Navigation Arrows BELOW the slider -->
+            <div class="swiper-navigation text-center mt-3">
+                <div class="swiper-button-prev d-inline-block me-2"></div>
+                <div class="swiper-button-next d-inline-block"></div>
+            </div>
+
         </div>
+
     </div>
 </section>
+@endif
+
 <!-- End Shop Home List  -->
 
-<!-- Modal -->
-@if($product_lists)
-@foreach($product_lists as $key=>$product)
-<div class="modal fade" id="{{$product->id}}" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close"
-                        aria-hidden="true"></span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row no-gutters">
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <!-- Product Slider -->
-                        <div class="product-gallery">
-                            <div class="quickview-slider-active">
-                                @php
-                                $photo=explode(',',$product->photo);
-                                // dd($photo);
-                                @endphp
-                                @foreach($photo as $data)
-                                <div class="single-slider">
-                                    <img src="{{$data}}" alt="{{$data}}">
-                                </div>
-                                @endforeach
-                            </div>
-                        </div>
-                        <!-- End Product slider -->
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="quickview-content">
-                            <h2>{{$product->title}}</h2>
-                            <div class="quickview-ratting-review">
-                                <div class="quickview-ratting-wrap">
-                                    <div class="quickview-ratting">
-                                        {{-- <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="yellow fa fa-star"></i>
-                                                    <i class="fa fa-star"></i> --}}
-                                        @php
-                                        $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
-                                        $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
-                                        @endphp
-                                        @for($i=1; $i<=5; $i++) @if($rate>=$i)
-                                            <i class="yellow fa fa-star"></i>
-                                            @else
-                                            <i class="fa fa-star"></i>
-                                            @endif
-                                            @endfor
-                                    </div>
-                                    <a href="#"> ({{$rate_count}} customer review)</a>
-                                </div>
-                                <div class="quickview-stock">
-                                    @if($product->stock >0)
-                                    <span><i class="fa fa-check-circle-o"></i> {{$product->stock}} in stock</span>
-                                    @else
-                                    <span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} out
-                                        stock</span>
-                                    @endif
-                                </div>
-                            </div>
-                            @php
-                            $after_discount=($product->price-($product->price*$product->discount)/100);
-                            @endphp
-                            <h3><small><del class="text-muted">₹{{number_format($product->price,2)}}</del></small>
-                                ${{number_format($after_discount,2)}} </h3>
-                            <div class="quickview-peragraph">
-                                <p>{!! html_entity_decode($product->summary) !!}</p>
-                            </div>
-                            @if($product->size)
-                            <div class="size">
-                                <div class="row">
-                                    <div class="col-lg-6 col-12">
-                                        <h5 class="title">Size</h5>
-                                        <select>
-                                            @php
-                                            $sizes=explode(',',$product->size);
-                                            // dd($sizes);
-                                            @endphp
-                                            @foreach($sizes as $size)
-                                            <option>{{$size}}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    {{-- <div class="col-lg-6 col-12">
-                                                        <h5 class="title">Color</h5>
-                                                        <select>
-                                                            <option selected="selected">orange</option>
-                                                            <option>purple</option>
-                                                            <option>black</option>
-                                                            <option>pink</option>
-                                                        </select>
-                                                    </div> --}}
-                                </div>
-                            </div>
-                            @endif
-                            <form action="{{route('single-add-to-cart')}}" method="POST" class="mt-4">
-                                @csrf
-                                <div class="quantity">
-                                    <!-- Input Order -->
-                                    <div class="input-group">
-                                        <div class="button minus">
-                                            <button type="button" class="btn btn-primary btn-number" disabled="disabled"
-                                                data-type="minus" data-field="quant[1]">
-                                                <i class="ti-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="hidden" name="slug" value="{{$product->slug}}">
-                                        <input type="text" name="quant[1]" class="input-number" data-min="1"
-                                            data-max="1000" value="1">
-                                        <div class="button plus">
-                                            <button type="button" class="btn btn-primary btn-number" data-type="plus"
-                                                data-field="quant[1]">
-                                                <i class="ti-plus"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <!--/ End Input Order -->
-                                </div>
-                                <div class="add-to-cart">
-                                    <button type="submit" class="btn">Add to cart</button>
-                                    <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i
-                                            class="ti-heart"></i></a>
-                                </div>
-                            </form>
-                            <div class="default-social">
-                                <!-- ShareThis BEGIN -->
-                                <div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endforeach
-@endif
-<!-- Modal end -->
 @endsection
 
 @push('scripts')
@@ -665,17 +512,21 @@
     }
     document.addEventListener('DOMContentLoaded', () => {
         const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
-        const products = document.querySelectorAll('.isotope-item');
+        const products = Array.from(document.querySelectorAll('.isotope-item'));
         const productsGrid = document.querySelector('.trending-products-grid');
 
-        // Function to filter products
         const filterProducts = (filterValue) => {
             let visibleCount = 0;
 
             products.forEach(product => {
                 if (filterValue === '*' || product.classList.contains(filterValue.substring(1))) {
-                    product.style.display = 'block';
-                    visibleCount++;
+                    // Show only first 8 matching products
+                    if (visibleCount < 8) {
+                        product.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        product.style.display = 'none';
+                    }
                 } else {
                     product.style.display = 'none';
                 }
@@ -695,10 +546,9 @@
             }
         };
 
-        // Add click listeners to buttons
+        // Add click listeners
         filterButtons.forEach(btn => {
             btn.addEventListener('click', function() {
-                // Remove 'active' from all buttons
                 filterButtons.forEach(b => b.classList.remove('active'));
                 this.classList.add('active');
 
@@ -707,12 +557,32 @@
             });
         });
 
-        // Default filter on page load (show all)
-        const defaultBtn = document.querySelector('.filter-tope-group .btn[data-filter="*"]');
-        if (defaultBtn) {
-            defaultBtn.classList.add('active');
-            filterProducts('*');
-        }
+        // Default: show first 8 products on page load
+        filterProducts('*');
+    });
+    document.addEventListener('DOMContentLoaded', () => {
+        new Swiper('.latest-items-swiper', {
+            slidesPerView: 4,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1.1
+                },
+                576: {
+                    slidesPerView: 2.1
+                },
+                768: {
+                    slidesPerView: 3.1
+                },
+                992: {
+                    slidesPerView: 4.1
+                },
+            }
+        });
     });
 </script>
 
