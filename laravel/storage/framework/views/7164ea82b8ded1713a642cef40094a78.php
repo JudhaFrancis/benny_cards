@@ -29,7 +29,19 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
 <!-- Product Style -->
 <div class="section-container mt-5 mb-3">
-    <h3 class="text-start text-uppercase"><?php echo e($category_name); ?></h3>
+    <h3 class="text-start text-uppercase">
+        <?php if(request('category')): ?>
+        <?php
+        $catSlug = request('category');
+        $cat = $allCategories->firstWhere('slug', $catSlug);
+        ?>
+        <?php echo e($cat ? $cat->title : $category_name); ?>
+
+        <?php else: ?>
+        <?php echo e($category_name); ?>
+
+        <?php endif; ?>
+    </h3>
 </div>
 
 <section class="product-area shop-sidebar shop">
@@ -42,27 +54,43 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                     <div class="d-flex flex-wrap gap-2">
                         <!-- Ratings Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Ratings
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 5])); ?>">5 Stars</a></li>
-                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 4])); ?>">4 Stars & Up</a></li>
-                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 3])); ?>">3 Stars & Up</a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 5])); ?>">5
+                                        Stars</a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 4])); ?>">4
+                                        Stars & Up</a></li>
+                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 3])); ?>">3
+                                        Stars & Up</a></li>
                             </ul>
                         </div>
 
                         <!-- Categories Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Categories
                             </button>
                             <ul class="dropdown-menu">
                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['category' => $cat->slug])); ?>"><?php echo e($cat->title); ?></a></li>
+                                <li>
+                                <li>
+                                    <a class="dropdown-item"
+                                        href="<?php echo e(request()->fullUrlWithQuery(['category' => $cat->slug])); ?>">
+                                        <?php echo e($cat->title); ?>
+
+                                    </a>
+                                </li>
+
+                                </li>
                                 <?php if($cat->child_cat->count()): ?>
                                 <?php $__currentLoopData = $cat->child_cat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><a class="dropdown-item ps-4" href="<?php echo e(request()->fullUrlWithQuery(['category' => $sub->slug])); ?>">— <?php echo e($sub->title); ?></a></li>
+                                <li><a class="dropdown-item ps-4"
+                                        href="<?php echo e(request()->fullUrlWithQuery(['category' => $sub->slug])); ?>">—
+                                        <?php echo e($sub->title); ?></a></li>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 <?php endif; ?>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -71,24 +99,38 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
                         <!-- Brands Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Brands
                             </button>
                             <ul class="dropdown-menu">
                                 <?php $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brand): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['brand' => $brand->slug])); ?>"><?php echo e($brand->title); ?></a></li>
+                                <li><a class="dropdown-item"
+                                        href="<?php echo e(request()->fullUrlWithQuery(['brand' => $brand->slug])); ?>">
+                                        <?php echo e($brand->title); ?>
+
+                                    </a>
+                                </li>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
 
                         <!-- Price Filter -->
                         <div class="dropdown">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
+                                data-bs-toggle="dropdown">
                                 Price
                             </button>
                             <ul class="dropdown-menu">
                                 <?php $__currentLoopData = $price_ranges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $range): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['price_range' => $range->slug])); ?>"><?php echo e($range->title); ?></a></li>
+                                <li>
+                                <li><a class="dropdown-item"
+                                        href="<?php echo e(request()->fullUrlWithQuery(['price_range' => $range->slug])); ?>">
+                                        <?php echo e($range->title); ?>
+
+                                    </a></li>
+
+                                </li>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
@@ -100,10 +142,24 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             Sort by
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['sort' => 'default'])); ?>">Default sorting</a></li>
-                            <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['sort' => 'price_asc'])); ?>">Price: Low to High</a></li>
-                            <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['sort' => 'price_desc'])); ?>">Price: High to Low</a></li>
-                            <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['sort' => 'latest'])); ?>">Newest</a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sort' => 'default'])); ?>">
+                                    Default sorting
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sortBy' => 'price_asc'])); ?>">
+                                    Price: Low to High
+                                </a></li>
+
+                            <li><a class="dropdown-item"
+                                    href="<?php echo e(route('product-grids', ['sortBy' => 'price_desc'])); ?>">
+                                    Price: High to Low
+                                </a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sortBy' => 'latest'])); ?>">
+                                    Newest
+                                </a></li>
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sortBy' => 'trending'])); ?>">
+                                    Trending
+                                </a></li>
                         </ul>
                     </div>
                     <?php
@@ -176,7 +232,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
                     <?php if(count($selectedFilters) > 0): ?>
                     <div class="w-100 mt-2 d-flex align-items-center gap-2 flex-wrap">
-                        <a href="<?php echo e(route('home')); ?>" class="clear_filter small">
+                        <a href="<?php echo e(route('product-grids')); ?>" class="clear_filter small">
                             ✕ Clear All Filters
                         </a>
 
@@ -190,7 +246,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                         <span class="badge small d-flex align-items-center gap-1">
                             <?php echo e($filter['title']); ?>
 
-                            <a href="<?php echo e($urlWithoutFilter); ?>" class="text-decoration-none fw-bold" style="line-height:1;">&times;</a>
+                            <a href="<?php echo e($urlWithoutFilter); ?>" class="text-decoration-none fw-bold"
+                                style="line-height:1;">&times;</a>
                         </span>
                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
@@ -204,11 +261,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                 <div class="row">
                     <?php if(count($products) > 0): ?>
                     <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php $hasTrending = false; ?>
-                    <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <?php if($product->condition == 'trending'): ?>
                     <?php
-                    $hasTrending = true;
                     $photo = explode(',', $product->photo);
                     $after_discount = ($product->price - ($product->price * $product->discount) / 100);
                     ?>
@@ -220,9 +273,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                     <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                                 </a>
 
-                                <!-- Badges (except discount) -->
-                                <?php if($product->stock <= 0): ?>
-                                    <span class="badge out-of-stock">Sold Out</span>
+                                <!-- Badges -->
+                                <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
                                     <?php elseif($product->condition == 'new'): ?>
                                     <span class="badge new">New</span>
                                     <?php elseif($product->condition == 'hot'): ?>
@@ -231,12 +283,10 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                     <span class="badge trending">Trending</span>
                                     <?php endif; ?>
 
-                                    <!-- Wishlist Top Right -->
+                                    <!-- Wishlist & Add to Cart -->
                                     <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top">
                                         <i class="ti-heart"></i>
                                     </a>
-
-                                    <!-- Add to Cart Bottom Right -->
                                     <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">
                                         Add to Cart
                                     </a>
@@ -249,7 +299,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 </h3>
 
                                 <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                    <span class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
+                                    <span
+                                        class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
 
                                     <?php if($product->discount > 0): ?>
                                     <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
@@ -259,12 +310,11 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             </div>
                         </div>
                     </div>
-                    <?php endif; ?>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     <?php else: ?>
                     <h4 class="text-warning text-center my-5">There are no products.</h4>
                     <?php endif; ?>
+
                 </div>
 
                 <!-- Pagination -->
@@ -283,54 +333,54 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 <?php $__env->stopSection(); ?>
 <?php $__env->startPush('styles'); ?>
 <style>
-    .pagination {
-        display: inline-flex;
-    }
+.pagination {
+    display: inline-flex;
+}
 
-    .filter_button {
-        /* height:20px; */
-        text-align: center;
-        background: #F7941D;
-        padding: 8px 16px;
-        margin-top: 10px;
-        color: white;
-    }
+.filter_button {
+    /* height:20px; */
+    text-align: center;
+    background: #F7941D;
+    padding: 8px 16px;
+    margin-top: 10px;
+    color: white;
+}
 </style>
 <?php $__env->stopPush(); ?>
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    $(document).ready(function() {
-        /*----------------------------------------------------*/
-        /*  Jquery Ui slider js
-        /*----------------------------------------------------*/
-        if ($("#slider-range").length > 0) {
-            const max_value = parseInt($("#slider-range").data('max')) || 500;
-            const min_value = parseInt($("#slider-range").data('min')) || 0;
-            const currency = $("#slider-range").data('currency') || '';
-            let price_range = min_value + '-' + max_value;
-            if ($("#price_range").length > 0 && $("#price_range").val()) {
-                price_range = $("#price_range").val().trim();
-            }
+$(document).ready(function() {
+    /*----------------------------------------------------*/
+    /*  Jquery Ui slider js
+    /*----------------------------------------------------*/
+    if ($("#slider-range").length > 0) {
+        const max_value = parseInt($("#slider-range").data('max')) || 500;
+        const min_value = parseInt($("#slider-range").data('min')) || 0;
+        const currency = $("#slider-range").data('currency') || '';
+        let price_range = min_value + '-' + max_value;
+        if ($("#price_range").length > 0 && $("#price_range").val()) {
+            price_range = $("#price_range").val().trim();
+        }
 
-            let price = price_range.split('-');
-            $("#slider-range").slider({
-                range: true,
-                min: min_value,
-                max: max_value,
-                values: price,
-                slide: function(event, ui) {
-                    $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
-                    $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
-                }
-            });
-        }
-        if ($("#amount").length > 0) {
-            const m_currency = $("#slider-range").data('currency') || '';
-            $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
-                "  -  " + m_currency + $("#slider-range").slider("values", 1));
-        }
-    })
+        let price = price_range.split('-');
+        $("#slider-range").slider({
+            range: true,
+            min: min_value,
+            max: max_value,
+            values: price,
+            slide: function(event, ui) {
+                $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
+                $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
+            }
+        });
+    }
+    if ($("#amount").length > 0) {
+        const m_currency = $("#slider-range").data('currency') || '';
+        $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
+            "  -  " + m_currency + $("#slider-range").slider("values", 1));
+    }
+})
 </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/pages/product-grids.blade.php ENDPATH**/ ?>
