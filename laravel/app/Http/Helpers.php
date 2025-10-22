@@ -111,7 +111,8 @@ class Helper
             if ($user_id == "") $user_id = auth()->user()->id;
             return Cart::with('product')->where('user_id', $user_id)->where('order_id', null)->get();
         } else {
-            return 0;
+            // Return empty collection instead of 0
+            return collect([]);
         }
     }
     // Total amount cart

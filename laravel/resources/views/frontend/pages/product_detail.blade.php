@@ -19,7 +19,7 @@
 
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
-    <div class="container">
+    <div class="section-container">
         <div class="row">
             <div class="col-12">
                 <div class="bread-inner">
@@ -52,7 +52,7 @@
 
 <!-- Shop Single -->
 <section class="shop single section">
-    <div class="container">
+    <div class="section-container">
         <div class="row">
             <div class="col-12">
                 <div class="row">
@@ -63,8 +63,10 @@
                             <div class="flexslider-thumbnails">
                                 <ul class="slides">
 
-                                    <li data-thumb="{{ $product_detail->photo }}" rel="adjustX:10, adjustY:">
-                                        <img src="{{ $product_detail->photo }}" alt="Main Product Image">
+                                    <li data-thumb="{{ $product_detail->photo }}" rel="adjustX:10, adjustY:" class="image-slide">
+                                        <div class="main-image-wrapper rounded border overflow-hidden">
+                                            <img src="{{ $product_detail->photo }}" alt="Main Product Image" class="img-fluid w-100 h-auto image" style="object-fit: cover; max-height: 500px;">
+                                        </div>
                                     </li>
 
                                     @if($product_detail->images && count($product_detail->images) > 0)
@@ -175,17 +177,17 @@
                                     </div>
                                 </form>
 
-                                <p class="cat">Category :<a
+                                <h3 class="cat">Category :<a
                                         href="{{route('product-cat',$product_detail->cat_info['slug'])}}">{{$product_detail->cat_info['title']}}</a>
-                                </p>
+                                </h3>
                                 @if($product_detail->sub_cat_info)
-                                <p class="cat mt-1">Sub Category :<a
+                                <h3 class="cat mt-1">Sub Category :<a
                                         href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a>
-                                </p>
+                                </h3>
                                 @endif
-                                <p class="availability">Stock : @if($product_detail->stock>0)<span
+                                <h3 class="availability">Stock : @if($product_detail->stock>0)<span
                                         class="badge badge-success">{{$product_detail->stock}}</span>@else <span
-                                        class="badge badge-danger">{{$product_detail->stock}}</span> @endif</p>
+                                        class="badge badge-danger">{{$product_detail->stock}}</span> @endif</h3>
                             </div>
                             <!--/ End Product Buy -->
                         </div>
@@ -380,8 +382,8 @@
 <!--/ End Shop Single -->
 
 <!-- Start Most Popular -->
-<div class="product-area most-popular related-product section">
-    <div class="container">
+<div class="product-area most-popular related-product section" style="padding-top: 0px;">
+    <div class="section-container">
         <div class="row">
             <div class="col-12">
                 <div class="section-title">
@@ -389,313 +391,153 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            {{-- {{$product_detail->rel_prods}} --}}
-            <div class="col-12">
-                <div class="owl-carousel popular-slider">
-                    @foreach($product_detail->rel_prods as $data)
-                    @if($data->id !==$product_detail->id)
-                    <!-- Start Single Product -->
-                    <div class="single-product">
-                        <div class="product-img">
-                            <a href="{{route('product-detail',$data->slug)}}">
-                                @php
-                                $photo=explode(',',$data->photo);
-                                @endphp
-                                <img class="default-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                <img class="hover-img" src="{{$photo[0]}}" alt="{{$photo[0]}}">
-                                @if($data->discount > 0)
-                                <span class="price-dec">{{$data->discount}} % Off</span>
-                                @endif
-                                {{-- <span class="out-of-stock">Hot</span> --}}
-                            </a>
-                            <div class="button-head">
-                                <div class="product-action">
-                                    <a data-toggle="modal" data-target="#modelExample" title="Quick View" href="#"><i
-                                            class=" ti-eye"></i><span>Quick Shop</span></a>
-                                    <a title="Wishlist" href="#"><i class=" ti-heart "></i><span>Add to
-                                            Wishlist</span></a>
-                                    <a title="Compare" href="#"><i class="ti-bar-chart-alt"></i><span>Add to
-                                            Compare</span></a>
-                                </div>
-                                <div class="product-action-2">
-                                    <a title="Add to cart" href="#">Add to cart</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h3><a href="{{route('product-detail',$data->slug)}}">{{$data->title}}</a></h3>
-                            <div class="product-price">
-                                @php
-                                $after_discount=($data->price-(($data->discount*$data->price)/100));
-                                @endphp
-                                <span class="old">₹{{number_format($data->price,2)}}</span>
-                                <span>₹{{number_format($after_discount,2)}}</span>
-                            </div>
+        <!-- Related Products -->
+        <div class="row trending-products-grid isotope-grid" style="padding-top: 40px;">
+            @foreach($product_detail->rel_prods as $data)
+            @php
+            $photo = explode(',', $data->photo);
+            $after_discount = $data->price - ($data->price * $data->discount / 100);
+            @endphp
 
+            <div class="col-sm-6 col-md-4 col-lg-3 isotope-item {{ $data->cat_id }}">
+                <div class="product-card-modern">
+                    <div class="product-image-modern">
+                        <a href="{{ route('product-detail', $data->slug) }}">
+                            <img src="{{ $photo[0] }}" alt="{{ $data->title }}">
+                        </a>
+
+                        @if($data->stock <= 0)
+                            <span class="badge out-of-stock">Sold Out</span>
+                            @elseif($data->condition == 'trending')
+                            <span class="badge trending">Trending</span>
+                            @elseif($data->condition == 'new')
+                            <span class="badge new">New</span>
+                            @elseif($data->condition == 'hot')
+                            <span class="badge hot">Hot</span>
+                            @endif
+
+                            <a href="{{ route('add-to-wishlist', $data->slug) }}" class="btn-wishlist-top">
+                                <i class="ti-heart"></i>
+                            </a>
+                            <a href="{{ route('add-to-cart', $data->slug) }}" class="btn-add-cart-bottom">
+                                Add to Cart
+                            </a>
+                    </div>
+
+                    <div class="product-info-modern text-center">
+                        <h3 class="product-title">
+                            <a href="{{ route('product-detail', $data->slug) }}">{{ $data->title }}</a>
+                        </h3>
+                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
+                            <span class="current-price">₹{{ number_format($after_discount, 2) }}</span>
+                            @if($data->discount > 0)
+                            <del class="text-muted">₹{{ number_format($data->price, 2) }}</del>
+                            <span class="badge discount-badge">{{ $data->discount }}% Off</span>
+                            @endif
                         </div>
                     </div>
-                    <!-- End Single Product -->
-
-                    @endif
-                    @endforeach
                 </div>
             </div>
+            @endforeach
         </div>
     </div>
 </div>
 <!-- End Most Popular Area -->
-
-
-<!-- Modal -->
-<div class="modal fade" id="modelExample" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close"
-                        aria-hidden="true"></span></button>
-            </div>
-            <div class="modal-body">
-                <div class="row no-gutters">
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <!-- Product Slider -->
-                        <div class="product-gallery">
-                            <div class="quickview-slider-active">
-                                <div class="single-slider">
-                                    <img src="images/modal1.png" alt="#">
-                                </div>
-                                <div class="single-slider">
-                                    <img src="images/modal2.png" alt="#">
-                                </div>
-                                <div class="single-slider">
-                                    <img src="images/modal3.png" alt="#">
-                                </div>
-                                <div class="single-slider">
-                                    <img src="images/modal4.png" alt="#">
-                                </div>
-                            </div>
-                        </div>
-                        <!-- End Product slider -->
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="quickview-content">
-                            <h2>Flared Shift Dress</h2>
-                            <div class="quickview-ratting-review">
-                                <div class="quickview-ratting-wrap">
-                                    <div class="quickview-ratting">
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="yellow fa fa-star"></i>
-                                        <i class="fa fa-star"></i>
-                                    </div>
-                                    <a href="#"> (1 customer review)</a>
-                                </div>
-                                <div class="quickview-stock">
-                                    <span><i class="fa fa-check-circle-o"></i> in stock</span>
-                                </div>
-                            </div>
-                            <h3>$29.00</h3>
-                            <div class="quickview-peragraph">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum ad
-                                    impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui nemo
-                                    ipsum numquam.</p>
-                            </div>
-                            <div class="size">
-                                <div class="row">
-                                    <div class="col-lg-6 col-12">
-                                        <h5 class="title">Size</h5>
-                                        <select>
-                                            <option selected="selected">s</option>
-                                            <option>m</option>
-                                            <option>l</option>
-                                            <option>xl</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-lg-6 col-12">
-                                        <h5 class="title">Color</h5>
-                                        <select>
-                                            <option selected="selected">orange</option>
-                                            <option>purple</option>
-                                            <option>black</option>
-                                            <option>pink</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="quantity">
-                                <!-- Input Order -->
-                                <div class="input-group">
-                                    <div class="button minus">
-                                        <button type="button" class="btn btn-primary btn-number" disabled="disabled"
-                                            data-type="minus" data-field="quant[1]">
-                                            <i class="ti-minus"></i>
-                                        </button>
-                                    </div>
-                                    <input type="text" name="qty" class="input-number" data-min="1" data-max="1000"
-                                        value="1">
-                                    <div class="button plus">
-                                        <button type="button" class="btn btn-primary btn-number" data-type="plus"
-                                            data-field="quant[1]">
-                                            <i class="ti-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                                <!--/ End Input Order -->
-                            </div>
-                            <div class="add-to-cart">
-                                <a href="#" class="btn">Add to cart</a>
-                                <a href="#" class="btn min"><i class="ti-heart"></i></a>
-                                <a href="#" class="btn min"><i class="fa fa-compress"></i></a>
-                            </div>
-                            <div class="default-social">
-                                <h4 class="share-now">Share:</h4>
-                                <ul>
-                                    <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-                                    <li><a class="twitter" href="#"><i class="fa fa-twitter"></i></a></li>
-                                    <li><a class="youtube" href="#"><i class="fa fa-pinterest-p"></i></a></li>
-                                    <li><a class="dribbble" href="#"><i class="fa fa-google-plus"></i></a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal end -->
-
 @endsection
-@push('styles')
-<style>
-/* Rating */
-.rating_box {
-    display: inline-flex;
-}
 
-.star-rating {
-    font-size: 0;
-    padding-left: 10px;
-    padding-right: 10px;
-}
-
-.star-rating__wrap {
-    display: inline-block;
-    font-size: 1rem;
-}
-
-.star-rating__wrap:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-
-.star-rating__ico {
-    float: right;
-    padding-left: 2px;
-    cursor: pointer;
-    color: #F7941D;
-    font-size: 16px;
-    margin-top: 5px;
-}
-
-.star-rating__ico:last-child {
-    padding-left: 0;
-}
-
-.star-rating__input {
-    display: none;
-}
-
-.star-rating__ico:hover:before,
-.star-rating__ico:hover~.star-rating__ico:before,
-.star-rating__input:checked~.star-rating__ico:before {
-    content: "\F005";
-}
-
-.discount-badge {
-    display: inline-block;
-    background: #F7941D !important;
-    color: #000 !important;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 5px 12px;
-    text-align: center;
-    border-radius: 20px;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-</style>
-@endpush
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-
-{{-- <script>
-        $('.cart').click(function(){
-            var quantity=$('#quantity').val();
-            var pro_id=$(this).data('id');
-            // alert(quantity);
-            $.ajax({
-                url:"{{route('add-to-cart')}}",
-type:"POST",
-data:{
-_token:"{{csrf_token()}}",
-quantity:quantity,
-pro_id:pro_id
-},
-success:function(response){
-console.log(response);
-if(typeof(response)!='object'){
-response=$.parseJSON(response);
-}
-if(response.status){
-swal('success',response.msg,'success').then(function(){
-document.location.href=document.location.href;
-});
-}
-else{
-swal('error',response.msg,'error').then(function(){
-document.location.href=document.location.href;
-});
-}
-}
-})
-});
-</script> --}}
 <script>
-$(document).ready(function() {
-    $('.btn-number').click(function(e) {
-        e.preventDefault();
-        let fieldName = $(this).data('field');
-        let input = $("input[name='" + fieldName + "']");
-        let currentVal = parseInt(input.val()) || parseInt(input.data('min'));
-        let min = parseInt(input.data('min'));
-        let max = parseInt(input.data('max'));
+    $(document).ready(function() {
+        $('.btn-number').click(function(e) {
+            e.preventDefault();
+            let fieldName = $(this).data('field');
+            let input = $("input[name='" + fieldName + "']");
+            let currentVal = parseInt(input.val()) || parseInt(input.data('min'));
+            let min = parseInt(input.data('min'));
+            let max = parseInt(input.data('max'));
 
-        if ($(this).data('type') === 'plus' && currentVal < max) {
-            currentVal += 100;
-        } else if ($(this).data('type') === 'minus' && currentVal > min) {
-            currentVal -= 100;
-        }
+            if ($(this).data('type') === 'plus' && currentVal < max) {
+                currentVal += 100;
+            } else if ($(this).data('type') === 'minus' && currentVal > min) {
+                currentVal -= 100;
+            }
 
-        currentVal = Math.round(currentVal / 100) * 100;
+            currentVal = Math.round(currentVal / 100) * 100;
 
-        input.val(currentVal);
+            input.val(currentVal);
+        });
+
+        $('.input-number').on('input', function() {
+            let min = parseInt($(this).data('min'));
+            let max = parseInt($(this).data('max'));
+            let val = parseInt($(this).val()) || min;
+
+            if (val < min) val = min;
+            if (val > max) val = max;
+
+            val = Math.round(val / 100) * 100;
+
+            $(this).val(val);
+        });
+    });
+    var $topeContainer = $('.isotope-grid');
+    var $filter = $('.filter-tope-group');
+
+    // filter items on button click
+    $filter.each(function() {
+        $filter.on('click', 'button', function() {
+            var filterValue = $(this).attr('data-filter');
+            $topeContainer.isotope({
+                filter: filterValue
+            });
+        });
+
     });
 
-    $('.input-number').on('input', function() {
-        let min = parseInt($(this).data('min'));
-        let max = parseInt($(this).data('max'));
-        let val = parseInt($(this).val()) || min;
-
-        if (val < min) val = min;
-        if (val > max) val = max;
-
-        val = Math.round(val / 100) * 100;
-
-        $(this).val(val);
+    // init Isotope
+    $(window).on('load', function() {
+        var $grid = $topeContainer.each(function() {
+            $(this).isotope({
+                itemSelector: '.isotope-item',
+                layoutMode: 'fitRows',
+                percentPosition: true,
+                animationEngine: 'best-available',
+                masonry: {
+                    columnWidth: '.isotope-item'
+                }
+            });
+        });
     });
-});
+
+    var isotopeButton = $('.filter-tope-group button');
+
+    $(isotopeButton).each(function() {
+        $(this).on('click', function() {
+            for (var i = 0; i < isotopeButton.length; i++) {
+                $(isotopeButton[i]).removeClass('how-active1');
+            }
+
+            $(this).addClass('how-active1');
+        });
+    });
+
+    function setEqualHeight() {
+        var maxHeight = 0;
+        $('.product-card-modern').css('height', 'auto'); // reset
+
+        $('.product-card-modern').each(function() {
+            var cardHeight = $(this).outerHeight();
+            if (cardHeight > maxHeight) {
+                maxHeight = cardHeight;
+            }
+        });
+
+        $('.product-card-modern').css('height', maxHeight + 'px');
+    }
+
+    // Run on page load and window resize
+    $(document).ready(setEqualHeight);
+    $(window).resize(setEqualHeight);
 </script>
 @endpush

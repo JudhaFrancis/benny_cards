@@ -31,6 +31,10 @@
 <link rel="stylesheet" href="<?php echo e(asset('frontend/css/slicknav.min.css')); ?>">
 <!-- Jquery Ui -->
 <link rel="stylesheet" href="<?php echo e(asset('frontend/css/jquery-ui.css')); ?>">
+<!-- Swiper CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css" />
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
 <!-- Eshop StyleSheet -->
 <link rel="stylesheet" href="<?php echo e(asset('frontend/css/reset.css')); ?>">
@@ -39,24 +43,23 @@
 <style>
     /* Multilevel dropdown */
     .dropdown-submenu {
-    position: relative;
+        position: relative;
     }
 
     .dropdown-submenu>a:after {
-    content: "\f0da";
-    float: right;
-    border: none;
-    font-family: 'FontAwesome';
+        content: "\f0da";
+        float: right;
+        border: none;
+        font-family: 'FontAwesome';
     }
 
     .dropdown-submenu>.dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: 0px;
-    margin-left: 0px;
+        top: 0;
+        left: 100%;
+        margin-top: 0px;
+        margin-left: 0px;
     }
 
     /*
 </style>
-<?php echo $__env->yieldPushContent('styles'); ?>
-<?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/layouts/head.blade.php ENDPATH**/ ?>
+<?php echo $__env->yieldPushContent('styles'); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/layouts/head.blade.php ENDPATH**/ ?>
