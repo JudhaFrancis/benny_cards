@@ -307,6 +307,7 @@ Version:1.0
 
 /* Dropdown Menu */
 .header .nav li .dropdown {
+	color: #333;
 	background: #fff;
 	width: 220px;
 	position: absolute;
@@ -1125,10 +1126,7 @@ Version:1.0
 }
 
 .header.shop .nav li:hover a {
-	background: linear-gradient(90deg, #3cc0c2, #FF6F61);
-	color: #fff;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: #3cc0c2;
 	/* make gradient visible */
 	transform: scale(1.05) translateX(4px);
 	/* slight zoom + move */
@@ -1141,10 +1139,7 @@ Version:1.0
 }
 
 .header.shop .nav li.active a {
-	background: linear-gradient(90deg, #3cc0c2, #FF6F61);
-	color: #fff;
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
+	color: #3cc0c2;
 }
 
 .header.shop.v2 .nav li.active a {
@@ -1196,12 +1191,13 @@ Version:1.0
 }
 
 .header.shop .nav li .dropdown li a {
+	color: #333;
 	font-weight: 400;
 	font-size: 14px;
 }
 
 .header.shop .nav li .dropdown li a:hover {
-	background: linear-gradient(90deg, #3cc0c2, #FF6F61);
+	background: #3cc0c2;
 	color: #fff;
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -1392,7 +1388,7 @@ Version:1.0
 }
 
 .header.sticky .header-inner .nav li:hover a {
-	color: #fff;
+	color: #333;
 }
 
 .header.sticky.v2 .header-inner .nav li:hover a {
@@ -1412,7 +1408,7 @@ Version:1.0
 }
 
 .header.sticky .header-inner .nav li.active a {
-	color: #fff;
+	color: #3cc0c2;
 }
 
 .header.sticky .header-inner {
@@ -2798,7 +2794,7 @@ Version:1.0
 }
 
 .shop.single .product-des .rating li i {
-	color: #3cc0c2;
+	color: #ffc107;
 }
 
 .shop.single .product-des .rating li.dark i {
@@ -2823,10 +2819,8 @@ Version:1.0
 }
 
 .shop.single .product-des .product-buy {
-	margin-top: 40px;
+	margin-top: 20px;
 }
-
-.shop.single .product-des .product-buy {}
 
 .shop.single .product-des .color {
 	display: inline-block;
@@ -3033,7 +3027,7 @@ Version:1.0
 }
 
 .shop.single .cat {
-	font-size: 14px;
+	font-size: 17px;
 	font-weight: 500;
 	color: #333;
 	margin-top: 30px;
@@ -3050,8 +3044,8 @@ Version:1.0
 
 .shop.single .availability {
 	color: #333;
-	font-size: 14px;
-	margin-top: 6px;
+	font-size: 17px;
+	margin-top: 30px;
 }
 
 /* Product Tab */
@@ -6048,7 +6042,7 @@ Version:1.0
 }
 
 .btn-add-cart-bottom:hover {
-	background: #FF6F61;
+	background: #ec1176;
 }
 
 
@@ -6195,7 +6189,7 @@ Version:1.0
 }
 
 .content-split .button-right a:hover {
-	background: #FF6F61;
+	background: #ec1176;
 	transform: translateY(-2px);
 	box-shadow: 0 6px 15px rgba(255, 111, 97, 0.4);
 }
@@ -6292,7 +6286,7 @@ Version:1.0
 }
 
 .price-btn-new:hover {
-	background: #FF6F61;
+	background: #ec1176;
 	transform: translateY(-2px);
 	box-shadow: 0 6px 12px rgba(255, 111, 97, 0.3);
 }
@@ -6326,7 +6320,7 @@ Version:1.0
 
 .discount-badge {
 	background-color: #ec1176;
-	color: #fff;
+	color: #fff !important;
 	font-size: 0.75rem;
 	border-radius: 12px;
 	padding: 2px 8px;

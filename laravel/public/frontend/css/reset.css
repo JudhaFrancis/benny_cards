@@ -820,6 +820,12 @@ a:visited {
 	color: inherit;
 }
 
+a.btn-wishlist-top:visited {
+	content: '\e901';
+	background-color: #ec1176;
+	color: #fff;
+}
+
 a:hover,
 a:focus,
 a:active {
@@ -2431,8 +2437,8 @@ object {
 }
 
 .badge {
-	background-color: #F6F7FB;
-	color: #424646;
+	background-color: #24a778;
+	color: #fff;
 	font-size: 12px;
 	padding: 8px 12px;
 	margin-left: 10px;
@@ -2468,7 +2474,7 @@ object {
 	justify-content: center;
 	width: 40px;
 	height: 40px;
-	background-color: #3cc0c2;
+	background-color: #333;
 	color: #fff;
 	border-radius: 50%;
 	cursor: pointer;

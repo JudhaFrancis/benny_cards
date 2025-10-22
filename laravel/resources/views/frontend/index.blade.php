@@ -31,34 +31,47 @@
 
 <!-- Wedding Cards by Religion Section -->
 <section class="section">
-    <div class="section-container ">
+    <div class="section-container">
         <div class="section-title">
             <h2>Wedding Invitations by Religion</h2>
         </div>
-        <div class="category-grid-modern">
-            @php
-            $category_lists = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
-            @endphp
-            @foreach($category_lists as $cat)
-            <div class="category-card-modern">
-                <div class="category-image-modern">
-                    @if($cat->photo)
-                    <img src="{{ $cat->photo }}" alt="{{ $cat->title }}">
-                    @else
-                    <img src="https://via.placeholder.com/400x400" alt="{{ $cat->title }}">
-                    @endif
-                    <a href="{{ route('product-cat', $cat->slug) }}" class="view-more-text">
-                        View More <span class="arrow">→</span>
-                    </a>
+
+        <!-- Use the same swiper class -->
+        <div class="swiper latest-items-swiper">
+            <div class="swiper-wrapper">
+                @php
+                $category_lists = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
+                @endphp
+                @foreach($category_lists as $cat)
+                <div class="swiper-slide" style="padding-bottom: 20px;">
+                    <div class="category-card-modern">
+                        <div class="category-image-modern">
+                            @if($cat->photo)
+                            <img src="{{ $cat->photo }}" alt="{{ $cat->title }}">
+                            @else
+                            <img src="https://via.placeholder.com/400x400" alt="{{ $cat->title }}">
+                            @endif
+                            <a href="{{ route('product-cat', $cat->slug) }}" class="view-more-text">
+                                View More <span class="arrow">→</span>
+                            </a>
+                        </div>
+                        <div class="category-content-modern">
+                            <h4 class="category-title">{{ $cat->title }}</h4>
+                        </div>
+                    </div>
                 </div>
-                <div class="category-content-modern">
-                    <h4 class="category-title">{{ $cat->title }}</h4>
-                </div>
+                @endforeach
             </div>
-            @endforeach
+
+            <!-- Navigation Arrows -->
+            <div class="swiper-navigation text-center mt-3">
+                <div class="swiper-button-prev d-inline-block me-2"></div>
+                <div class="swiper-button-next d-inline-block"></div>
+            </div>
         </div>
     </div>
 </section>
+
 <!-- End Small Banner -->
 
 <!-- All categories -->
