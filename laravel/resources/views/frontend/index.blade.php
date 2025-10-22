@@ -145,7 +145,7 @@
             @endforeach
 
             @if($productsByCategory->count() == 0)
-            <div class="col-12 text-center no-products-message" style="display:none;">
+            <div class="col-12 text-center mt-4">
                 <p class="text-muted fs-5">No products available in this category right now.</p>
             </div>
             @endif
@@ -292,11 +292,6 @@ $trendingItems = $product_lists->where('condition','new');
 
 
 <!-- Start Latest Items -->
-<!-- Start Trending Items -->
-@php
-$latestItems = $product_lists->where('condition','new');
-@endphp
-@if($latestItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -372,8 +367,6 @@ $latestItems = $product_lists->where('condition','new');
         </div>
     </div>
 </section>
-@endif
-
 
 <!-- Start Hot Items -->
 @php
@@ -456,6 +449,33 @@ $hotItems = $product_lists->where('condition','hot');
     </div>
 
 </section>
+<<<<<<< HEAD
+<!-- End Shop Home List  -->
+
+<!-- Modal -->
+@if($product_lists)
+@foreach($product_lists as $key=>$product)
+<div class="modal fade" id="{{$product->id}}" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close"
+                        aria-hidden="true"></span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row no-gutters">
+                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                        <!-- Product Slider -->
+                        <div class="product-gallery">
+                            <div class="quickview-slider-active">
+                                @php
+                                $photo=explode(',',$product->photo);
+                                // dd($photo);
+                                @endphp
+                                @foreach($photo as $data)
+                                <div class="single-slider">
+                                    <img src="{{$data}}" alt="{{$data}}">
+=======
 <<<<<<< HEAD @endif=======>>>>>>> a7e52c3faa7299694fb1684abe1e3bf8a959ca9b
     <!-- End Shop Home List  -->
 
@@ -484,6 +504,7 @@ $hotItems = $product_lists->where('condition','hot');
                                         <img src="{{$data}}" alt="{{$data}}">
                                     </div>
                                     @endforeach
+>>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
                                 </div>
                             </div>
                             <!-- End Product slider -->

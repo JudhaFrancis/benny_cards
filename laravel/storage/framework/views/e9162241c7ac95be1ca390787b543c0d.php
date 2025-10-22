@@ -226,11 +226,12 @@ $trendingItems = $product_lists->where('condition','new');
             <div class="col-12">
                 <div class="section-title text-center mb-4">
                     <h2>Trending Items</h2>
-         
-         <div class="hot-slider-nav text-center mt-3">
-    <button class="hot-prev mx-2">&lt;</button>
-    <button class="hot-next mx-2">&gt;</button>
-</div>       </div>
+
+                    <div class="hot-slider-nav text-center mt-3">
+                        <button class="hot-prev mx-2">&lt;</button>
+                        <button class="hot-next mx-2">&gt;</button>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -366,7 +367,7 @@ $latestItems = $product_lists->where('condition','new');
             <?php endif; ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
-         <div class="latest-slider-nav text-center mt-3">
+        <div class="latest-slider-nav text-center mt-3">
             <button class="latest-prev mx-2">&lt;</button>
             <button class="latest-next mx-2">&gt;</button>
         </div>
@@ -450,11 +451,11 @@ $hotItems = $product_lists->where('condition','hot');
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
         <div class="hot-slider-nav text-center mt-3">
-    <button class="hot-prev mx-2">&lt;</button>
-    <button class="hot-next mx-2">&gt;</button>
-</div>
+            <button class="hot-prev mx-2">&lt;</button>
+            <button class="hot-next mx-2">&gt;</button>
+        </div>
     </div>
-    
+
 </section>
 <<<<<<< HEAD <?php endif; ?>=======>>>>>>> a7e52c3faa7299694fb1684abe1e3bf8a959ca9b
     <!-- End Shop Home List  -->
@@ -900,7 +901,6 @@ $hotItems = $product_lists->where('condition','hot');
         ]
     });
 
-    // Custom arrow controls
     $('.trending-prev').on('click', function() {
         $slider.slick('slickPrev');
     });
@@ -909,42 +909,76 @@ $hotItems = $product_lists->where('condition','hot');
     });
 
     var $latest = $('.latest-slider');
-$latest.slick({
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: false,
-    arrows: false,
-    dots: false,
-    infinite: false,
-    responsive: [
-        { breakpoint: 1200, settings: { slidesToShow: 3 } },
-        { breakpoint: 768, settings: { slidesToShow: 2 } },
-        { breakpoint: 480, settings: { slidesToShow: 1 } }
-    ]
-});
-$('.latest-prev').on('click', function() { $latest.slick('slickPrev'); });
-$('.latest-next').on('click', function() { $latest.slick('slickNext'); });
+    $latest.slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: false,
+        arrows: false,
+        dots: false,
+        infinite: false,
+        responsive: [{
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
+    $('.latest-prev').on('click', function() {
+        $latest.slick('slickPrev');
+    });
+    $('.latest-next').on('click', function() {
+        $latest.slick('slickNext');
+    });
 
-var $hot = $('.hot-slider');
+    var $hot = $('.hot-slider');
 
-$hot.slick({
-    slidesToShow: 4,
-    slidesToScroll: 1,
-    autoplay: false,
-    arrows: false,
-    dots: false,
-    infinite: false,
-    responsive: [
-        { breakpoint: 1200, settings: { slidesToShow: 3 } },
-        { breakpoint: 768, settings: { slidesToShow: 2 } },
-        { breakpoint: 480, settings: { slidesToShow: 1 } }
-    ]
-});
+    $hot.slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: false,
+        arrows: false,
+        dots: false,
+        infinite: false,
+        responsive: [{
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
 
-// Custom arrow controls
-$('.hot-prev').on('click', function() { $hot.slick('slickPrev'); });
-$('.hot-next').on('click', function() { $hot.slick('slickNext'); });
-
+    $('.hot-prev').on('click', function() {
+        $hot.slick('slickPrev');
+    });
+    $('.hot-next').on('click', function() {
+        $hot.slick('slickNext');
+    });
     </script>
     <?php $__env->stopPush(); ?>
 <?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/index.blade.php ENDPATH**/ ?>
