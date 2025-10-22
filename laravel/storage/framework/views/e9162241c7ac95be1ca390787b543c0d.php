@@ -213,77 +213,84 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
+<<<<<<< HEAD
+=======
+ <?php
+$trendingItems = $product_lists->where('condition','new');
+?>
+<?php if($trendingItems->count() > 0): ?>
+<!-- Trending Item Area Start -->
+<?php if($product_lists->where('condition', 'trending')->count() > 0): ?>
+>>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
 <section class="product-area most-popular section" style="padding-top:0px;">
-    <div class="section-container">
+    <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="section-title">
+                <div class="section-title text-center mb-4">
                     <h2>Trending Items</h2>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            <?php $hasTrending = false; ?>
+        <div class="trending-slider">
             <?php $__currentLoopData = $product_lists; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <?php if($product->condition == 'trending'): ?>
-            <?php
-            $hasTrending = true;
-            $photo = explode(',', $product->photo);
-            $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-            ?>
+                <?php if($product->condition == 'trending'): ?>
+                <?php
+                    $photo = explode(',', $product->photo);
+                    $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+                ?>
 
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="product-card-modern">
-                    <div class="product-image-modern">
+                <div class="product-card-modern text-center px-2">
+                    <div class="product-image-modern position-relative">
                         <a href="<?php echo e(route('product-detail', $product->slug)); ?>">
-                            <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
+                            <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>" style="width:100%;border-radius:12px;">
                         </a>
 
-                        <!-- Badges (except discount) -->
                         <?php if($product->stock <= 0): ?>
                             <span class="badge out-of-stock">Sold Out</span>
-                            <?php elseif($product->condition == 'new'): ?>
+                        <?php elseif($product->condition == 'new'): ?>
                             <span class="badge new">New</span>
-                            <?php elseif($product->condition == 'hot'): ?>
+                        <?php elseif($product->condition == 'hot'): ?>
                             <span class="badge hot">Hot</span>
-                            <?php elseif($product->condition == 'trending'): ?>
+                        <?php elseif($product->condition == 'trending'): ?>
                             <span class="badge trending">Trending</span>
-                            <?php endif; ?>
+                        <?php endif; ?>
 
-                            <!-- Wishlist Top Right -->
-                            <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top">
-                                <i class="ti-heart"></i>
-                            </a>
-
-                            <!-- Add to Cart Bottom Right -->
-                            <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">
-                                Add to Cart
-                            </a>
+                        <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                        <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
                     </div>
 
-                    <!-- Product Info -->
-                    <div class="product-info-modern text-center">
+                    <div class="product-info-modern mt-3">
                         <h3 class="product-title">
                             <a href="<?php echo e(route('product-detail', $product->slug)); ?>"><?php echo e($product->title); ?></a>
                         </h3>
-
-                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
+                        <div class="product-price">
                             <span class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
-
                             <?php if($product->discount > 0): ?>
-                            <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
-                            <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
+                                <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
+                                <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
                             <?php endif; ?>
                         </div>
                     </div>
                 </div>
-            </div>
-            <?php endif; ?>
+                <?php endif; ?>
             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
+
+        <div class="trending-slider-nav text-center mt-3">
+    <button class="trending-prev  mx-2">&lt;</button>
+    <button class="trending-next  mx-2">&gt;</button>
+</div>
     </div>
 </section>
+<<<<<<< HEAD
+=======
+<?php endif; ?>
+<!-- Trending Item Area End -->
+
+<?php endif; ?>
+
+>>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
 
 <!-- Start Latest Items -->
 <section class="product-area most-popular section" style="padding-top:0px;">
@@ -430,6 +437,15 @@
         </div>
     </div>
 </section>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<?php endif; ?>
+
+
+=======
+>>>>>>> a7e52c3faa7299694fb1684abe1e3bf8a959ca9b
+>>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
 <!-- End Shop Home List  -->
 
 <!-- Modal -->
@@ -840,5 +856,31 @@
     });
 </script>
 
+<script>
+var $slider = $('.trending-slider');
+
+$slider.slick({
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    autoplay: false,
+    arrows: false,  // hide default arrows
+    dots: false,
+    infinite: false,
+    responsive: [
+        { breakpoint: 1200, settings: { slidesToShow: 3 } },
+        { breakpoint: 768, settings: { slidesToShow: 2 } },
+        { breakpoint: 480, settings: { slidesToShow: 1 } }
+    ]
+});
+
+// Custom arrow controls
+$('.trending-prev').on('click', function(){
+    $slider.slick('slickPrev');
+});
+$('.trending-next').on('click', function(){
+    $slider.slick('slickNext');
+});
+
+    </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/index.blade.php ENDPATH**/ ?>

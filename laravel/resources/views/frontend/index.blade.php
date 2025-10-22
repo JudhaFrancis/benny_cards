@@ -110,8 +110,7 @@
                         </a>
 
                         <!-- Badges -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
+                        @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                             @elseif($product->condition == 'trending')
                             <span class="badge trending">Trending</span>
                             @elseif($product->condition == 'new')
@@ -121,9 +120,11 @@
                             @endif
 
                             <!-- Wishlist -->
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
+                                    class="ti-heart"></i></a>
                             <!-- Add to Cart -->
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
+                                Cart</a>
                     </div>
 
                     <!-- Product Info -->
@@ -212,77 +213,78 @@
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
+@php
+$trendingItems = $product_lists->where('condition','new');
+@endphp
+@if($trendingItems->count() > 0)
+<!-- Trending Item Area Start -->
+@if($product_lists->where('condition', 'trending')->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
-    <div class="section-container">
+    <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="section-title">
+                <div class="section-title text-center mb-4">
                     <h2>Trending Items</h2>
                 </div>
             </div>
         </div>
 
-        <div class="row">
-            @php $hasTrending = false; @endphp
+        <div class="trending-slider">
             @foreach($product_lists as $product)
             @if($product->condition == 'trending')
             @php
-            $hasTrending = true;
             $photo = explode(',', $product->photo);
             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
             @endphp
 
-            <div class="col-sm-6 col-md-4 col-lg-3">
-                <div class="product-card-modern">
-                    <div class="product-image-modern">
-                        <a href="{{ route('product-detail', $product->slug) }}">
-                            <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
-                        </a>
+            <div class="product-card-modern text-center px-2">
+                <div class="product-image-modern position-relative">
+                    <a href="{{ route('product-detail', $product->slug) }}">
+                        <img src="{{ $photo[0] }}" alt="{{ $product->title }}" style="width:100%;border-radius:12px;">
+                    </a>
 
-                        <!-- Badges (except discount) -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
-                            @elseif($product->condition == 'new')
-                            <span class="badge new">New</span>
-                            @elseif($product->condition == 'hot')
-                            <span class="badge hot">Hot</span>
-                            @elseif($product->condition == 'trending')
-                            <span class="badge trending">Trending</span>
-                            @endif
+                    @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
+                        @elseif($product->condition == 'new')
+                        <span class="badge new">New</span>
+                        @elseif($product->condition == 'hot')
+                        <span class="badge hot">Hot</span>
+                        @elseif($product->condition == 'trending')
+                        <span class="badge trending">Trending</span>
+                        @endif
 
-                            <!-- Wishlist Top Right -->
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
-                                <i class="ti-heart"></i>
-                            </a>
+                        <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
+                                class="ti-heart"></i></a>
+                        <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                </div>
 
-                            <!-- Add to Cart Bottom Right -->
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
-                                Add to Cart
-                            </a>
-                    </div>
-
-                    <!-- Product Info -->
-                    <div class="product-info-modern text-center">
-                        <h3 class="product-title">
-                            <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
-                        </h3>
-
-                        <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
-
-                            @if($product->discount > 0)
-                            <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
-                            <span class="badge discount-badge">{{ $product->discount }}% Off</span>
-                            @endif
-                        </div>
+                <div class="product-info-modern mt-3">
+                    <h3 class="product-title">
+                        <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                    </h3>
+                    <div class="product-price">
+                        <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                        @if($product->discount > 0)
+                        <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
+                        <span class="badge discount-badge">{{ $product->discount }}% Off</span>
+                        @endif
                     </div>
                 </div>
             </div>
             @endif
             @endforeach
         </div>
+
+        <div class="trending-slider-nav text-center mt-3">
+            <button class="trending-prev  mx-2">&lt;</button>
+            <button class="trending-next  mx-2">&gt;</button>
+        </div>
     </div>
 </section>
+@endif
+<!-- Trending Item Area End -->
+
+@endif
+
 
 <!-- Start Latest Items -->
 <section class="product-area most-popular section" style="padding-top:0px;">
@@ -313,8 +315,7 @@
                         </a>
 
                         <!-- Badges (except discount) -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
+                        @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                             @elseif($product->condition == 'new')
                             <span class="badge new">New</span>
                             @elseif($product->condition == 'hot')
@@ -341,7 +342,8 @@
                         </h3>
 
                         <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                            <span
+                                class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
 
                             @if($product->discount > 0)
                             <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
@@ -358,6 +360,10 @@
 </section>
 
 <!-- Start Hot Items -->
+@php
+$hotItems = $product_lists->where('condition','hot');
+@endphp
+@if($hotItems->count() > 0)
 <section class="product-area most-popular section" style="padding-top:0px;">
     <div class="section-container">
         <div class="row">
@@ -386,8 +392,7 @@
                         </a>
 
                         <!-- Badges (except discount) -->
-                        @if($product->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
+                        @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                             @elseif($product->condition == 'new')
                             <span class="badge new">New</span>
                             @elseif($product->condition == 'hot')
@@ -414,7 +419,8 @@
                         </h3>
 
                         <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                            <span
+                                class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
 
                             @if($product->discount > 0)
                             <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
@@ -429,6 +435,7 @@
         </div>
     </div>
 </section>
+<<<<<<< HEAD
 <!-- End Shop Home List  -->
 
 <!-- Modal -->
@@ -454,69 +461,97 @@
                                 @foreach($photo as $data)
                                 <div class="single-slider">
                                     <img src="{{$data}}" alt="{{$data}}">
+=======
+<<<<<<< HEAD @endif=======>>>>>>> a7e52c3faa7299694fb1684abe1e3bf8a959ca9b
+    <!-- End Shop Home List  -->
+
+    <!-- Modal -->
+    @if($product_lists)
+    @foreach($product_lists as $key=>$product)
+    <div class="modal fade" id="{{$product->id}}" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span class="ti-close"
+                            aria-hidden="true"></span></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row no-gutters">
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <!-- Product Slider -->
+                            <div class="product-gallery">
+                                <div class="quickview-slider-active">
+                                    @php
+                                    $photo=explode(',',$product->photo);
+                                    // dd($photo);
+                                    @endphp
+                                    @foreach($photo as $data)
+                                    <div class="single-slider">
+                                        <img src="{{$data}}" alt="{{$data}}">
+                                    </div>
+                                    @endforeach
+>>>>>>> c5232e1244bb3f4d08f0c235441960b168864de2
                                 </div>
-                                @endforeach
                             </div>
+                            <!-- End Product slider -->
                         </div>
-                        <!-- End Product slider -->
-                    </div>
-                    <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <div class="quickview-content">
-                            <h2>{{$product->title}}</h2>
-                            <div class="quickview-ratting-review">
-                                <div class="quickview-ratting-wrap">
-                                    <div class="quickview-ratting">
-                                        {{-- <i class="yellow fa fa-star"></i>
+                        <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                            <div class="quickview-content">
+                                <h2>{{$product->title}}</h2>
+                                <div class="quickview-ratting-review">
+                                    <div class="quickview-ratting-wrap">
+                                        <div class="quickview-ratting">
+                                            {{-- <i class="yellow fa fa-star"></i>
                                                     <i class="yellow fa fa-star"></i>
                                                     <i class="yellow fa fa-star"></i>
                                                     <i class="yellow fa fa-star"></i>
                                                     <i class="fa fa-star"></i> --}}
-                                        @php
-                                        $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
-                                        $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
-                                        @endphp
-                                        @for($i=1; $i<=5; $i++) @if($rate>=$i)
-                                            <i class="yellow fa fa-star"></i>
-                                            @else
-                                            <i class="fa fa-star"></i>
-                                            @endif
-                                            @endfor
-                                    </div>
-                                    <a href="#"> ({{$rate_count}} customer review)</a>
-                                </div>
-                                <div class="quickview-stock">
-                                    @if($product->stock >0)
-                                    <span><i class="fa fa-check-circle-o"></i> {{$product->stock}} in stock</span>
-                                    @else
-                                    <span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} out
-                                        stock</span>
-                                    @endif
-                                </div>
-                            </div>
-                            @php
-                            $after_discount=($product->price-($product->price*$product->discount)/100);
-                            @endphp
-                            <h3><small><del class="text-muted">₹{{number_format($product->price,2)}}</del></small>
-                                ${{number_format($after_discount,2)}} </h3>
-                            <div class="quickview-peragraph">
-                                <p>{!! html_entity_decode($product->summary) !!}</p>
-                            </div>
-                            @if($product->size)
-                            <div class="size">
-                                <div class="row">
-                                    <div class="col-lg-6 col-12">
-                                        <h5 class="title">Size</h5>
-                                        <select>
                                             @php
-                                            $sizes=explode(',',$product->size);
-                                            // dd($sizes);
+                                            $rate=DB::table('product_reviews')->where('product_id',$product->id)->avg('rate');
+                                            $rate_count=DB::table('product_reviews')->where('product_id',$product->id)->count();
                                             @endphp
-                                            @foreach($sizes as $size)
-                                            <option>{{$size}}</option>
-                                            @endforeach
-                                        </select>
+                                            @for($i=1; $i<=5; $i++) @if($rate>=$i)
+                                                <i class="yellow fa fa-star"></i>
+                                                @else
+                                                <i class="fa fa-star"></i>
+                                                @endif
+                                                @endfor
+                                        </div>
+                                        <a href="#"> ({{$rate_count}} customer review)</a>
                                     </div>
-                                    {{-- <div class="col-lg-6 col-12">
+                                    <div class="quickview-stock">
+                                        @if($product->stock >0)
+                                        <span><i class="fa fa-check-circle-o"></i> {{$product->stock}} in stock</span>
+                                        @else
+                                        <span><i class="fa fa-times-circle-o text-danger"></i> {{$product->stock}} out
+                                            stock</span>
+                                        @endif
+                                    </div>
+                                </div>
+                                @php
+                                $after_discount=($product->price-($product->price*$product->discount)/100);
+                                @endphp
+                                <h3><small><del class="text-muted">₹{{number_format($product->price,2)}}</del></small>
+                                    ${{number_format($after_discount,2)}} </h3>
+                                <div class="quickview-peragraph">
+                                    <p>{!! html_entity_decode($product->summary) !!}</p>
+                                </div>
+                                @if($product->size)
+                                <div class="size">
+                                    <div class="row">
+                                        <div class="col-lg-6 col-12">
+                                            <h5 class="title">Size</h5>
+                                            <select>
+                                                @php
+                                                $sizes=explode(',',$product->size);
+                                                // dd($sizes);
+                                                @endphp
+                                                @foreach($sizes as $size)
+                                                <option>{{$size}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        {{-- <div class="col-lg-6 col-12">
                                                         <h5 class="title">Color</h5>
                                                         <select>
                                                             <option selected="selected">orange</option>
@@ -525,41 +560,42 @@
                                                             <option>pink</option>
                                                         </select>
                                                     </div> --}}
-                                </div>
-                            </div>
-                            @endif
-                            <form action="{{route('single-add-to-cart')}}" method="POST" class="mt-4">
-                                @csrf
-                                <div class="quantity">
-                                    <!-- Input Order -->
-                                    <div class="input-group">
-                                        <div class="button minus">
-                                            <button type="button" class="btn btn-primary btn-number" disabled="disabled"
-                                                data-type="minus" data-field="quant[1]">
-                                                <i class="ti-minus"></i>
-                                            </button>
-                                        </div>
-                                        <input type="hidden" name="slug" value="{{$product->slug}}">
-                                        <input type="text" name="quant[1]" class="input-number" data-min="1"
-                                            data-max="1000" value="1">
-                                        <div class="button plus">
-                                            <button type="button" class="btn btn-primary btn-number" data-type="plus"
-                                                data-field="quant[1]">
-                                                <i class="ti-plus"></i>
-                                            </button>
-                                        </div>
                                     </div>
-                                    <!--/ End Input Order -->
                                 </div>
-                                <div class="add-to-cart">
-                                    <button type="submit" class="btn">Add to cart</button>
-                                    <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i
-                                            class="ti-heart"></i></a>
+                                @endif
+                                <form action="{{route('single-add-to-cart')}}" method="POST" class="mt-4">
+                                    @csrf
+                                    <div class="quantity">
+                                        <!-- Input Order -->
+                                        <div class="input-group">
+                                            <div class="button minus">
+                                                <button type="button" class="btn btn-primary btn-number"
+                                                    disabled="disabled" data-type="minus" data-field="quant[1]">
+                                                    <i class="ti-minus"></i>
+                                                </button>
+                                            </div>
+                                            <input type="hidden" name="slug" value="{{$product->slug}}">
+                                            <input type="text" name="quant[1]" class="input-number" data-min="1"
+                                                data-max="1000" value="1">
+                                            <div class="button plus">
+                                                <button type="button" class="btn btn-primary btn-number"
+                                                    data-type="plus" data-field="quant[1]">
+                                                    <i class="ti-plus"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <!--/ End Input Order -->
+                                    </div>
+                                    <div class="add-to-cart">
+                                        <button type="submit" class="btn">Add to cart</button>
+                                        <a href="{{route('add-to-wishlist',$product->slug)}}" class="btn min"><i
+                                                class="ti-heart"></i></a>
+                                    </div>
+                                </form>
+                                <div class="default-social">
+                                    <!-- ShareThis BEGIN -->
+                                    <div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
                                 </div>
-                            </form>
-                            <div class="default-social">
-                                <!-- ShareThis BEGIN -->
-                                <div class="sharethis-inline-share-buttons"></div><!-- ShareThis END -->
                             </div>
                         </div>
                     </div>
@@ -567,14 +603,13 @@
             </div>
         </div>
     </div>
-</div>
-@endforeach
-@endif
-<!-- Modal end -->
-@endsection
+    @endforeach
+    @endif
+    <!-- Modal end -->
+    @endsection
 
-@push('styles')
-<style>
+    @push('styles')
+    <style>
     /* Banner Sliding */
     #Gslider .carousel-inner {
         background: #000000;
@@ -704,11 +739,11 @@
         border: none;
         display: inline-block;
     }
-</style>
-@endpush
-@push('scripts')
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
-<script>
+    </style>
+    @endpush
+    @push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <script>
     /*==================================================================
         [ Isotope ]*/
     var $topeContainer = $('.isotope-grid');
@@ -769,10 +804,11 @@
     // Run on page load and window resize
     $(document).ready(setEqualHeight);
     $(window).resize(setEqualHeight);
-</script>
-<script>
+    </script>
+    <script>
     function cancelFullScreen(el) {
-        var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
+        var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el
+            .exitFullscreen;
         if (requestMethod) { // cancel full screen.
             requestMethod.call(el);
         } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
@@ -822,7 +858,8 @@
                 if (!message) {
                     const msg = document.createElement('div');
                     msg.className = 'col-12 text-center no-products-message mt-2';
-                    msg.innerHTML = `<p class="text-muted fs-5">No products available in this category right now.</p>`;
+                    msg.innerHTML =
+                        `<p class="text-muted fs-5">No products available in this category right now.</p>`;
                     productsGrid.appendChild(msg);
                 }
             } else if (message) {
@@ -849,6 +886,45 @@
             filterProducts('*');
         }
     });
-</script>
+    </script>
 
-@endpush
+    <script>
+    var $slider = $('.trending-slider');
+
+    $slider.slick({
+        slidesToShow: 4,
+        slidesToScroll: 1,
+        autoplay: false,
+        arrows: false,
+        dots: false,
+        infinite: false,
+        responsive: [{
+                breakpoint: 1200,
+                settings: {
+                    slidesToShow: 3
+                }
+            },
+            {
+                breakpoint: 768,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1
+                }
+            }
+        ]
+    });
+
+    // Custom arrow controls
+    $('.trending-prev').on('click', function() {
+        $slider.slick('slickPrev');
+    });
+    $('.trending-next').on('click', function() {
+        $slider.slick('slickNext');
+    });
+    </script>
+    @endpush

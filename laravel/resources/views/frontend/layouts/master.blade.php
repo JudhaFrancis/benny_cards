@@ -2,6 +2,13 @@
 <html lang="zxx">
 <head>
 	@include('frontend.layouts.head')	
+
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+
+    {{-- ✅ Extra page-specific CSS from @push('styles') --}}
+    @stack('styles')
+	
 </head>
 <body class="js">
 	
@@ -23,6 +30,12 @@
 	@yield('main-content')
 	
 	@include('frontend.layouts.footer')
+
+	 {{-- ✅ Slick Carousel JS --}}
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+
+    {{-- ✅ Extra scripts pushed from pages --}}
+    @stack('scripts')
 
 </body>
 </html>
