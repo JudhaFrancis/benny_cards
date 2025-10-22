@@ -747,7 +747,7 @@ pre code {
 /* Medium devices */
 @media (min-width: 768px) {
     .section-container {
-        max-width: 720px;
+        max-width: 900px;
     }
 }
 

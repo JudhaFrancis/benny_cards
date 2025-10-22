@@ -2,9 +2,9 @@
     <!-- Topbar -->
     <div class="topbar">
         <div class="section-container">
-            <div class="row align-items-center">
+            <div class="row align-items-center" style="flex-wrap: nowrap;">
                 <!-- Left Section -->
-                <div class="aligncenter col-lg-6 col-md-12 col-12">
+                <div class="aligncenter col-lg-6 col-md-6 col-6">
                     <div class="top-left">
                         <ul class="list-main">
                             @php
@@ -19,7 +19,7 @@
                 </div>
 
                 <!-- Right Section (Existing) -->
-                <div class="col-lg-4 col-md-12 col-12">
+                <div class="col-lg-4 col-md-4 col-4">
                     <div class="right-content">
                         <ul class="list-main">
                             <li><i class="ti-package"></i><a href="{{route('order.track')}}">My Orders</a></li>
