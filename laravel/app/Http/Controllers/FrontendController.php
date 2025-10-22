@@ -455,10 +455,12 @@ return view('frontend.pages.product-grids', compact('products', 'recent_products
 
     $category_name = $priceRange->title ?? '';
 
+    $allCategories = Category::where('status', 'active')->get();
+
     if (request()->is('product-grids') || request()->is('price-range/*')) {
-        return view('frontend.pages.product-grids', compact('products', 'recent_products', 'priceRange','category_name'));
+        return view('frontend.pages.product-grids', compact('products', 'recent_products', 'priceRange','category_name','allCategories'));
     } else {
-        return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange','category_name'));
+        return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange','category_name','allCategories'));
     }
 }
 

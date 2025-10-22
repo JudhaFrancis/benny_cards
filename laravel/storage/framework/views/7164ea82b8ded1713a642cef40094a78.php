@@ -31,14 +31,14 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 <div class="section-container mt-5 mb-3">
     <h3 class="text-start text-uppercase">
         <?php if(request('category')): ?>
-            <?php
-                $catSlug = request('category');
-                $cat = $allCategories->firstWhere('slug', $catSlug);
-            ?>
-            <?php echo e($cat ? $cat->title : $category_name); ?>
+        <?php
+        $catSlug = request('category');
+        $cat = $allCategories->firstWhere('slug', $catSlug);
+        ?>
+        <?php echo e($cat ? $cat->title : $category_name); ?>
 
         <?php else: ?>
-            <?php echo e($category_name); ?>
+        <?php echo e($category_name); ?>
 
         <?php endif; ?>
     </h3>
