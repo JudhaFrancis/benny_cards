@@ -4,7 +4,7 @@
 
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
-	<div class="container">
+	<div class="section-container">
 		<div class="row">
 			<div class="col-12">
 				<div class="bread-inner">
@@ -19,8 +19,8 @@
 </div>
 
 <!-- Flipkart-style Cart Layout -->
-<div class="shopping-cart section py-4">
-	<div class="container">
+<div class="shopping-cart section">
+	<div class="section-container">
 		@if(Helper::getAllProductFromCart()->count() > 0)
 		<div class="row">
 			<!-- Cart Items -->
@@ -82,7 +82,7 @@
 
 					<!-- Update Cart Button -->
 					<div class="d-flex justify-content-end mt-3">
-						<button type="submit" class="btn btn-primary checkout-btn px-4">Update Cart</button>
+						<button type="submit" class="btn checkout-btn px-4">Update Cart</button>
 					</div>
 				</form>
 			</div>
@@ -90,14 +90,14 @@
 
 			<!-- Price Details & Coupon -->
 			<div class="col-lg-4">
-				<div class="card shadow-sm p-3 sticky-top price-card" style="top:80px; z-index:1;">
+				<div class="card shadow-sm p-3 sticky-top price-card" style="z-index:1;">
 					<h5 class="mb-3 text-uppercase fw-bold">Price Details</h5>
 
 					<!-- Coupon Section -->
 					<div class="coupon-section mb-3">
 						<form action="{{route('coupon-store')}}" method="POST" class="d-flex">
 							@csrf
-							<input type="text" name="code" class="form-control me-2" placeholder="Enter Coupon Code">
+							<input type="text" name="code" class="form-control me-2 px-3" placeholder="Enter Coupon Code">
 							<button class="btn btn-primary">Apply</button>
 						</form>
 					</div>
