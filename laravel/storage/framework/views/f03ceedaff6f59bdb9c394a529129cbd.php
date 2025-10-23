@@ -163,8 +163,7 @@
 		$("select.select2").select2();
 	});
 	$('select.nice-select').niceSelect();
-</script>
-<script>
+
 	$(document).ready(function() {
 		$('.shipping select[name=shipping]').change(function() {
 			let cost = parseFloat($(this).find('option:selected').data('price')) || 0;
@@ -174,6 +173,32 @@
 			$('#order_total_price span').text('$' + (subtotal + cost - coupon).toFixed(2));
 		});
 
+	});
+
+	$(document).on('click', '.btn-number', function(e) {
+		e.preventDefault();
+
+		// Stop any other bound events
+		e.stopImmediatePropagation();
+
+		var fieldName = $(this).attr('data-field');
+		var type = $(this).attr('data-type');
+		var input = $("input[name='" + fieldName + "']");
+		var currentVal = parseFloat(input.val()) || 0;
+		var step = 99;
+
+		var min = parseFloat(input.attr('data-min')) || 1;
+		var max = parseFloat(input.attr('data-max')) || 1000;
+
+		if (type === 'minus') {
+			let newVal = currentVal - step;
+			if (newVal < min) newVal = min;
+			input.val(newVal);
+		} else if (type === 'plus') {
+			let newVal = currentVal + step;
+			if (newVal > max) newVal = max;
+			input.val(newVal);
+		}
 	});
 </script>
 

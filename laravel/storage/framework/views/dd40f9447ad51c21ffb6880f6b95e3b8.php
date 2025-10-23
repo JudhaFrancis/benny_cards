@@ -1,21 +1,21 @@
-@extends('frontend.layouts.master')
 
-@section('meta')
+
+<?php $__env->startSection('meta'); ?>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name='copyright' content=''>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="keywords" content="online shop, purchase, cart, ecommerce site, best online shopping">
-<meta name="description" content="{{$product_detail->summary}}">
-<meta property="og:url" content="{{route('product-detail',$product_detail->slug)}}">
+<meta name="description" content="<?php echo e($product_detail->summary); ?>">
+<meta property="og:url" content="<?php echo e(route('product-detail',$product_detail->slug)); ?>">
 <meta property="og:type" content="article">
-<meta property="og:title" content="{{$product_detail->title}}">
-<meta property="og:image" content="{{$product_detail->photo}}">
-<meta property="og:description" content="{{$product_detail->description}}">
-@endsection
-@section('title','BENNY CARDS || PRODUCT DETAIL')
-@section('main-content')
+<meta property="og:title" content="<?php echo e($product_detail->title); ?>">
+<meta property="og:image" content="<?php echo e($product_detail->photo); ?>">
+<meta property="og:description" content="<?php echo e($product_detail->description); ?>">
+<?php $__env->stopSection(); ?>
+<?php $__env->startSection('title','BENNY CARDS || PRODUCT DETAIL'); ?>
+<?php $__env->startSection('main-content'); ?>
 
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
@@ -24,22 +24,22 @@
             <div class="col-12">
                 <div class="bread-inner">
                     <ul class="bread-list">
-                        <li><a href="{{ route('home') }}">Home<i class="ti-arrow-right"></i></a></li>
+                        <li><a href="<?php echo e(route('home')); ?>">Home<i class="ti-arrow-right"></i></a></li>
 
-                        @php
+                        <?php
                         // Product category fetch
                         $category = DB::table('categories')->where('id', $product_detail->cat_id)->first();
-                        @endphp
+                        ?>
 
-                        @if($category)
+                        <?php if($category): ?>
                         <li>
-                            <a href="{{ route('product-cat', $category->slug) }}">
-                                {{ $category->title }}<i class="ti-arrow-right"></i>
+                            <a href="<?php echo e(route('product-cat', $category->slug)); ?>">
+                                <?php echo e($category->title); ?><i class="ti-arrow-right"></i>
                             </a>
                         </li>
-                        @endif
+                        <?php endif; ?>
 
-                        <li class="active">{{ $product_detail->title }}</li>
+                        <li class="active"><?php echo e($product_detail->title); ?></li>
                     </ul>
                 </div>
             </div>
@@ -63,19 +63,19 @@
                             <div class="flexslider-thumbnails">
                                 <ul class="slides">
 
-                                    <li data-thumb="{{ $product_detail->photo }}" rel="adjustX:10, adjustY:" class="image-slide">
+                                    <li data-thumb="<?php echo e($product_detail->photo); ?>" rel="adjustX:10, adjustY:" class="image-slide">
                                         <div class="main-image-wrapper rounded border overflow-hidden">
-                                            <img src="{{ $product_detail->photo }}" alt="Main Product Image" class="img-fluid w-100 h-auto image" style="object-fit: cover; max-height: 500px;">
+                                            <img src="<?php echo e($product_detail->photo); ?>" alt="Main Product Image" class="img-fluid w-100 h-auto image" style="object-fit: cover; max-height: 500px;">
                                         </div>
                                     </li>
 
-                                    @if($product_detail->images && count($product_detail->images) > 0)
-                                    @foreach($product_detail->images as $img)
-                                    <li data-thumb="{{ $img->image_path }}" rel="adjustX:10, adjustY:">
-                                        <img src="{{ $img->image_path }}" alt="Product Thumbnail">
+                                    <?php if($product_detail->images && count($product_detail->images) > 0): ?>
+                                    <?php $__currentLoopData = $product_detail->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $img): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li data-thumb="<?php echo e($img->image_path); ?>" rel="adjustX:10, adjustY:">
+                                        <img src="<?php echo e($img->image_path); ?>" alt="Product Thumbnail">
                                     </li>
-                                    @endforeach
-                                    @endif
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                    <?php endif; ?>
                                 </ul>
                             </div>
                         </div>
@@ -86,31 +86,31 @@
                         <div class="product-des">
                             <!-- Description -->
                             <div class="short">
-                                <h4>{{$product_detail->title}}</h4>
+                                <h4><?php echo e($product_detail->title); ?></h4>
                                 <div class="rating-main">
                                     <ul class="rating">
-                                        @php
+                                        <?php
                                         $rate=ceil($product_detail->getReview->avg('rate'))
-                                        @endphp
-                                        @for($i=1; $i<=5; $i++) @if($rate>=$i)
+                                        ?>
+                                        <?php for($i=1; $i<=5; $i++): ?> <?php if($rate>=$i): ?>
                                             <li><i class="fa fa-star"></i></li>
-                                            @else
+                                            <?php else: ?>
                                             <li><i class="fa fa-star-o"></i></li>
-                                            @endif
-                                            @endfor
+                                            <?php endif; ?>
+                                            <?php endfor; ?>
                                     </ul>
-                                    <a href="#" class="total-review">({{$product_detail['getReview']->count()}})
+                                    <a href="#" class="total-review">(<?php echo e($product_detail['getReview']->count()); ?>)
                                         Review</a>
                                 </div>
-                                @php
+                                <?php
                                 $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
-                                @endphp
+                                ?>
                                 <p class="price">
-                                    <span class="discount">₹{{ number_format($after_discount,2) }}</span>
-                                    @if($product_detail->discount > 0)
-                                    <s>₹{{ number_format($product_detail->price,2) }}</s>
-                                    <span class="discount-badge">{{ $product_detail->discount }}% OFF</span>
-                                    @endif
+                                    <span class="discount">₹<?php echo e(number_format($after_discount,2)); ?></span>
+                                    <?php if($product_detail->discount > 0): ?>
+                                    <s>₹<?php echo e(number_format($product_detail->price,2)); ?></s>
+                                    <span class="discount-badge"><?php echo e($product_detail->discount); ?>% OFF</span>
+                                    <?php endif; ?>
                                 </p>
 
 
@@ -118,36 +118,28 @@
                             </div>
                             <!--/ End Description -->
                             <!-- Color -->
-                            {{-- <div class="color">
-												<h4>Available Options <span>Color</span></h4>
-												<ul>
-													<li><a href="#" class="one"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="two"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="three"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="four"><i class="ti-check"></i></a></li>
-												</ul>
-											</div> --}}
+                            
                             <!--/ End Color -->
                             <!-- Size -->
-                            @if($product_detail->size)
+                            <?php if($product_detail->size): ?>
                             <div class="size mt-4">
                                 <h4>Size</h4>
                                 <ul>
-                                    @php
+                                    <?php
                                     $sizes=explode(',',$product_detail->size);
                                     // dd($sizes);
-                                    @endphp
-                                    @foreach($sizes as $size)
-                                    <li><a href="#" class="one">{{$size}}</a></li>
-                                    @endforeach
+                                    ?>
+                                    <?php $__currentLoopData = $sizes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $size): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <li><a href="#" class="one"><?php echo e($size); ?></a></li>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                 </ul>
                             </div>
-                            @endif
+                            <?php endif; ?>
                             <!--/ End Size -->
                             <!-- Product Buy -->
                             <div class="product-buy">
-                                <form action="{{route('single-add-to-cart')}}" method="POST">
-                                    @csrf
+                                <form action="<?php echo e(route('single-add-to-cart')); ?>" method="POST">
+                                    <?php echo csrf_field(); ?>
                                     <div class="quantity">
                                         <h6>Quantity :</h6>
                                         <!-- Input Order -->
@@ -158,7 +150,7 @@
                                                     <i class="ti-minus"></i>
                                                 </button>
                                             </div>
-                                            <input type="hidden" name="slug" value="{{$product_detail->slug}}">
+                                            <input type="hidden" name="slug" value="<?php echo e($product_detail->slug); ?>">
                                             <input type="text" name="quant[1]" class="input-number" data-min="100"
                                                 data-max="10000" value="100" id="quantity">
                                             <div class="button plus">
@@ -172,22 +164,22 @@
                                     </div>
                                     <div class="add-to-cart mt-4">
                                         <button type="submit" class="btn">Add to cart</button>
-                                        <a href="{{route('add-to-wishlist',$product_detail->slug)}}" class="btn min"><i
+                                        <a href="<?php echo e(route('add-to-wishlist',$product_detail->slug)); ?>" class="btn min"><i
                                                 class="ti-heart"></i></a>
                                     </div>
                                 </form>
 
                                 <h3 class="cat">Category :<a
-                                        href="{{route('product-cat',$product_detail->cat_info['slug'])}}">{{$product_detail->cat_info['title']}}</a>
+                                        href="<?php echo e(route('product-cat',$product_detail->cat_info['slug'])); ?>"><?php echo e($product_detail->cat_info['title']); ?></a>
                                 </h3>
-                                @if($product_detail->sub_cat_info)
+                                <?php if($product_detail->sub_cat_info): ?>
                                 <h3 class="cat mt-1">Sub Category :<a
-                                        href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a>
+                                        href="<?php echo e(route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])); ?>"><?php echo e($product_detail->sub_cat_info['title']); ?></a>
                                 </h3>
-                                @endif
-                                <h3 class="availability">Stock : @if($product_detail->stock>0)<span
-                                        class="badge badge-success">{{$product_detail->stock}}</span>@else <span
-                                        class="badge badge-danger">{{$product_detail->stock}}</span> @endif</h3>
+                                <?php endif; ?>
+                                <h3 class="availability">Stock : <?php if($product_detail->stock>0): ?><span
+                                        class="badge badge-success"><?php echo e($product_detail->stock); ?></span><?php else: ?> <span
+                                        class="badge badge-danger"><?php echo e($product_detail->stock); ?></span> <?php endif; ?></h3>
                             </div>
                             <!--/ End Product Buy -->
                         </div>
@@ -213,7 +205,7 @@
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="single-des">
-                                                    <p>{!! ($product_detail->description) !!}</p>
+                                                    <p><?php echo ($product_detail->description); ?></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -236,10 +228,10 @@
                                                     <h4>Your Rating <span class="text-danger">*</span></h4>
                                                     <div class="review-inner">
                                                         <!-- Form -->
-                                                        @auth
+                                                        <?php if(auth()->guard()->check()): ?>
                                                         <form class="form" method="post"
-                                                            action="{{route('review.store',$product_detail->slug)}}">
-                                                            @csrf
+                                                            action="<?php echo e(route('review.store',$product_detail->slug)); ?>">
+                                                            <?php echo csrf_field(); ?>
                                                             <div class="row">
                                                                 <div class="col-lg-12 col-12">
                                                                     <div class="rating_box">
@@ -280,10 +272,17 @@
                                                                                     class="star-rating__ico fa fa-star-o"
                                                                                     for="star-rating-1"
                                                                                     title="1 out of 5 stars"></label>
-                                                                                @error('rate')
+                                                                                <?php $__errorArgs = ['rate'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
                                                                                 <span
-                                                                                    class="text-danger">{{$message}}</span>
-                                                                                @enderror
+                                                                                    class="text-danger"><?php echo e($message); ?></span>
+                                                                                <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -303,65 +302,62 @@
                                                                 </div>
                                                             </div>
                                                         </form>
-                                                        @else
+                                                        <?php else: ?>
                                                         <p class="text-center p-5">
-                                                            You need to <a href="{{route('login.form')}}"
+                                                            You need to <a href="<?php echo e(route('login.form')); ?>"
                                                                 style="color:rgb(54, 54, 204)">Login</a> OR <a
                                                                 style="color:blue"
-                                                                href="{{route('register.form')}}">Register</a>
+                                                                href="<?php echo e(route('register.form')); ?>">Register</a>
 
                                                         </p>
                                                         <!--/ End Form -->
-                                                        @endauth
+                                                        <?php endif; ?>
                                                     </div>
                                                 </div>
 
                                                 <div class="ratting-main">
                                                     <div class="avg-ratting">
-                                                        {{-- @php 
-																			$rate=0;
-																			foreach($product_detail->rate as $key=>$rate){
-																				$rate +=$rate
-																			}
-																		@endphp --}}
-                                                        <h4>{{ceil($product_detail->getReview->avg('rate'))}}
+                                                        
+                                                        <h4><?php echo e(ceil($product_detail->getReview->avg('rate'))); ?>
+
                                                             <span>(Overall)</span>
                                                         </h4>
-                                                        <span>Based on {{$product_detail->getReview->count()}}
+                                                        <span>Based on <?php echo e($product_detail->getReview->count()); ?>
+
                                                             Comments</span>
                                                     </div>
-                                                    @foreach($product_detail['getReview'] as $data)
+                                                    <?php $__currentLoopData = $product_detail['getReview']; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                     <!-- Single Rating -->
                                                     <div class="single-rating">
                                                         <div class="rating-author">
-                                                            @if($data->user_info['photo'])
-                                                            <img src="{{$data->user_info['photo']}}"
-                                                                alt="{{$data->user_info['photo']}}">
-                                                            @else
-                                                            <img src="{{asset('backend/img/avatar.png')}}"
+                                                            <?php if($data->user_info['photo']): ?>
+                                                            <img src="<?php echo e($data->user_info['photo']); ?>"
+                                                                alt="<?php echo e($data->user_info['photo']); ?>">
+                                                            <?php else: ?>
+                                                            <img src="<?php echo e(asset('backend/img/avatar.png')); ?>"
                                                                 alt="Profile.jpg">
-                                                            @endif
+                                                            <?php endif; ?>
                                                         </div>
                                                         <div class="rating-des">
-                                                            <h6>{{$data->user_info['name']}}</h6>
+                                                            <h6><?php echo e($data->user_info['name']); ?></h6>
                                                             <div class="ratings">
 
                                                                 <ul class="rating">
-                                                                    @for($i=1; $i<=5; $i++) @if($data->rate>=$i)
+                                                                    <?php for($i=1; $i<=5; $i++): ?> <?php if($data->rate>=$i): ?>
                                                                         <li><i class="fa fa-star"></i></li>
-                                                                        @else
+                                                                        <?php else: ?>
                                                                         <li><i class="fa fa-star-o"></i></li>
-                                                                        @endif
-                                                                        @endfor
+                                                                        <?php endif; ?>
+                                                                        <?php endfor; ?>
                                                                 </ul>
-                                                                <div class="rate-count">(<span>{{$data->rate}}</span>)
+                                                                <div class="rate-count">(<span><?php echo e($data->rate); ?></span>)
                                                                 </div>
                                                             </div>
-                                                            <p>{{$data->review}}</p>
+                                                            <p><?php echo e($data->review); ?></p>
                                                         </div>
                                                     </div>
                                                     <!--/ End Single Rating -->
-                                                    @endforeach
+                                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </div>
 
                                                 <!--/ End Review -->
@@ -393,59 +389,59 @@
         </div>
         <!-- Related Products -->
         <div class="row trending-products-grid isotope-grid" style="padding-top: 40px;">
-            @foreach($product_detail->rel_prods as $data)
-            @php
+            <?php $__currentLoopData = $product_detail->rel_prods; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $data): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+            <?php
             $photo = explode(',', $data->photo);
             $after_discount = $data->price - ($data->price * $data->discount / 100);
-            @endphp
+            ?>
 
-            <div class="col-sm-6 col-md-4 col-lg-3 isotope-item {{ $data->cat_id }}">
+            <div class="col-sm-6 col-md-4 col-lg-3 isotope-item <?php echo e($data->cat_id); ?>">
                 <div class="product-card-modern">
                     <div class="product-image-modern">
-                        <a href="{{ route('product-detail', $data->slug) }}">
-                            <img src="{{ $photo[0] }}" alt="{{ $data->title }}">
+                        <a href="<?php echo e(route('product-detail', $data->slug)); ?>">
+                            <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($data->title); ?>">
                         </a>
 
-                        @if($data->stock <= 0)
+                        <?php if($data->stock <= 0): ?>
                             <span class="badge out-of-stock">Sold Out</span>
-                            @elseif($data->condition == 'trending')
+                            <?php elseif($data->condition == 'trending'): ?>
                             <span class="badge trending">Trending</span>
-                            @elseif($data->condition == 'new')
+                            <?php elseif($data->condition == 'new'): ?>
                             <span class="badge new">New</span>
-                            @elseif($data->condition == 'hot')
+                            <?php elseif($data->condition == 'hot'): ?>
                             <span class="badge hot">Hot</span>
-                            @endif
+                            <?php endif; ?>
 
-                            <a href="{{ route('add-to-wishlist', $data->slug) }}" class="btn-wishlist-top">
+                            <a href="<?php echo e(route('add-to-wishlist', $data->slug)); ?>" class="btn-wishlist-top">
                                 <i class="ti-heart"></i>
                             </a>
-                            <a href="{{ route('add-to-cart', $data->slug) }}" class="btn-add-cart-bottom">
+                            <a href="<?php echo e(route('add-to-cart', $data->slug)); ?>" class="btn-add-cart-bottom">
                                 Add to Cart
                             </a>
                     </div>
 
                     <div class="product-info-modern text-center">
                         <h3 class="product-title">
-                            <a href="{{ route('product-detail', $data->slug) }}">{{ $data->title }}</a>
+                            <a href="<?php echo e(route('product-detail', $data->slug)); ?>"><?php echo e($data->title); ?></a>
                         </h3>
                         <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                            <span class="current-price">₹{{ number_format($after_discount, 2) }}</span>
-                            @if($data->discount > 0)
-                            <del class="text-muted">₹{{ number_format($data->price, 2) }}</del>
-                            <span class="badge discount-badge">{{ $data->discount }}% Off</span>
-                            @endif
+                            <span class="current-price">₹<?php echo e(number_format($after_discount, 2)); ?></span>
+                            <?php if($data->discount > 0): ?>
+                            <del class="text-muted">₹<?php echo e(number_format($data->price, 2)); ?></del>
+                            <span class="badge discount-badge"><?php echo e($data->discount); ?>% Off</span>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
             </div>
-            @endforeach
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
         </div>
     </div>
 </div>
 <!-- End Most Popular Area -->
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
     $(document).on('click', '.btn-number', function(e) {
@@ -531,4 +527,5 @@
     $(document).ready(setEqualHeight);
     $(window).resize(setEqualHeight);
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/pages/product_detail.blade.php ENDPATH**/ ?>

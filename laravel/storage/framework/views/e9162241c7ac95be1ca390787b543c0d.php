@@ -105,6 +105,7 @@
             <?php
             $photo = explode(',', $product->photo);
             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+            $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
             ?>
             <div class="col-sm-6 col-md-4 col-lg-3 isotope-item <?php echo e($product->cat_id); ?>">
                 <div class="product-card-modern">
@@ -116,7 +117,7 @@
                             <span class="badge out-of-stock">Sold Out</span>
                             <?php elseif($product->condition == 'trending'): ?>
                             <span class="badge trending">Trending</span>
-                            <?php elseif($product->condition == 'new'): ?>
+                            <?php elseif(in_array($product->id, $newProductIds)): ?>
                             <span class="badge new">New</span>
                             <?php elseif($product->condition == 'hot'): ?>
                             <span class="badge hot">Hot</span>
@@ -221,6 +222,7 @@
 <!-- Start Trending Items -->
 <?php
 $trendingProducts = $product_lists->where('condition', 'trending');
+$newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
 ?>
 
 <?php if($trendingProducts->count() > 0): ?>
@@ -257,7 +259,7 @@ $trendingProducts = $product_lists->where('condition', 'trending');
 
                             <?php if($product->stock <= 0): ?>
                                 <span class="badge out-of-stock">Sold Out</span>
-                                <?php elseif($product->condition == 'new'): ?>
+                                <?php elseif(in_array($product->id, $newProductIds)): ?>
                                 <span class="badge new">New</span>
                                 <?php elseif($product->condition == 'hot'): ?>
                                 <span class="badge hot">Hot</span>
@@ -298,9 +300,10 @@ $trendingProducts = $product_lists->where('condition', 'trending');
 </section>
 <?php endif; ?>
 
-<!-- Start New Items -->
+<!-- Start Latest Items -->
 <?php
-$newProducts = $product_lists->where('condition', 'new');
+// Get the 20 most recently created products
+$newProducts = $product_lists->sortByDesc('created_at')->take(20);
 ?>
 
 <?php if($newProducts->count() > 0): ?>
@@ -330,18 +333,15 @@ $newProducts = $product_lists->where('condition', 'new');
                                 <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                             </a>
 
-                            <?php if($product->stock <= 0): ?>
-                                <span class="badge out-of-stock">Sold Out</span>
-                                <?php elseif($product->condition == 'new'): ?>
-                                <span class="badge new">New</span>
-                                <?php elseif($product->condition == 'hot'): ?>
-                                <span class="badge hot">Hot</span>
-                                <?php elseif($product->condition == 'trending'): ?>
-                                <span class="badge trending">Trending</span>
-                                <?php endif; ?>
+                            <!-- Always show "New" badge -->
+                            <span class="badge new">New</span>
 
-                                <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                                <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
+                            <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top">
+                                <i class="ti-heart"></i>
+                            </a>
+                            <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">
+                                Add to Cart
+                            </a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -366,15 +366,16 @@ $newProducts = $product_lists->where('condition', 'new');
                 <div class="swiper-button-prev d-inline-block me-2"></div>
                 <div class="swiper-button-next d-inline-block"></div>
             </div>
-
         </div>
     </div>
 </section>
 <?php endif; ?>
 
+
 <!-- Start Hot Items -->
 <?php
 $hotProducts = $product_lists->where('condition', 'hot');
+$newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
 ?>
 
 <?php if($hotProducts->count() > 0): ?>
@@ -406,7 +407,7 @@ $hotProducts = $product_lists->where('condition', 'hot');
 
                             <?php if($product->stock <= 0): ?>
                                 <span class="badge out-of-stock">Sold Out</span>
-                                <?php elseif($product->condition == 'new'): ?>
+                                <?php elseif(in_array($product->id, $newProductIds)): ?>
                                 <span class="badge new">New</span>
                                 <?php elseif($product->condition == 'hot'): ?>
                                 <span class="badge hot">Hot</span>
@@ -454,46 +455,78 @@ $hotProducts = $product_lists->where('condition', 'hot');
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    /*==================================================================
-        [ Isotope ]*/
-    var $topeContainer = $('.isotope-grid');
-    var $filter = $('.filter-tope-group');
+    $(document).ready(function() {
+        var $topeContainer = $('.isotope-grid');
 
-    // filter items on button click
-    $filter.each(function() {
-        $filter.on('click', 'button', function() {
-            var filterValue = $(this).attr('data-filter');
-            $topeContainer.isotope({
-                filter: filterValue
-            });
+        // Initialize Isotope and keep the instance in $grid
+        var $grid = $topeContainer.isotope({
+            itemSelector: '.isotope-item',
+            layoutMode: 'fitRows',
+            percentPosition: true,
+            animationEngine: 'best-available',
+            masonry: {
+                columnWidth: '.isotope-item'
+            }
         });
 
-    });
+        // Function to limit visible items to maxItems (e.g., 8)
+        function limitVisibleItems(maxItems) {
+            var visibleItems = $grid.data('isotope').filteredItems;
 
-    // init Isotope
-    $(window).on('load', function() {
-        var $grid = $topeContainer.each(function() {
-            $(this).isotope({
-                itemSelector: '.isotope-item',
-                layoutMode: 'fitRows',
-                percentPosition: true,
-                animationEngine: 'best-available',
-                masonry: {
-                    columnWidth: '.isotope-item'
+            visibleItems.forEach(function(item, index) {
+                if (index < maxItems) {
+                    $(item.element).show();
+                } else {
+                    $(item.element).hide();
                 }
             });
-        });
-    });
 
-    var isotopeButton = $('.filter-tope-group button');
+            $grid.isotope('layout');
 
-    $(isotopeButton).each(function() {
-        $(this).on('click', function() {
-            for (var i = 0; i < isotopeButton.length; i++) {
-                $(isotopeButton[i]).removeClass('how-active1');
+            // Handle "no products" message
+            if (visibleItems.length === 0) {
+                if ($('.no-products-message').length === 0) {
+                    $topeContainer.append(`
+                    <div class="col-12 text-center no-products-message mt-2">
+                        <p class="text-muted fs-5">No products available in this category right now.</p>
+                    </div>
+                `);
+                }
+            } else {
+                $('.no-products-message').remove();
             }
+        }
 
-            $(this).addClass('how-active1');
+        // On filter button click
+        $('.filter-tope-group').on('click', 'button', function() {
+            var filterValue = $(this).attr('data-filter');
+
+            // Filter with Isotope
+            $grid.isotope({
+                filter: filterValue
+            });
+
+            // After filtering, limit visible items to 8
+            $grid.one('arrangeComplete', function() {
+                limitVisibleItems(8);
+            });
+
+            // Toggle active classes
+            $('.filter-tope-group button').removeClass('how-active1 active');
+            $(this).addClass('how-active1 active');
+        });
+
+        // Default filter on page load: show all and limit to 8
+        $(window).on('load', function() {
+            $grid.isotope({
+                filter: '*'
+            });
+
+            $grid.one('arrangeComplete', function() {
+                limitVisibleItems(8);
+
+                $('.filter-tope-group button[data-filter="*"]').addClass('how-active1 active');
+            });
         });
     });
 
@@ -514,8 +547,7 @@ $hotProducts = $product_lists->where('condition', 'hot');
     // Run on page load and window resize
     $(document).ready(setEqualHeight);
     $(window).resize(setEqualHeight);
-</script>
-<script>
+
     function cancelFullScreen(el) {
         var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
         if (requestMethod) { // cancel full screen.
@@ -541,63 +573,6 @@ $hotProducts = $product_lists->where('condition', 'hot');
                 wscript.SendKeys("{F11}");
             }
         }
-    };
-    document.addEventListener('DOMContentLoaded', () => {
-        const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
-        const products = Array.from(document.querySelectorAll('.isotope-item'));
-        const productsGrid = document.querySelector('.trending-products-grid');
-
-        const filterProducts = (filterValue) => {
-            let visibleCount = 0;
-
-            products.forEach(product => {
-                if (filterValue === '*' || product.classList.contains(filterValue.substring(1))) {
-                    // Show only first 8 matching products
-                    if (visibleCount < 8) {
-                        product.style.display = 'block';
-                        visibleCount++;
-                    } else {
-                        product.style.display = 'none';
-                    }
-                } else {
-                    product.style.display = 'none';
-                }
-            });
-
-            // Handle "no products" message
-            let message = productsGrid.querySelector('.no-products-message');
-            if (visibleCount === 0) {
-                if (!message) {
-                    const msg = document.createElement('div');
-                    msg.className = 'col-12 text-center no-products-message mt-2';
-                    msg.innerHTML = `<p class="text-muted fs-5">No products available in this category right now.</p>`;
-                    productsGrid.appendChild(msg);
-                }
-            } else if (message) {
-                message.remove();
-            }
-        };
-
-        // Add click listeners
-        filterButtons.forEach(btn => {
-            btn.addEventListener('click', function() {
-                filterButtons.forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-
-                const filterValue = this.getAttribute('data-filter');
-                filterProducts(filterValue);
-            });
-        });
-
-        // Default: show first 8 products on page load
-        filterProducts('*');
-    });
-
-    // Default filter on page load (show all)
-    const defaultBtn = document.querySelector('.filter-tope-group .btn[data-filter="*"]');
-    if (defaultBtn) {
-        defaultBtn.classList.add('active');
-        filterProducts('*');
     };
 
     document.addEventListener('DOMContentLoaded', () => {

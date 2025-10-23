@@ -1,15 +1,15 @@
-@extends('frontend.layouts.master')
 
-@section('title','BENNY CARDS || PRODUCT PAGE')
-@php
+
+<?php $__env->startSection('title','BENNY CARDS || PRODUCT PAGE'); ?>
+<?php
 use App\Models\Category;
 use Illuminate\Support\Facades\DB;
 
 $categories = Category::getAllParentWithChild();
 $price_ranges = DB::table('price_ranges')->where('status', 'active')->orderBy('min_price', 'ASC')->get();
 $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC')->get();
-@endphp
-@section('main-content')
+?>
+<?php $__env->startSection('main-content'); ?>
 <!-- Breadcrumbs -->
 <div class="breadcrumbs">
     <div class="section-container">
@@ -17,8 +17,8 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
             <div class="col-12" style="padding: 0px;">
                 <div class="bread-inner">
                     <ul class="bread-list">
-                        <li><a href="{{ url('/') }}">Home<i class="ti-arrow-right"></i></a></li>
-                        <li class="active"><span>{{ $category_name }}</span></li>
+                        <li><a href="<?php echo e(url('/')); ?>">Home<i class="ti-arrow-right"></i></a></li>
+                        <li class="active"><span><?php echo e($category_name); ?></span></li>
                     </ul>
                 </div>
             </div>
@@ -30,15 +30,17 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 <!-- Product Style -->
 <div class="section-container mt-5 mb-3">
     <h3 class="text-start text-uppercase">
-        @if(request('category'))
-        @php
+        <?php if(request('category')): ?>
+        <?php
         $catSlug = request('category');
         $cat = $allCategories->firstWhere('slug', $catSlug);
-        @endphp
-        {{ $cat ? $cat->title : $category_name }}
-        @else
-        {{ $category_name }}
-        @endif
+        ?>
+        <?php echo e($cat ? $cat->title : $category_name); ?>
+
+        <?php else: ?>
+        <?php echo e($category_name); ?>
+
+        <?php endif; ?>
     </h3>
 </div>
 
@@ -57,11 +59,11 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 Ratings
                             </button>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 5]) }}">5
+                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 5])); ?>">5
                                         Stars</a></li>
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 4]) }}">4
+                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 4])); ?>">4
                                         Stars & Up</a></li>
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 3]) }}">3
+                                <li><a class="dropdown-item" href="<?php echo e(request()->fullUrlWithQuery(['rating' => 3])); ?>">3
                                         Stars & Up</a></li>
                             </ul>
                         </div>
@@ -73,24 +75,25 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 Categories
                             </button>
                             <ul class="dropdown-menu">
-                                @foreach($categories as $cat)
+                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
                                 <li>
                                     <a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['category' => $cat->slug]) }}">
-                                        {{ $cat->title }}
+                                        href="<?php echo e(request()->fullUrlWithQuery(['category' => $cat->slug])); ?>">
+                                        <?php echo e($cat->title); ?>
+
                                     </a>
                                 </li>
 
                                 </li>
-                                @if($cat->child_cat->count())
-                                @foreach($cat->child_cat as $sub)
+                                <?php if($cat->child_cat->count()): ?>
+                                <?php $__currentLoopData = $cat->child_cat; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li><a class="dropdown-item ps-4"
-                                        href="{{ request()->fullUrlWithQuery(['category' => $sub->slug]) }}">—
-                                        {{ $sub->title }}</a></li>
-                                @endforeach
-                                @endif
-                                @endforeach
+                                        href="<?php echo e(request()->fullUrlWithQuery(['category' => $sub->slug])); ?>">—
+                                        <?php echo e($sub->title); ?></a></li>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                                <?php endif; ?>
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
 
@@ -101,13 +104,14 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 Brands
                             </button>
                             <ul class="dropdown-menu">
-                                @foreach($brands as $brand)
+                                <?php $__currentLoopData = $brands; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $brand): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['brand' => $brand->slug]) }}">
-                                        {{ $brand->title }}
+                                        href="<?php echo e(request()->fullUrlWithQuery(['brand' => $brand->slug])); ?>">
+                                        <?php echo e($brand->title); ?>
+
                                     </a>
                                 </li>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
 
@@ -118,15 +122,16 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 Price
                             </button>
                             <ul class="dropdown-menu">
-                                @foreach($price_ranges as $range)
+                                <?php $__currentLoopData = $price_ranges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $range): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li>
                                 <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => $range->slug]) }}">
-                                        {{ $range->title }}
+                                        href="<?php echo e(request()->fullUrlWithQuery(['price_range' => $range->slug])); ?>">
+                                        <?php echo e($range->title); ?>
+
                                     </a></li>
 
                                 </li>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
                     </div>
@@ -137,27 +142,27 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             Sort by
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sort' => 'default']) }}">
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sort' => 'default'])); ?>">
                                     Default sorting
                                 </a>
                             </li>
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'price_asc']) }}">
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sortBy' => 'price_asc'])); ?>">
                                     Price: Low to High
                                 </a></li>
 
                             <li><a class="dropdown-item"
-                                    href="{{ route('product-grids', ['sortBy' => 'price_desc']) }}">
+                                    href="<?php echo e(route('product-grids', ['sortBy' => 'price_desc'])); ?>">
                                     Price: High to Low
                                 </a></li>
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'latest']) }}">
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sortBy' => 'latest'])); ?>">
                                     Newest
                                 </a></li>
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'trending']) }}">
+                            <li><a class="dropdown-item" href="<?php echo e(route('product-grids', ['sortBy' => 'trending'])); ?>">
                                     Trending
                                 </a></li>
                         </ul>
                     </div>
-                    @php
+                    <?php
                     // Flatten categories + child categories to find titles by slug
                     $allCategories = collect();
                     foreach ($categories as $cat) {
@@ -223,29 +228,30 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                     'title' => $sortTitles[$sort] ?? $sort,
                     ];
                     }
-                    @endphp
+                    ?>
 
-                    @if(count($selectedFilters) > 0)
+                    <?php if(count($selectedFilters) > 0): ?>
                     <div class="w-100 mt-2 d-flex align-items-center gap-2 flex-wrap">
-                        <a href="{{ route('product-grids') }}" class="clear_filter small">
+                        <a href="<?php echo e(route('product-grids')); ?>" class="clear_filter small">
                             ✕ Clear All Filters
                         </a>
 
-                        @foreach($selectedFilters as $filterKey => $filter)
-                        @php
+                        <?php $__currentLoopData = $selectedFilters; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $filterKey => $filter): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
                         // Prepare URL that removes only this filter
                         $query = request()->query();
                         unset($query[$filterKey]);
                         $urlWithoutFilter = url()->current() . (count($query) ? '?' . http_build_query($query) : '');
-                        @endphp
+                        ?>
                         <span class="badge small d-flex align-items-center gap-1">
-                            {{ $filter['title'] }}
-                            <a href="{{ $urlWithoutFilter }}" class="text-decoration-none fw-bold"
+                            <?php echo e($filter['title']); ?>
+
+                            <a href="<?php echo e($urlWithoutFilter); ?>" class="text-decoration-none fw-bold"
                                 style="line-height:1;">&times;</a>
                         </span>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
-                    @endif
+                    <?php endif; ?>
 
                 </div>
             </div>
@@ -253,35 +259,35 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
             <!-- Products Section -->
             <div class="col-lg-12 col-md-8 col-12 section" style="padding-top: 40px;">
                 <div class="row">
-                    @if(count($products) > 0)
-                    @foreach($products as $product)
-                    @php
+                    <?php if(count($products) > 0): ?>
+                    <?php $__currentLoopData = $products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                    <?php
                     $photo = explode(',', $product->photo);
                     $after_discount = ($product->price - ($product->price * $product->discount) / 100);
-                    @endphp
+                    ?>
 
                     <div class="col-sm-6 col-md-4 col-lg-3">
                         <div class="product-card-modern">
                             <div class="product-image-modern">
-                                <a href="{{ route('product-detail', $product->slug) }}">
-                                    <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
+                                <a href="<?php echo e(route('product-detail', $product->slug)); ?>">
+                                    <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                                 </a>
 
                                 <!-- Badges -->
-                                @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
-                                    @elseif($product->condition == 'new')
+                                <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
+                                    <?php elseif($product->condition == 'new'): ?>
                                     <span class="badge new">New</span>
-                                    @elseif($product->condition == 'hot')
+                                    <?php elseif($product->condition == 'hot'): ?>
                                     <span class="badge hot">Hot</span>
-                                    @elseif($product->condition == 'trending')
+                                    <?php elseif($product->condition == 'trending'): ?>
                                     <span class="badge trending">Trending</span>
-                                    @endif
+                                    <?php endif; ?>
 
                                     <!-- Wishlist & Add to Cart -->
-                                    <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
+                                    <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top">
                                         <i class="ti-heart"></i>
                                     </a>
-                                    <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
+                                    <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">
                                         Add to Cart
                                     </a>
                             </div>
@@ -289,32 +295,33 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                             <!-- Product Info -->
                             <div class="product-info-modern text-center">
                                 <h3 class="product-title">
-                                    <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
+                                    <a href="<?php echo e(route('product-detail', $product->slug)); ?>"><?php echo e($product->title); ?></a>
                                 </h3>
 
                                 <div class="product-price d-flex justify-content-center align-items-center gap-2">
                                     <span
-                                        class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                        class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
 
-                                    @if($product->discount > 0)
-                                    <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
-                                    <span class="badge discount-badge">{{ $product->discount }}% Off</span>
-                                    @endif
+                                    <?php if($product->discount > 0): ?>
+                                    <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
+                                    <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    @endforeach
-                    @else
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <?php else: ?>
                     <h4 class="text-warning text-center my-5">There are no products.</h4>
-                    @endif
+                    <?php endif; ?>
 
                 </div>
 
                 <!-- Pagination -->
                 <div class="row">
                     <div class="col-md-12 d-flex justify-content-center">
-                        {{ $products->appends(request()->query())->links() }}
+                        <?php echo e($products->appends(request()->query())->links()); ?>
+
                     </div>
                 </div>
             </div>
@@ -323,9 +330,9 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 </section>
 
 
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
     $(document).ready(function() {
@@ -360,4 +367,5 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
         }
     })
 </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/pages/product-grids.blade.php ENDPATH**/ ?>
