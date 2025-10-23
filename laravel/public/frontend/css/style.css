@@ -3477,7 +3477,6 @@ Version:1.0
 
 .shopping-cart {
 	background: #f6f6f6;
-	padding: 50px 0;
 }
 
 .shopping-summery thead .main-hading {
@@ -6220,13 +6219,11 @@ Version:1.0
 	background: #fff;
 	border-radius: 15px;
 	overflow: hidden;
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-	transition: transform 0.4s ease, box-shadow 0.4s ease;
+	transition: transform 0.4s ease;
 }
 
 .price-card-new:hover {
 	transform: translateY(-8px);
-	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
 /* Image Section */
