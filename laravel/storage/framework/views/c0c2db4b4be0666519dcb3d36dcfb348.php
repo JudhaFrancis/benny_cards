@@ -2,7 +2,7 @@
 <footer class="footer">
 	<!-- Footer Top -->
 	<div class="footer-top" style="padding: 60px 0px;background-color:#222;">
-		<div class="container">
+		<div class="section-container">
 			<div class="row">
 				<div class="col-lg-5 col-md-6 col-12">
 					<!-- Single Widget -->
@@ -89,7 +89,7 @@
 	</div>
 	<!-- End Footer Top -->
 	<div class="copyright">
-		<div class="container">
+		<div class="section-container">
 			<div class="inner">
 				<div class="row">
 					<div class="col-lg-6 col-12">

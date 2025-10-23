@@ -182,25 +182,40 @@
         <div class="section-title">
             <h2>Price Range</h2>
         </div>
-        <div class="price-grid-new">
-            <?php
-            $price_ranges = DB::table('price_ranges')->where('status','active')->get();
-            ?>
-            <?php $__currentLoopData = $price_ranges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $price): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-            <div class="price-card-new">
-                <div class="price-image-new">
-                    <img src="<?php echo e($price->photo ?? 'https://via.placeholder.com/400x400'); ?>" alt="<?php echo e($price->title); ?>">
-                    <div class="ribbon">Starting at ₹<?php echo e($price->min_price); ?></div>
+
+        <!-- Swiper Slider using same class as Trending Items -->
+        <div class="swiper latest-items-swiper">
+            <div class="swiper-wrapper">
+                <?php
+                $price_ranges = DB::table('price_ranges')->where('status','active')->get();
+                ?>
+                <?php $__currentLoopData = $price_ranges; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $price): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                <div class="swiper-slide">
+                    <div class="product-card-modern">
+                        <div class="price-card-new">
+                            <div class="price-image-new">
+                                <img src="<?php echo e($price->photo ?? 'https://via.placeholder.com/400x400'); ?>" alt="<?php echo e($price->title); ?>">
+                                <div class="ribbon">Starting at ₹<?php echo e($price->min_price); ?></div>
+                            </div>
+                            <div class="price-content-new text-center">
+                                <h4 class="price-title-new"><?php echo e($price->title); ?></h4>
+                                <a href="<?php echo e(route('price-range.products', $price->slug)); ?>" class="price-btn-new">Shop Now</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="price-content-new">
-                    <h4 class="price-title-new"><?php echo e($price->title); ?></h4>
-                    <a href="<?php echo e(route('price-range.products', $price->slug)); ?>" class="price-btn-new">Shop Now</a>
-                </div>
+                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
             </div>
-            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+
+            <!-- Navigation arrows -->
+            <div class="swiper-navigation text-center mt-3">
+                <div class="swiper-button-prev d-inline-block me-2"></div>
+                <div class="swiper-button-next d-inline-block"></div>
+            </div>
         </div>
     </div>
 </section>
+
 <!-- End Price Range Section -->
 
 <!-- Start Trending Items -->
@@ -439,93 +454,94 @@ $hotProducts = $product_lists->where('condition', 'hot');
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-/*==================================================================
+    /*==================================================================
         [ Isotope ]*/
-var $topeContainer = $('.isotope-grid');
-var $filter = $('.filter-tope-group');
+    var $topeContainer = $('.isotope-grid');
+    var $filter = $('.filter-tope-group');
 
-// filter items on button click
-$filter.each(function() {
-    $filter.on('click', 'button', function() {
-        var filterValue = $(this).attr('data-filter');
-        $topeContainer.isotope({
-            filter: filterValue
+    // filter items on button click
+    $filter.each(function() {
+        $filter.on('click', 'button', function() {
+            var filterValue = $(this).attr('data-filter');
+            $topeContainer.isotope({
+                filter: filterValue
+            });
+        });
+
+    });
+
+    // init Isotope
+    $(window).on('load', function() {
+        var $grid = $topeContainer.each(function() {
+            $(this).isotope({
+                itemSelector: '.isotope-item',
+                layoutMode: 'fitRows',
+                percentPosition: true,
+                animationEngine: 'best-available',
+                masonry: {
+                    columnWidth: '.isotope-item'
+                }
+            });
         });
     });
 
-});
+    var isotopeButton = $('.filter-tope-group button');
 
-// init Isotope
-$(window).on('load', function() {
-    var $grid = $topeContainer.each(function() {
-        $(this).isotope({
-            itemSelector: '.isotope-item',
-            layoutMode: 'fitRows',
-            percentPosition: true,
-            animationEngine: 'best-available',
-            masonry: {
-                columnWidth: '.isotope-item'
+    $(isotopeButton).each(function() {
+        $(this).on('click', function() {
+            for (var i = 0; i < isotopeButton.length; i++) {
+                $(isotopeButton[i]).removeClass('how-active1');
+            }
+
+            $(this).addClass('how-active1');
+        });
+    });
+
+    function setEqualHeight() {
+        var maxHeight = 0;
+        $('.product-card-modern').css('height', 'auto'); // reset
+
+        $('.product-card-modern').each(function() {
+            var cardHeight = $(this).outerHeight();
+            if (cardHeight > maxHeight) {
+                maxHeight = cardHeight;
             }
         });
-    });
-});
 
-var isotopeButton = $('.filter-tope-group button');
+        $('.product-card-modern').css('height', maxHeight + 'px');
+    }
 
-$(isotopeButton).each(function() {
-    $(this).on('click', function() {
-        for (var i = 0; i < isotopeButton.length; i++) {
-            $(isotopeButton[i]).removeClass('how-active1');
-        }
-
-        $(this).addClass('how-active1');
-    });
-});
-
-function setEqualHeight() {
-    var maxHeight = 0;
-    $('.product-card-modern').css('height', 'auto'); // reset
-
-    $('.product-card-modern').each(function() {
-        var cardHeight = $(this).outerHeight();
-        if (cardHeight > maxHeight) {
-            maxHeight = cardHeight;
-        }
-    });
-
-    $('.product-card-modern').css('height', maxHeight + 'px');
-}
-
-// Run on page load and window resize
-$(document).ready(setEqualHeight);
-$(window).resize(setEqualHeight);
+    // Run on page load and window resize
+    $(document).ready(setEqualHeight);
+    $(window).resize(setEqualHeight);
 </script>
 <script>
-function cancelFullScreen(el) {
-    var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
-    if (requestMethod) { // cancel full screen.
-        requestMethod.call(el);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
+    function cancelFullScreen(el) {
+        var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
+        if (requestMethod) { // cancel full screen.
+            requestMethod.call(el);
+        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
+            }
         }
     }
-}
 
-function requestFullScreen(el) {
-    // Supports most browsers and their versions.
-    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
-        .msRequestFullscreen;
+    function requestFullScreen(el) {
+        // Supports most browsers and their versions.
+        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
+            .msRequestFullscreen;
 
-    if (requestMethod) { // Native full screen.
-        requestMethod.call(el);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
+        if (requestMethod) { // Native full screen.
+            requestMethod.call(el);
+        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
+            }
         }
-    }
+    };
     document.addEventListener('DOMContentLoaded', () => {
         const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
         const products = Array.from(document.querySelectorAll('.isotope-item'));
@@ -576,6 +592,14 @@ function requestFullScreen(el) {
         // Default: show first 8 products on page load
         filterProducts('*');
     });
+
+    // Default filter on page load (show all)
+    const defaultBtn = document.querySelector('.filter-tope-group .btn[data-filter="*"]');
+    if (defaultBtn) {
+        defaultBtn.classList.add('active');
+        filterProducts('*');
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
         new Swiper('.latest-items-swiper', {
             slidesPerView: 4,
@@ -600,14 +624,6 @@ function requestFullScreen(el) {
             }
         });
     });
-
-    // Default filter on page load (show all)
-    const defaultBtn = document.querySelector('.filter-tope-group .btn[data-filter="*"]');
-    if (defaultBtn) {
-        defaultBtn.classList.add('active');
-        filterProducts('*');
-    }
-});
 </script>
 
 <?php $__env->stopPush(); ?>
