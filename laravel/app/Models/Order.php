@@ -5,8 +5,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    protected $fillable=['user_id','order_number','sub_total','quantity','delivery_charge','status','total_amount','first_name','last_name','country','post_code','address1','address2','phone','email','payment_method','payment_status','shipping_id','coupon'];
-
+protected $fillable = [
+    'user_id',
+    'order_number',
+    'tracking_id',
+    'order_date',
+    'items_count',
+    'total_quantity',
+    'net_amount',
+    'coupons_id',
+    'discount',
+    'total_amount',
+    'paid_amount',
+    'payment_method',
+    'payment_status',
+    'status',
+    'tracking_status_id',
+    'name',
+    'email',
+    'phone',
+    'country',
+    'post_code',
+    'address_1',
+    'address_2',
+    'remarks'
+];
     public function cart_info(){
         return $this->hasMany('App\Models\Cart','order_id','id');
     }
@@ -27,9 +50,30 @@ class Order extends Model
     public function shipping(){
         return $this->belongsTo(Shipping::class,'shipping_id');
     }
-    public function user()
-    {
-        return $this->belongsTo('App\User', 'user_id');
-    }
+    // public function user()
+    // {
+    //     return $this->belongsTo('App\User', 'user_id');
+    // }
+
+// Order -> Order Items
+public function items(){
+    return $this->hasMany(OrderItem::class, 'orders_id', 'id');
+}
+
+// Order -> Tracking history
+public function trackingHistory(){
+    return $this->hasMany(OrderTracking::class, 'orders_id', 'id');
+}
+
+// Order -> User
+public function user(){
+    return $this->belongsTo(User::class, 'user_id', 'id');
+}
+
+// Order -> Tracking Status
+public function trackingStatus(){
+    return $this->belongsTo(TrackingStatus::class, 'tracking_status_id', 'id');
+}
+
 
 }

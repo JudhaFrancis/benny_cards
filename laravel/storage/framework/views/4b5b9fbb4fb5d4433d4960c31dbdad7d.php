@@ -37,9 +37,8 @@
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Name<span>*</span></label>
-                                        <input type="text" name="first_name" placeholder="" value="<?php echo e(old('first_name')); ?>"
-                                            value="<?php echo e(old('first_name')); ?>">
-                                        <?php $__errorArgs = ['first_name'];
+                                        <input type="text" name="name" placeholder="" value="<?php echo e(old('name')); ?>">
+                                        <?php $__errorArgs = ['name'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
 if ($__bag->has($__errorArgs[0])) :
 if (isset($message)) { $__messageOriginal = $message; }
@@ -155,6 +154,12 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>
     </div>
+
+   <div class="col-12 mt-3 text-center">
+    <button type="submit" class="btn btn-primary">Save</button>
+</div>
+
+
 </div>
 
 
