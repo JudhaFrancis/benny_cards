@@ -113,8 +113,7 @@
                         <a href="<?php echo e(route('product-detail', $product->slug)); ?>">
                             <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                         </a>
-                        <?php if($product->stock <= 0): ?>
-                            <span class="badge out-of-stock">Sold Out</span>
+                        <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
                             <?php elseif($product->condition == 'trending'): ?>
                             <span class="badge trending">Trending</span>
                             <?php elseif(in_array($product->id, $newProductIds)): ?>
@@ -123,8 +122,10 @@
                             <span class="badge hot">Hot</span>
                             <?php endif; ?>
 
-                            <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                            <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
+                            <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i
+                                    class="ti-heart"></i></a>
+                            <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to
+                                Cart</a>
                     </div>
 
                     <div class="product-info-modern text-center">
@@ -195,12 +196,14 @@
                     <div class="product-card-modern">
                         <div class="price-card-new">
                             <div class="price-image-new">
-                                <img src="<?php echo e($price->photo ?? 'https://via.placeholder.com/400x400'); ?>" alt="<?php echo e($price->title); ?>">
+                                <img src="<?php echo e($price->photo ?? 'https://via.placeholder.com/400x400'); ?>"
+                                    alt="<?php echo e($price->title); ?>">
                                 <div class="ribbon">Starting at ₹<?php echo e($price->min_price); ?></div>
                             </div>
                             <div class="price-content-new text-center">
                                 <h4 class="price-title-new"><?php echo e($price->title); ?></h4>
-                                <a href="<?php echo e(route('price-range.products', $price->slug)); ?>" class="price-btn-new">Shop Now</a>
+                                <a href="<?php echo e(route('price-range.products', $price->slug)); ?>" class="price-btn-new">Shop
+                                    Now</a>
                             </div>
                         </div>
                     </div>
@@ -232,11 +235,6 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
             <div class="col-12">
                 <div class="section-title">
                     <h2>Trending Items</h2>
-
-                    <div class="hot-slider-nav text-center mt-3">
-                        <button class="hot-prev mx-2">&lt;</button>
-                        <button class="hot-next mx-2">&gt;</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -257,9 +255,14 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
                                 <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                             </a>
 
+<<<<<<< HEAD
                             <?php if($product->stock <= 0): ?>
                                 <span class="badge out-of-stock">Sold Out</span>
                                 <?php elseif(in_array($product->id, $newProductIds)): ?>
+=======
+                            <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
+                                <?php elseif($product->condition == 'new'): ?>
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
                                 <span class="badge new">New</span>
                                 <?php elseif($product->condition == 'hot'): ?>
                                 <span class="badge hot">Hot</span>
@@ -267,8 +270,10 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
                                 <span class="badge trending">Trending</span>
                                 <?php endif; ?>
 
-                                <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                                <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
+                                <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i
+                                        class="ti-heart"></i></a>
+                                <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to
+                                    Cart</a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -276,7 +281,8 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
                                 <a href="<?php echo e(route('product-detail', $product->slug)); ?>"><?php echo e($product->title); ?></a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
+                                <span
+                                    class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
                                 <?php if($product->discount > 0): ?>
                                 <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
                                 <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
@@ -333,6 +339,7 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
                                 <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                             </a>
 
+<<<<<<< HEAD
                             <!-- Always show "New" badge -->
                             <span class="badge new">New</span>
 
@@ -342,6 +349,21 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
                             <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">
                                 Add to Cart
                             </a>
+=======
+                            <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
+                                <?php elseif($product->condition == 'new'): ?>
+                                <span class="badge new">New</span>
+                                <?php elseif($product->condition == 'hot'): ?>
+                                <span class="badge hot">Hot</span>
+                                <?php elseif($product->condition == 'trending'): ?>
+                                <span class="badge trending">Trending</span>
+                                <?php endif; ?>
+
+                                <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i
+                                        class="ti-heart"></i></a>
+                                <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to
+                                    Cart</a>
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -349,7 +371,8 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
                                 <a href="<?php echo e(route('product-detail', $product->slug)); ?>"><?php echo e($product->title); ?></a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
+                                <span
+                                    class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
                                 <?php if($product->discount > 0): ?>
                                 <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
                                 <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
@@ -405,9 +428,14 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
                                 <img src="<?php echo e($photo[0]); ?>" alt="<?php echo e($product->title); ?>">
                             </a>
 
+<<<<<<< HEAD
                             <?php if($product->stock <= 0): ?>
                                 <span class="badge out-of-stock">Sold Out</span>
                                 <?php elseif(in_array($product->id, $newProductIds)): ?>
+=======
+                            <?php if($product->stock <= 0): ?> <span class="badge out-of-stock">Sold Out</span>
+                                <?php elseif($product->condition == 'new'): ?>
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
                                 <span class="badge new">New</span>
                                 <?php elseif($product->condition == 'hot'): ?>
                                 <span class="badge hot">Hot</span>
@@ -415,8 +443,10 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
                                 <span class="badge trending">Trending</span>
                                 <?php endif; ?>
 
-                                <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                                <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to Cart</a>
+                                <a href="<?php echo e(route('add-to-wishlist', $product->slug)); ?>" class="btn-wishlist-top"><i
+                                        class="ti-heart"></i></a>
+                                <a href="<?php echo e(route('add-to-cart', $product->slug)); ?>" class="btn-add-cart-bottom">Add to
+                                    Cart</a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -424,7 +454,8 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
                                 <a href="<?php echo e(route('product-detail', $product->slug)); ?>"><?php echo e($product->title); ?></a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
+                                <span
+                                    class="current-price fw-bold text-dark">₹<?php echo e(number_format($after_discount, 2)); ?></span>
                                 <?php if($product->discount > 0): ?>
                                 <del class="text-muted small">₹<?php echo e(number_format($product->price, 2)); ?></del>
                                 <span class="badge discount-badge"><?php echo e($product->discount); ?>% Off</span>
@@ -455,6 +486,7 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
+<<<<<<< HEAD
     $(document).ready(function() {
         var $topeContainer = $('.isotope-grid');
 
@@ -538,12 +570,42 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
             var cardHeight = $(this).outerHeight();
             if (cardHeight > maxHeight) {
                 maxHeight = cardHeight;
+=======
+/*==================================================================
+        [ Isotope ]*/
+var $topeContainer = $('.isotope-grid');
+var $filter = $('.filter-tope-group');
+
+// filter items on button click
+$filter.each(function() {
+    $filter.on('click', 'button', function() {
+        var filterValue = $(this).attr('data-filter');
+        $topeContainer.isotope({
+            filter: filterValue
+        });
+    });
+
+});
+
+// init Isotope
+$(window).on('load', function() {
+    var $grid = $topeContainer.each(function() {
+        $(this).isotope({
+            itemSelector: '.isotope-item',
+            layoutMode: 'fitRows',
+            percentPosition: true,
+            animationEngine: 'best-available',
+            masonry: {
+                columnWidth: '.isotope-item'
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
             }
         });
+    });
+});
 
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
+var isotopeButton = $('.filter-tope-group button');
 
+<<<<<<< HEAD
     // Run on page load and window resize
     $(document).ready(setEqualHeight);
     $(window).resize(setEqualHeight);
@@ -557,48 +619,149 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
             if (wscript !== null) {
                 wscript.SendKeys("{F11}");
             }
+=======
+$(isotopeButton).each(function() {
+    $(this).on('click', function() {
+        for (var i = 0; i < isotopeButton.length; i++) {
+            $(isotopeButton[i]).removeClass('how-active1');
+        }
+
+        $(this).addClass('how-active1');
+    });
+});
+
+function setEqualHeight() {
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
+
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
+        }
+    });
+
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
+
+// Run on page load and window resize
+$(document).ready(setEqualHeight);
+$(window).resize(setEqualHeight);
+</script>
+<script>
+function cancelFullScreen(el) {
+    var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
+    if (requestMethod) { // cancel full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
         }
     }
+}
 
-    function requestFullScreen(el) {
-        // Supports most browsers and their versions.
-        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
-            .msRequestFullscreen;
+function requestFullScreen(el) {
+    // Supports most browsers and their versions.
+    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
+        .msRequestFullscreen;
 
-        if (requestMethod) { // Native full screen.
-            requestMethod.call(el);
-        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
-            }
+    if (requestMethod) { // Native full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
         }
-    };
+<<<<<<< HEAD
+=======
+    }
+};
+document.addEventListener('DOMContentLoaded', () => {
+    const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
+    const products = Array.from(document.querySelectorAll('.isotope-item'));
+    const productsGrid = document.querySelector('.trending-products-grid');
 
-    document.addEventListener('DOMContentLoaded', () => {
-        new Swiper('.latest-items-swiper', {
-            slidesPerView: 4,
-            spaceBetween: 20,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
-            },
-            breakpoints: {
-                0: {
-                    slidesPerView: 1.1
-                },
-                576: {
-                    slidesPerView: 2.1
-                },
-                768: {
-                    slidesPerView: 3.1
-                },
-                992: {
-                    slidesPerView: 4.1
-                },
+    const filterProducts = (filterValue) => {
+        let visibleCount = 0;
+
+        products.forEach(product => {
+            if (filterValue === '*' || product.classList.contains(filterValue.substring(1))) {
+                // Show only first 8 matching products
+                if (visibleCount < 8) {
+                    product.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    product.style.display = 'none';
+                }
+            } else {
+                product.style.display = 'none';
             }
         });
+
+        // Handle "no products" message
+        let message = productsGrid.querySelector('.no-products-message');
+        if (visibleCount === 0) {
+            if (!message) {
+                const msg = document.createElement('div');
+                msg.className = 'col-12 text-center no-products-message mt-2';
+                msg.innerHTML =
+                    `<p class="text-muted fs-5">No products available in this category right now.</p>`;
+                productsGrid.appendChild(msg);
+            }
+        } else if (message) {
+            message.remove();
+        }
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
+    };
+
+    // Add click listeners
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            filterButtons.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+
+            const filterValue = this.getAttribute('data-filter');
+            filterProducts(filterValue);
+        });
     });
+
+    // Default: show first 8 products on page load
+    filterProducts('*');
+});
+
+// Default filter on page load (show all)
+const defaultBtn = document.querySelector('.filter-tope-group .btn[data-filter="*"]');
+if (defaultBtn) {
+    defaultBtn.classList.add('active');
+    filterProducts('*');
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.latest-items-swiper', {
+        slidesPerView: 4,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 1.1
+            },
+            576: {
+                slidesPerView: 2.1
+            },
+            768: {
+                slidesPerView: 3.1
+            },
+            992: {
+                slidesPerView: 4.1
+            },
+        }
+    });
+});
 </script>
 
 <?php $__env->stopPush(); ?>

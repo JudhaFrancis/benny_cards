@@ -331,7 +331,26 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
 
 <?php $__env->stopSection(); ?>
+<<<<<<< HEAD
 
+=======
+<?php $__env->startPush('styles'); ?>
+<style>
+    .pagination {
+        display: inline-flex;
+    }
+
+    .filter_button {
+        /* height:20px; */
+        text-align: center;
+        background: #F7941D;
+        padding: 8px 16px;
+        margin-top: 10px;
+        color: white;
+    }
+</style>
+<?php $__env->stopPush(); ?>
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>

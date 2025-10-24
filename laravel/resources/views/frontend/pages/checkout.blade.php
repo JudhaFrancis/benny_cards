@@ -44,15 +44,7 @@
                                         @enderror
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Last Name<span>*</span></label>
-                                        <input type="text" name="last_name" placeholder="" value="{{old('lat_name')}}">
-                                        @error('last_name')
-                                            <span class='text-danger'>{{$message}}</span>
-                                        @enderror
-                                    </div>
-                                </div>
+                            
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Email Address<span>*</span></label>
@@ -106,6 +98,16 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+    <div class="form-group">
+        <label>Remarks</label>
+        <textarea name="remarks" rows="1" placeholder="" class="form-control">{{ old('remarks') }}</textarea>
+        @error('remarks')
+            <span class='text-danger'>{{ $message }}</span>
+        @enderror
+    </div>
+</div>
+
 
                             </div>
                             <!--/ End Form -->
