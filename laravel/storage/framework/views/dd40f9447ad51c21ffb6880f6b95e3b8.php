@@ -444,6 +444,32 @@ unset($__errorArgs, $__bag); ?>
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
+<<<<<<< HEAD
+    $(document).on('click', '.btn-number', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+
+        var fieldName = $(this).attr('data-field');
+        var type = $(this).attr('data-type');
+        var input = $("input[name='" + fieldName + "']");
+        var currentVal = parseFloat(input.val()) || 0;
+        var step = 99;
+
+        var min = parseFloat(input.attr('data-min')) || 100;
+        var max = parseFloat(input.attr('data-max')) || 10000;
+
+        if (type === 'minus') {
+            let newVal = currentVal - step;
+            if (newVal < min) newVal = min;
+            input.val(newVal);
+        } else if (type === 'plus') {
+            let newVal = currentVal + step;
+            if (newVal > max) newVal = max;
+            input.val(newVal);
+        }
+    });
+
+=======
     $(document).ready(function() {
         $('.btn-number').click(function(e) {
             e.preventDefault();
@@ -477,6 +503,7 @@ unset($__errorArgs, $__bag); ?>
             $(this).val(val);
         });
     });
+>>>>>>> a57a3392364d8a6350c548a41b4cf0bf8319a959
     var $topeContainer = $('.isotope-grid');
     var $filter = $('.filter-tope-group');
 

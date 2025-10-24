@@ -104,6 +104,7 @@
             @php
             $photo = explode(',', $product->photo);
             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
+            $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
             @endphp
             <div class="col-sm-6 col-md-4 col-lg-3 isotope-item {{$product->cat_id}}">
                 <div class="product-card-modern">
@@ -111,19 +112,18 @@
                         <a href="{{ route('product-detail', $product->slug) }}">
                             <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                         </a>
-                        @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
+                        @if($product->stock <= 0)
+                            <span class="badge out-of-stock">Sold Out</span>
                             @elseif($product->condition == 'trending')
                             <span class="badge trending">Trending</span>
-                            @elseif($product->condition == 'new')
+                            @elseif(in_array($product->id, $newProductIds))
                             <span class="badge new">New</span>
                             @elseif($product->condition == 'hot')
                             <span class="badge hot">Hot</span>
                             @endif
 
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
-                                    class="ti-heart"></i></a>
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
-                                Cart</a>
+                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
                     </div>
 
                     <div class="product-info-modern text-center">
@@ -194,14 +194,12 @@
                     <div class="product-card-modern">
                         <div class="price-card-new">
                             <div class="price-image-new">
-                                <img src="{{ $price->photo ?? 'https://via.placeholder.com/400x400' }}"
-                                    alt="{{ $price->title }}">
+                                <img src="{{ $price->photo ?? 'https://via.placeholder.com/400x400' }}" alt="{{ $price->title }}">
                                 <div class="ribbon">Starting at ₹{{ $price->min_price }}</div>
                             </div>
                             <div class="price-content-new text-center">
                                 <h4 class="price-title-new">{{ $price->title }}</h4>
-                                <a href="{{ route('price-range.products', $price->slug) }}" class="price-btn-new">Shop
-                                    Now</a>
+                                <a href="{{ route('price-range.products', $price->slug) }}" class="price-btn-new">Shop Now</a>
                             </div>
                         </div>
                     </div>
@@ -232,6 +230,11 @@ $trendingProducts = $product_lists->where('condition', 'trending');
             <div class="col-12">
                 <div class="section-title">
                     <h2>Trending Items</h2>
+
+                    <div class="hot-slider-nav text-center mt-3">
+                        <button class="hot-prev mx-2">&lt;</button>
+                        <button class="hot-next mx-2">&gt;</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -252,19 +255,14 @@ $trendingProducts = $product_lists->where('condition', 'trending');
                                 <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
-                                @elseif($product->condition == 'new')
-                                <span class="badge new">New</span>
-                                @elseif($product->condition == 'hot')
-                                <span class="badge hot">Hot</span>
+                            @if($product->stock <= 0)
+                                <span class="badge out-of-stock">Sold Out</span>
                                 @elseif($product->condition == 'trending')
                                 <span class="badge trending">Trending</span>
                                 @endif
 
-                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
-                                        class="ti-heart"></i></a>
-                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
-                                    Cart</a>
+                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -272,8 +270,7 @@ $trendingProducts = $product_lists->where('condition', 'trending');
                                 <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span
-                                    class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
                                 @if($product->discount > 0)
                                 <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
                                 <span class="badge discount-badge">{{ $product->discount }}% Off</span>
@@ -297,9 +294,10 @@ $trendingProducts = $product_lists->where('condition', 'trending');
 </section>
 @endif
 
-<!-- Start New Items -->
+<!-- Start Latest Items -->
 @php
-$newProducts = $product_lists->where('condition', 'new');
+// Get the 20 most recently created products
+$newProducts = $product_lists->sortByDesc('created_at')->take(20);
 @endphp
 
 @if($newProducts->count() > 0)
@@ -329,19 +327,15 @@ $newProducts = $product_lists->where('condition', 'new');
                                 <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
-                                @elseif($product->condition == 'new')
-                                <span class="badge new">New</span>
-                                @elseif($product->condition == 'hot')
-                                <span class="badge hot">Hot</span>
-                                @elseif($product->condition == 'trending')
-                                <span class="badge trending">Trending</span>
-                                @endif
+                            <!-- Always show "New" badge -->
+                            <span class="badge new">New</span>
 
-                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
-                                        class="ti-heart"></i></a>
-                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
-                                    Cart</a>
+                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
+                                <i class="ti-heart"></i>
+                            </a>
+                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
+                                Add to Cart
+                            </a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -349,8 +343,7 @@ $newProducts = $product_lists->where('condition', 'new');
                                 <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span
-                                    class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
                                 @if($product->discount > 0)
                                 <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
                                 <span class="badge discount-badge">{{ $product->discount }}% Off</span>
@@ -367,11 +360,11 @@ $newProducts = $product_lists->where('condition', 'new');
                 <div class="swiper-button-prev d-inline-block me-2"></div>
                 <div class="swiper-button-next d-inline-block"></div>
             </div>
-
         </div>
     </div>
 </section>
 @endif
+
 
 <!-- Start Hot Items -->
 @php
@@ -405,19 +398,14 @@ $hotProducts = $product_lists->where('condition', 'hot');
                                 <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
-                                @elseif($product->condition == 'new')
-                                <span class="badge new">New</span>
+                            @if($product->stock <= 0)
+                                <span class="badge out-of-stock">Sold Out</span>
                                 @elseif($product->condition == 'hot')
                                 <span class="badge hot">Hot</span>
-                                @elseif($product->condition == 'trending')
-                                <span class="badge trending">Trending</span>
                                 @endif
 
-                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
-                                        class="ti-heart"></i></a>
-                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
-                                    Cart</a>
+                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
+                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -425,8 +413,7 @@ $hotProducts = $product_lists->where('condition', 'hot');
                                 <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span
-                                    class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
                                 @if($product->discount > 0)
                                 <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
                                 <span class="badge discount-badge">{{ $product->discount }}% Off</span>
@@ -457,26 +444,11 @@ $hotProducts = $product_lists->where('condition', 'hot');
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-/*==================================================================
-        [ Isotope ]*/
-var $topeContainer = $('.isotope-grid');
-var $filter = $('.filter-tope-group');
+    $(document).ready(function() {
+        var $topeContainer = $('.isotope-grid');
 
-// filter items on button click
-$filter.each(function() {
-    $filter.on('click', 'button', function() {
-        var filterValue = $(this).attr('data-filter');
-        $topeContainer.isotope({
-            filter: filterValue
-        });
-    });
-
-});
-
-// init Isotope
-$(window).on('load', function() {
-    var $grid = $topeContainer.each(function() {
-        $(this).isotope({
+        // Initialize Isotope and keep the instance in $grid
+        var $grid = $topeContainer.isotope({
             itemSelector: '.isotope-item',
             layoutMode: 'fitRows',
             percentPosition: true,
@@ -485,149 +457,137 @@ $(window).on('load', function() {
                 columnWidth: '.isotope-item'
             }
         });
-    });
-});
 
-var isotopeButton = $('.filter-tope-group button');
+        // Function to limit visible items to maxItems (e.g., 8)
+        function limitVisibleItems(maxItems) {
+            var visibleItems = $grid.data('isotope').filteredItems;
 
-$(isotopeButton).each(function() {
-    $(this).on('click', function() {
-        for (var i = 0; i < isotopeButton.length; i++) {
-            $(isotopeButton[i]).removeClass('how-active1');
-        }
-
-        $(this).addClass('how-active1');
-    });
-});
-
-function setEqualHeight() {
-    var maxHeight = 0;
-    $('.product-card-modern').css('height', 'auto'); // reset
-
-    $('.product-card-modern').each(function() {
-        var cardHeight = $(this).outerHeight();
-        if (cardHeight > maxHeight) {
-            maxHeight = cardHeight;
-        }
-    });
-
-    $('.product-card-modern').css('height', maxHeight + 'px');
-}
-
-// Run on page load and window resize
-$(document).ready(setEqualHeight);
-$(window).resize(setEqualHeight);
-</script>
-<script>
-function cancelFullScreen(el) {
-    var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
-    if (requestMethod) { // cancel full screen.
-        requestMethod.call(el);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
-        }
-    }
-}
-
-function requestFullScreen(el) {
-    // Supports most browsers and their versions.
-    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
-        .msRequestFullscreen;
-
-    if (requestMethod) { // Native full screen.
-        requestMethod.call(el);
-    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-        var wscript = new ActiveXObject("WScript.Shell");
-        if (wscript !== null) {
-            wscript.SendKeys("{F11}");
-        }
-    }
-};
-document.addEventListener('DOMContentLoaded', () => {
-    const filterButtons = document.querySelectorAll('.filter-tope-group .btn');
-    const products = Array.from(document.querySelectorAll('.isotope-item'));
-    const productsGrid = document.querySelector('.trending-products-grid');
-
-    const filterProducts = (filterValue) => {
-        let visibleCount = 0;
-
-        products.forEach(product => {
-            if (filterValue === '*' || product.classList.contains(filterValue.substring(1))) {
-                // Show only first 8 matching products
-                if (visibleCount < 8) {
-                    product.style.display = 'block';
-                    visibleCount++;
+            visibleItems.forEach(function(item, index) {
+                if (index < maxItems) {
+                    $(item.element).show();
                 } else {
-                    product.style.display = 'none';
+                    $(item.element).hide();
+                }
+            });
+
+            $grid.isotope('layout');
+
+            // Handle "no products" message
+            if (visibleItems.length === 0) {
+                if ($('.no-products-message').length === 0) {
+                    $topeContainer.append(`
+                    <div class="col-12 text-center no-products-message mt-2">
+                        <p class="text-muted fs-5">No products available in this category right now.</p>
+                    </div>
+                `);
                 }
             } else {
-                product.style.display = 'none';
+                $('.no-products-message').remove();
+            }
+        }
+
+        // On filter button click
+        $('.filter-tope-group').on('click', 'button', function() {
+            var filterValue = $(this).attr('data-filter');
+
+            // Filter with Isotope
+            $grid.isotope({
+                filter: filterValue
+            });
+
+            // After filtering, limit visible items to 8
+            $grid.one('arrangeComplete', function() {
+                limitVisibleItems(8);
+            });
+
+            // Toggle active classes
+            $('.filter-tope-group button').removeClass('how-active1 active');
+            $(this).addClass('how-active1 active');
+        });
+
+        // Default filter on page load: show all and limit to 8
+        $(window).on('load', function() {
+            $grid.isotope({
+                filter: '*'
+            });
+
+            $grid.one('arrangeComplete', function() {
+                limitVisibleItems(8);
+
+                $('.filter-tope-group button[data-filter="*"]').addClass('how-active1 active');
+            });
+        });
+    });
+
+    function setEqualHeight() {
+        var maxHeight = 0;
+        $('.product-card-modern').css('height', 'auto'); // reset
+
+        $('.product-card-modern').each(function() {
+            var cardHeight = $(this).outerHeight();
+            if (cardHeight > maxHeight) {
+                maxHeight = cardHeight;
             }
         });
 
-        // Handle "no products" message
-        let message = productsGrid.querySelector('.no-products-message');
-        if (visibleCount === 0) {
-            if (!message) {
-                const msg = document.createElement('div');
-                msg.className = 'col-12 text-center no-products-message mt-2';
-                msg.innerHTML =
-                    `<p class="text-muted fs-5">No products available in this category right now.</p>`;
-                productsGrid.appendChild(msg);
+        $('.product-card-modern').css('height', maxHeight + 'px');
+    }
+
+    // Run on page load and window resize
+    $(document).ready(setEqualHeight);
+    $(window).resize(setEqualHeight);
+
+    function cancelFullScreen(el) {
+        var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
+        if (requestMethod) { // cancel full screen.
+            requestMethod.call(el);
+        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
             }
-        } else if (message) {
-            message.remove();
+        }
+    }
+
+    function requestFullScreen(el) {
+        // Supports most browsers and their versions.
+        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
+            .msRequestFullscreen;
+
+        if (requestMethod) { // Native full screen.
+            requestMethod.call(el);
+        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+            var wscript = new ActiveXObject("WScript.Shell");
+            if (wscript !== null) {
+                wscript.SendKeys("{F11}");
+            }
         }
     };
 
-    // Add click listeners
-    filterButtons.forEach(btn => {
-        btn.addEventListener('click', function() {
-            filterButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-
-            const filterValue = this.getAttribute('data-filter');
-            filterProducts(filterValue);
+    document.addEventListener('DOMContentLoaded', () => {
+        new Swiper('.latest-items-swiper', {
+            slidesPerView: 4,
+            spaceBetween: 20,
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                0: {
+                    slidesPerView: 1.1
+                },
+                576: {
+                    slidesPerView: 2.1
+                },
+                768: {
+                    slidesPerView: 3.1
+                },
+                992: {
+                    slidesPerView: 4.1
+                },
+            }
         });
     });
-
-    // Default: show first 8 products on page load
-    filterProducts('*');
-});
-
-// Default filter on page load (show all)
-const defaultBtn = document.querySelector('.filter-tope-group .btn[data-filter="*"]');
-if (defaultBtn) {
-    defaultBtn.classList.add('active');
-    filterProducts('*');
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-    new Swiper('.latest-items-swiper', {
-        slidesPerView: 4,
-        spaceBetween: 20,
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-            0: {
-                slidesPerView: 1.1
-            },
-            576: {
-                slidesPerView: 2.1
-            },
-            768: {
-                slidesPerView: 3.1
-            },
-            992: {
-                slidesPerView: 4.1
-            },
-        }
-    });
-});
 </script>
 
 @endpush

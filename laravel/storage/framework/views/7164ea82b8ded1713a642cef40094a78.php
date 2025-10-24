@@ -331,22 +331,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 
 
 <?php $__env->stopSection(); ?>
-<?php $__env->startPush('styles'); ?>
-<style>
-    .pagination {
-        display: inline-flex;
-    }
 
-    .filter_button {
-        /* height:20px; */
-        text-align: center;
-        background: #F7941D;
-        padding: 8px 16px;
-        margin-top: 10px;
-        color: white;
-    }
-</style>
-<?php $__env->stopPush(); ?>
 <?php $__env->startPush('scripts'); ?>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
@@ -381,6 +366,22 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                 "  -  " + m_currency + $("#slider-range").slider("values", 1));
         }
     })
+
+    // Removes page from the query string
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all links inside dropdowns and filter badges
+        const filterLinks = document.querySelectorAll('.dropdown-menu a, .clear_filter, .badge a');
+
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                let url = new URL(this.href);
+                // Reset pagination if present
+                url.searchParams.delete('page');
+                window.location.href = url.toString();
+                e.preventDefault();
+            });
+        });
+    });
 </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('frontend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/frontend/pages/product-grids.blade.php ENDPATH**/ ?>

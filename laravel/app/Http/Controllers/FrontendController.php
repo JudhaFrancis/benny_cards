@@ -34,7 +34,7 @@ class FrontendController extends Controller
         $posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         $banners = Banner::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         // return $banner;
-        $products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(12)->get();
+        $products = Product::where('status', 'active')->orderBy('id', 'DESC')->get();
         $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'ASC')->get();
         // return $category;
         return view('frontend.index')
@@ -127,10 +127,9 @@ class FrontendController extends Controller
             }
         }
 
-
         // Pagination
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
-        $products = $products->where('status', 'active')->paginate(!empty($_GET['show']) ? $_GET['show'] : 2);
+        $products = $products->where('status', 'active')->paginate(!empty($_GET['show']) ? $_GET['show'] : 12);
 
         $allCategories = Category::where('status', 'active')->get();
 
@@ -233,7 +232,7 @@ class FrontendController extends Controller
 
         $category = Category::where('slug', $request->slug)->firstOrFail();
 
-        $products = Product::where('cat_id', $category->id)->where('status', 'active')->orderBy('id', 'DESC')->paginate(9);        // return $request->slug;
+        $products = Product::where('cat_id', $category->id)->where('status', 'active')->orderBy('id', 'DESC')->paginate(12);        // return $request->slug;
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
         $allCategories = Category::where('status', 'active')->get();

@@ -448,39 +448,30 @@
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $('.btn-number').click(function(e) {
-            e.preventDefault();
-            let fieldName = $(this).data('field');
-            let input = $("input[name='" + fieldName + "']");
-            let currentVal = parseInt(input.val()) || parseInt(input.data('min'));
-            let min = parseInt(input.data('min'));
-            let max = parseInt(input.data('max'));
+    $(document).on('click', '.btn-number', function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
 
-            if ($(this).data('type') === 'plus' && currentVal < max) {
-                currentVal += 100;
-            } else if ($(this).data('type') === 'minus' && currentVal > min) {
-                currentVal -= 100;
-            }
+        var fieldName = $(this).attr('data-field');
+        var type = $(this).attr('data-type');
+        var input = $("input[name='" + fieldName + "']");
+        var currentVal = parseFloat(input.val()) || 0;
+        var step = 99;
 
-            currentVal = Math.round(currentVal / 100) * 100;
+        var min = parseFloat(input.attr('data-min')) || 100;
+        var max = parseFloat(input.attr('data-max')) || 10000;
 
-            input.val(currentVal);
-        });
-
-        $('.input-number').on('input', function() {
-            let min = parseInt($(this).data('min'));
-            let max = parseInt($(this).data('max'));
-            let val = parseInt($(this).val()) || min;
-
-            if (val < min) val = min;
-            if (val > max) val = max;
-
-            val = Math.round(val / 100) * 100;
-
-            $(this).val(val);
-        });
+        if (type === 'minus') {
+            let newVal = currentVal - step;
+            if (newVal < min) newVal = min;
+            input.val(newVal);
+        } else if (type === 'plus') {
+            let newVal = currentVal + step;
+            if (newVal > max) newVal = max;
+            input.val(newVal);
+        }
     });
+
     var $topeContainer = $('.isotope-grid');
     var $filter = $('.filter-tope-group');
 
