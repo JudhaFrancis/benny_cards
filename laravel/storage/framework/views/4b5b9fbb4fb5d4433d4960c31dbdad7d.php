@@ -36,7 +36,7 @@
                             <div class="row">
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
-                                        <label>First Name<span>*</span></label>
+                                        <label>Name<span>*</span></label>
                                         <input type="text" name="first_name" placeholder="" value="<?php echo e(old('first_name')); ?>"
                                             value="<?php echo e(old('first_name')); ?>">
                                         <?php $__errorArgs = ['first_name'];
@@ -51,22 +51,7 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
-                                <div class="col-lg-6 col-md-6 col-12">
-                                    <div class="form-group">
-                                        <label>Last Name<span>*</span></label>
-                                        <input type="text" name="last_name" placeholder="" value="<?php echo e(old('lat_name')); ?>">
-                                        <?php $__errorArgs = ['last_name'];
-$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
-if ($__bag->has($__errorArgs[0])) :
-if (isset($message)) { $__messageOriginal = $message; }
-$message = $__bag->first($__errorArgs[0]); ?>
-                                            <span class='text-danger'><?php echo e($message); ?></span>
-                                        <?php unset($message);
-if (isset($__messageOriginal)) { $message = $__messageOriginal; }
-endif;
-unset($__errorArgs, $__bag); ?>
-                                    </div>
-                                </div>
+                            
                                 <div class="col-lg-6 col-md-6 col-12">
                                     <div class="form-group">
                                         <label>Email Address<span>*</span></label>
@@ -155,6 +140,23 @@ endif;
 unset($__errorArgs, $__bag); ?>
                                     </div>
                                 </div>
+                                <div class="col-lg-6 col-md-6 col-12">
+    <div class="form-group">
+        <label>Remarks</label>
+        <textarea name="remarks" rows="1" placeholder="" class="form-control"><?php echo e(old('remarks')); ?></textarea>
+        <?php $__errorArgs = ['remarks'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?>
+            <span class='text-danger'><?php echo e($message); ?></span>
+        <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?>
+    </div>
+</div>
+
 
                             </div>
                             <!--/ End Form -->
