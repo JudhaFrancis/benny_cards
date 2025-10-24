@@ -71,7 +71,7 @@
                     </div>
 
                     <!-- Cart -->
-                    <div class="sinlge-bar shopping" style="border-left: 1px solid #f0f0f0;">
+                    <div class="sinlge-bar shopping" style="border-left: 1px solid #f0f0f0;">head
                         <a href="{{route('cart')}}" class="single-icon">
                             <i class="ti-shopping-cart"></i>
                             <span class="total-count">{{Helper::cartCount()}}</span>

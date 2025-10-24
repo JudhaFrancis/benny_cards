@@ -359,5 +359,21 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                 "  -  " + m_currency + $("#slider-range").slider("values", 1));
         }
     })
+
+    // Removes page from the query string
+    document.addEventListener('DOMContentLoaded', function() {
+        // Select all links inside dropdowns and filter badges
+        const filterLinks = document.querySelectorAll('.dropdown-menu a, .clear_filter, .badge a');
+
+        filterLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                let url = new URL(this.href);
+                // Reset pagination if present
+                url.searchParams.delete('page');
+                window.location.href = url.toString();
+                e.preventDefault();
+            });
+        });
+    });
 </script>
 @endpush

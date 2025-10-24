@@ -127,7 +127,6 @@ class FrontendController extends Controller
             }
         }
 
-
         // Pagination
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         $products = $products->where('status', 'active')->paginate(!empty($_GET['show']) ? $_GET['show'] : 12);
@@ -233,7 +232,7 @@ class FrontendController extends Controller
 
         $category = Category::where('slug', $request->slug)->firstOrFail();
 
-        $products = Product::where('cat_id', $category->id)->where('status', 'active')->orderBy('id', 'DESC')->paginate(9);        // return $request->slug;
+        $products = Product::where('cat_id', $category->id)->where('status', 'active')->orderBy('id', 'DESC')->paginate(12);        // return $request->slug;
         $recent_products = Product::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
 
         $allCategories = Category::where('status', 'active')->get();

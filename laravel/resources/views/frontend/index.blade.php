@@ -221,7 +221,6 @@
 <!-- Start Trending Items -->
 @php
 $trendingProducts = $product_lists->where('condition', 'trending');
-$newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
 @endphp
 
 @if($trendingProducts->count() > 0)
@@ -258,10 +257,6 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
 
                             @if($product->stock <= 0)
                                 <span class="badge out-of-stock">Sold Out</span>
-                                @elseif(in_array($product->id, $newProductIds))
-                                <span class="badge new">New</span>
-                                @elseif($product->condition == 'hot')
-                                <span class="badge hot">Hot</span>
                                 @elseif($product->condition == 'trending')
                                 <span class="badge trending">Trending</span>
                                 @endif
@@ -374,7 +369,6 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
 <!-- Start Hot Items -->
 @php
 $hotProducts = $product_lists->where('condition', 'hot');
-$newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
 @endphp
 
 @if($hotProducts->count() > 0)
@@ -406,12 +400,8 @@ $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')
 
                             @if($product->stock <= 0)
                                 <span class="badge out-of-stock">Sold Out</span>
-                                @elseif(in_array($product->id, $newProductIds))
-                                <span class="badge new">New</span>
                                 @elseif($product->condition == 'hot')
                                 <span class="badge hot">Hot</span>
-                                @elseif($product->condition == 'trending')
-                                <span class="badge trending">Trending</span>
                                 @endif
 
                                 <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
