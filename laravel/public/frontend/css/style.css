@@ -6328,3 +6328,8 @@ Version:1.0
 .product-price del {
 	margin-left: 5px;
 }
+
+
+.swiper-wrapper {
+	height: auto !important;
+}
