@@ -24,7 +24,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'     => 'required|string',
+        'name'     => 'required|string',
         'email'    => 'required|email',
         'phone'    => 'required|numeric',
         'address1' => 'required|string',

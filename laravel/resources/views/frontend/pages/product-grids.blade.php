@@ -118,15 +118,25 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                                 Price
                             </button>
                             <ul class="dropdown-menu">
-                                @foreach($price_ranges as $range)
-                                <li>
                                 <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => $range->slug]) }}">
-                                        {{ $range->title }}
-                                    </a></li>
-
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => '0-10']) }}">₹0 - ₹10</a>
                                 </li>
-                                @endforeach
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => '10-20']) }}">₹10 -
+                                        ₹20</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => '20-30']) }}">₹20 -
+                                        ₹30</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => '30-40']) }}">₹30 -
+                                        ₹40</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => '40-50']) }}">₹40 -
+                                        ₹50</a></li>
+                                <li><a class="dropdown-item"
+                                        href="{{ request()->fullUrlWithQuery(['price_range' => '50-above']) }}">₹50
+                                        and above</a></li>
+
                             </ul>
                         </div>
                     </div>
@@ -328,52 +338,52 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    $(document).ready(function() {
-        /*----------------------------------------------------*/
-        /*  Jquery Ui slider js
-        /*----------------------------------------------------*/
-        if ($("#slider-range").length > 0) {
-            const max_value = parseInt($("#slider-range").data('max')) || 500;
-            const min_value = parseInt($("#slider-range").data('min')) || 0;
-            const currency = $("#slider-range").data('currency') || '';
-            let price_range = min_value + '-' + max_value;
-            if ($("#price_range").length > 0 && $("#price_range").val()) {
-                price_range = $("#price_range").val().trim();
+$(document).ready(function() {
+    /*----------------------------------------------------*/
+    /*  Jquery Ui slider js
+    /*----------------------------------------------------*/
+    if ($("#slider-range").length > 0) {
+        const max_value = parseInt($("#slider-range").data('max')) || 500;
+        const min_value = parseInt($("#slider-range").data('min')) || 0;
+        const currency = $("#slider-range").data('currency') || '';
+        let price_range = min_value + '-' + max_value;
+        if ($("#price_range").length > 0 && $("#price_range").val()) {
+            price_range = $("#price_range").val().trim();
+        }
+
+        let price = price_range.split('-');
+        $("#slider-range").slider({
+            range: true,
+            min: min_value,
+            max: max_value,
+            values: price,
+            slide: function(event, ui) {
+                $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
+                $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
             }
+        });
+    }
+    if ($("#amount").length > 0) {
+        const m_currency = $("#slider-range").data('currency') || '';
+        $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
+            "  -  " + m_currency + $("#slider-range").slider("values", 1));
+    }
+})
 
-            let price = price_range.split('-');
-            $("#slider-range").slider({
-                range: true,
-                min: min_value,
-                max: max_value,
-                values: price,
-                slide: function(event, ui) {
-                    $("#amount").val(currency + ui.values[0] + " -  " + currency + ui.values[1]);
-                    $("#price_range").val(ui.values[0] + "-" + ui.values[1]);
-                }
-            });
-        }
-        if ($("#amount").length > 0) {
-            const m_currency = $("#slider-range").data('currency') || '';
-            $("#amount").val(m_currency + $("#slider-range").slider("values", 0) +
-                "  -  " + m_currency + $("#slider-range").slider("values", 1));
-        }
-    })
+// Removes page from the query string
+document.addEventListener('DOMContentLoaded', function() {
+    // Select all links inside dropdowns and filter badges
+    const filterLinks = document.querySelectorAll('.dropdown-menu a, .clear_filter, .badge a');
 
-    // Removes page from the query string
-    document.addEventListener('DOMContentLoaded', function() {
-        // Select all links inside dropdowns and filter badges
-        const filterLinks = document.querySelectorAll('.dropdown-menu a, .clear_filter, .badge a');
-
-        filterLinks.forEach(link => {
-            link.addEventListener('click', function(e) {
-                let url = new URL(this.href);
-                // Reset pagination if present
-                url.searchParams.delete('page');
-                window.location.href = url.toString();
-                e.preventDefault();
-            });
+    filterLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            let url = new URL(this.href);
+            // Reset pagination if present
+            url.searchParams.delete('page');
+            window.location.href = url.toString();
+            e.preventDefault();
         });
     });
+});
 </script>
 @endpush
