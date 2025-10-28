@@ -14,10 +14,10 @@ class BannerController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-{
-    $banners = Banner::latest('id')->paginate(8);
-    return view('backend.banner.index', compact('banners'));
-}
+    {
+        $banners = Banner::latest('id')->paginate(8);
+        return view('backend.banner.index', compact('banners'));
+    }
 
 
     /**
@@ -66,10 +66,7 @@ class BannerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
-
-    }
+    public function show($id) {}
 
     /**
      * Show the form for editing the specified resource.

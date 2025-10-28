@@ -6027,6 +6027,7 @@ Version:1.0
 	bottom: 10px;
 	right: 10px;
 	background: #3cc0c2;
+	border: 1px solid #32B87D;
 	color: #fff !important;
 	padding: 4px 8px;
 	/* reduced padding */
@@ -6328,7 +6329,6 @@ Version:1.0
 .product-price del {
 	margin-left: 5px;
 }
-
 
 .swiper-wrapper {
 	height: auto !important;
