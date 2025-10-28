@@ -44,7 +44,7 @@
 
 								</a>
 							</h6>
-							<p class="small text-muted mb-1"><?php echo $cart->product['summary']; ?></p>
+							<!-- <p class="small text-muted mb-1"><?php echo $cart->product['summary']; ?></p> -->
 							<?php if($cart->product['discount'] > 0): ?>
 							<span class="badge bg-danger"><?php echo e($cart->product['discount']); ?>% OFF</span>
 							<?php endif; ?>
@@ -58,7 +58,7 @@
 							</button>
 
 							<!-- Quantity Input -->
-							<input type="text" name="quant[<?php echo e($key); ?>]" class="input-number text-center" data-min="1" data-max="1000" value="<?php echo e($cart->quantity); ?>">
+							<input type="text" name="quant[<?php echo e($key); ?>]" class="input-number text-center" data-min="100" data-max="100000" value="100">
 
 							<!-- Plus Button -->
 							<button type="button" class="btn btn-outline-primary btn-number plus" data-type="plus" data-field="quant[<?php echo e($key); ?>]">
@@ -176,30 +176,29 @@
 	});
 
 	$(document).on('click', '.btn-number', function(e) {
-		e.preventDefault();
+        e.preventDefault();
+        e.stopImmediatePropagation();
 
-		// Stop any other bound events
-		e.stopImmediatePropagation();
+        var fieldName = $(this).attr('data-field');
+        var type = $(this).attr('data-type');
+        var input = $("input[name='" + fieldName + "']");
+        var currentVal = parseFloat(input.val()) || 0;
+        var step = 99;
 
-		var fieldName = $(this).attr('data-field');
-		var type = $(this).attr('data-type');
-		var input = $("input[name='" + fieldName + "']");
-		var currentVal = parseFloat(input.val()) || 0;
-		var step = 99;
+        var min = parseFloat(input.attr('data-min')) || 100;
+        var max = parseFloat(input.attr('data-max')) || 10000;
 
-		var min = parseFloat(input.attr('data-min')) || 1;
-		var max = parseFloat(input.attr('data-max')) || 1000;
+        if (type === 'minus') {
+            let newVal = currentVal - step;
+            if (newVal < min) newVal = min;
+            input.val(newVal);
+        } else if (type === 'plus') {
+            let newVal = currentVal + step;
+            if (newVal > max) newVal = max;
+            input.val(newVal);
+        }
+    });
 
-		if (type === 'minus') {
-			let newVal = currentVal - step;
-			if (newVal < min) newVal = min;
-			input.val(newVal);
-		} else if (type === 'plus') {
-			let newVal = currentVal + step;
-			if (newVal > max) newVal = max;
-			input.val(newVal);
-		}
-	});
 </script>
 
 <?php $__env->stopPush(); ?>

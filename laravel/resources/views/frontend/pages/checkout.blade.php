@@ -73,8 +73,8 @@
                             <div class="col-lg-6 col-md-6 col-12">
                                 <div class="form-group">
                                     <label>Address Line 1<span>*</span></label>
-                                    <input type="text" name="address1" placeholder="" value="{{old('address1')}}">
-                                    @error('address1')
+                                    <input type="text" name="address_1" placeholder="" value="{{old('address_1')}}">
+                                    @error('address_1')
                                     <span class='text-danger'>{{$message}}</span>
                                     @enderror
                                 </div>
@@ -82,8 +82,8 @@
                             <div class="col-lg-6 col-md-6 col-12">
                                 <div class="form-group">
                                     <label>Address Line 2</label>
-                                    <input type="text" name="address2" placeholder="" value="{{old('address2')}}">
-                                    @error('address2')
+                                    <input type="text" name="address_2" placeholder="" value="{{old('address_2')}}">
+                                    @error('address_2')
                                     <span class='text-danger'>{{$message}}</span>
                                     @enderror
                                 </div>

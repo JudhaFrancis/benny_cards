@@ -87,6 +87,7 @@
                             <!-- Description -->
                             <div class="short">
                                 <h4><?php echo e($product_detail->title); ?></h4>
+                                <p class="product-summary"><?php echo $product_detail->summary; ?></p>
                                 <div class="rating-main">
                                     <ul class="rating">
                                         <?php

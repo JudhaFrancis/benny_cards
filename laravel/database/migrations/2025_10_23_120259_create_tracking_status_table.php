@@ -18,16 +18,7 @@ return new class extends Migration
         });
 
         // Default statuses
-        DB::table('tracking_status')->insert([
-            ['name' => 'Confirmed'],
-            ['name' => 'Processing'],
-            ['name' => 'Packed'],
-            ['name' => 'Out for Delivery'],
-            ['name' => 'Delivered'],
-            ['name' => 'Cancelled'],
-            ['name' => 'Return Requested'],
-            ['name' => 'Return'],
-        ]);
+    
     }
     
 

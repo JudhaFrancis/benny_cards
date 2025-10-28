@@ -75,5 +75,10 @@ public function trackingStatus(){
     return $this->belongsTo(TrackingStatus::class, 'tracking_status_id', 'id');
 }
 
+public function orderItems()
+{
+    return $this->hasMany(OrderItem::class, 'orders_id', 'id');
+}
+
 
 }

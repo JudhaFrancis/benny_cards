@@ -595,8 +595,10 @@ mark {
 }
 
 .img-fluid {
-    max-width: 100%;
-    height: auto
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
 .img-thumbnail {
@@ -729,6 +731,7 @@ pre code {
         /* for full HD/4K monitors */
     }
 }
+
 .section-container {
     width: 100%;
     padding-right: 15px;
