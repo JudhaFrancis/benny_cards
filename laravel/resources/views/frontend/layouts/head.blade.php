@@ -36,6 +36,9 @@
 <!-- Swiper JS -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
 
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
 <!-- Eshop StyleSheet -->
 <link rel="stylesheet" href="{{asset('frontend/css/reset.css')}}">
 <link rel="stylesheet" href="{{asset('frontend/css/style.css')}}">

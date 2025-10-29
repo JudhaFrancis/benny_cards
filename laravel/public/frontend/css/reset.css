@@ -783,7 +783,6 @@ input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="url"]:focus,
 input[type="password"]:focus,
-input[type="search"]:focus,
 input[type="number"]:focus,
 input[type="tel"]:focus,
 input[type="range"]:focus,
@@ -2252,6 +2251,7 @@ object {
 	border: none;
 	display: inline-block;
 }
+
 .price-card .btn:hover {
 	background: #ec1176;
 }
@@ -2444,7 +2444,7 @@ object {
 }
 
 .badge {
-	background-color: #24a778;
+	background-color: #3cc0c2;
 	color: #fff;
 	font-size: 12px;
 	padding: 8px 12px;
@@ -2507,4 +2507,83 @@ object {
 .swiper-navigation .swiper-button-next:hover {
 	background-color: #ec1176;
 	transform: scale(1.1);
+}
+
+.filter-wrapper {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin: 0 25px;
+	padding: 0 25px;
+}
+
+.filter-tope-group {
+	display: flex;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	gap: 10px;
+	scrollbar-width: none;
+	scroll-behavior: smooth;
+}
+
+.filter-tope-group::-webkit-scrollbar {
+	display: none;
+}
+
+.filter-tope-group button {
+	background: none;
+	border: none;
+	color: #444;
+	font-weight: 500;
+	position: relative;
+	padding: 8px 0;
+	white-space: nowrap;
+	transition: all 0.3s ease;
+}
+
+.filter-tope-group button:hover {
+	color: #ec1176;
+}
+
+.filter-tope-group button.active {
+	color: #ec1176;
+	border-bottom: 2px solid #ec1176;
+}
+
+/* 🔽 Scroll arrows */
+.scroll-arrow {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	z-index: 1000;
+	border: none;
+	background: #333;
+	font-size: 24px;
+	font-weight: 400;
+	color: #fff;
+	padding: 4px 10px;
+	cursor: pointer;
+	border-radius: 6px;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+	transition: all 0.2s ease;
+}
+
+.scroll-arrow:hover {
+	background: #ec1176;
+	color: white;
+}
+
+.scroll-arrow.left {
+	left: -10px;
+}
+
+.scroll-arrow.right {
+	right: -10px;
+}
+
+/* hide arrows on small screens if needed */
+@media (max-width: 576px) {
+	.scroll-arrow {
+		display: none;
+	}
 }

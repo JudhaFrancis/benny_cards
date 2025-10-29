@@ -5,7 +5,7 @@
 @section('main-content')
     <!-- Breadcrumbs -->
     <div class="breadcrumbs">
-        <div class="container">
+        <div class="section-container">
             <div class="row">
                 <div class="col-12">
                     <div class="bread-inner">

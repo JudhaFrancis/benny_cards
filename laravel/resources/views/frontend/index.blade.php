@@ -87,16 +87,23 @@
         </div>
 
         <!-- Tab Nav -->
-        <ul class="nav nav-tabs filter-tope-group mb-4" id="myTab" role="tablist">
-            @php
-            $categories = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
-            @endphp
-            @foreach($categories as $cat)
-            <button class="btn" style="background:white;color:black;" data-filter=".{{$cat->id}}">
-                {{$cat->title}}
-            </button>
-            @endforeach
-        </ul>
+        <div class="filter-wrapper mb-4">
+            <button class="scroll-arrow left" id="scrollLeft">‹</button>
+
+            <ul class="nav nav-tabs filter-tope-group" id="myTab" role="tablist">
+                @php
+                $categories = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
+                @endphp
+                @foreach($categories as $cat)
+                <button class="btn" data-filter=".{{$cat->id}}">
+                    {{$cat->title}}
+                </button>
+                @endforeach
+            </ul>
+
+            <button class="scroll-arrow right" id="scrollRight">›</button>
+        </div>
+
 
         <!-- Products Grid -->
         <div class="row trending-products-grid isotope-grid">
@@ -106,7 +113,7 @@
             $after_discount = ($product->price - ($product->price * $product->discount) / 100);
             $newProductIds = $product_lists->sortByDesc('created_at')->take(20)->pluck('id')->toArray();
             @endphp
-            <div class="col-sm-6 col-md-4 col-lg-3 isotope-item {{$product->cat_id}}">
+            <div class="col-6 col-sm-6 col-md-4 col-lg-3 isotope-item {{$product->cat_id}}">
                 <div class="product-card-modern">
                     <div class="product-image-modern">
                         <a href="{{ route('product-detail', $product->slug) }}">
@@ -444,6 +451,39 @@ $hotProducts = $product_lists->where('condition', 'hot');
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const scrollContainer = document.querySelector('.filter-tope-group');
+        const btnLeft = document.getElementById('scrollLeft');
+        const btnRight = document.getElementById('scrollRight');
+
+        const scrollAmount = 150; // adjust scroll distance per click
+
+        btnLeft.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: -scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+
+        btnRight.addEventListener('click', () => {
+            scrollContainer.scrollBy({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+        });
+
+        // hide/show arrows dynamically
+        function toggleArrows() {
+            btnLeft.style.display = scrollContainer.scrollLeft > 10 ? 'block' : 'none';
+            btnRight.style.display =
+                scrollContainer.scrollWidth - scrollContainer.scrollLeft >
+                scrollContainer.clientWidth + 10 ? 'block' : 'none';
+        }
+
+        scrollContainer.addEventListener('scroll', toggleArrows);
+        toggleArrows();
+    });
+
     $(document).ready(function() {
         var $topeContainer = $('.isotope-grid');
 
@@ -506,16 +546,13 @@ $hotProducts = $product_lists->where('condition', 'hot');
         });
 
         // Default filter on page load: show all and limit to 8
-        $(window).on('load', function() {
-            $grid.isotope({
-                filter: '*'
-            });
+        $grid.isotope({
+            filter: '*'
+        });
 
-            $grid.one('arrangeComplete', function() {
-                limitVisibleItems(8);
-
-                $('.filter-tope-group button[data-filter="*"]').addClass('how-active1 active');
-            });
+        $grid.one('arrangeComplete', function() {
+            limitVisibleItems(8);
+            $('.filter-tope-group button[data-filter="*"]').addClass('how-active1 active');
         });
     });
 
@@ -574,7 +611,7 @@ $hotProducts = $product_lists->where('condition', 'hot');
             },
             breakpoints: {
                 0: {
-                    slidesPerView: 1.1
+                    slidesPerView: 2
                 },
                 576: {
                     slidesPerView: 2.1
