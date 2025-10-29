@@ -6186,7 +6186,7 @@ Version:1.0
 .content-split .button-right a {
 	background: #3cc0c2;
 	color: #fff;
-	padding: 8px 20px;
+	padding: 6px 12px;
 	border-radius: 25px;
 	font-weight: 500;
 	text-decoration: none;
@@ -6280,7 +6280,7 @@ Version:1.0
 /* Button */
 .price-btn-new {
 	display: inline-block;
-	padding: 8px 20px;
+	padding: 6px 12px;
 	background: #3cc0c2;
 	color: #fff !important;
 	border-radius: 25px;
