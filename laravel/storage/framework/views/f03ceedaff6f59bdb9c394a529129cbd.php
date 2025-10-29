@@ -58,7 +58,7 @@
 							</button>
 
 							<!-- Quantity Input -->
-							<input type="text" name="quant[<?php echo e($key); ?>]" class="input-number text-center" data-min="100" data-max="100000" value="100">
+							<input type="text" name="quant[<?php echo e($key); ?>]" class="input-number text-center" data-min="50" data-max="100000" value="50">
 
 							<!-- Plus Button -->
 							<button type="button" class="btn btn-outline-primary btn-number plus" data-type="plus" data-field="quant[<?php echo e($key); ?>]">
@@ -183,9 +183,9 @@
         var type = $(this).attr('data-type');
         var input = $("input[name='" + fieldName + "']");
         var currentVal = parseFloat(input.val()) || 0;
-        var step = 99;
+        var step = 49;
 
-        var min = parseFloat(input.attr('data-min')) || 100;
+        var min = parseFloat(input.attr('data-min')) || 50;
         var max = parseFloat(input.attr('data-max')) || 10000;
 
         if (type === 'minus') {
