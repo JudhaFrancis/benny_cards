@@ -115,7 +115,7 @@
         </div>
 
         <div class="form-group">
-          <label for="stock">Quantity <span class="text-danger">*</span></label>
+          <label for="stock">Quantity</label>
           <input id="quantity" type="number" name="stock" min="0" placeholder="Enter quantity"  value="{{$product->stock}}" class="form-control">
           @error('stock')
           <span class="text-danger">{{$message}}</span>

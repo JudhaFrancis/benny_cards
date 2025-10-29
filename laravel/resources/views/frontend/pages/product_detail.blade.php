@@ -87,6 +87,7 @@
                             <!-- Description -->
                             <div class="short">
                                 <h4>{{$product_detail->title}}</h4>
+                                <p class="product-summary">{!! $product_detail->summary !!}</p>
                                 <div class="rating-main">
                                     <ul class="rating">
                                         @php
@@ -159,8 +160,8 @@
                                                 </button>
                                             </div>
                                             <input type="hidden" name="slug" value="{{$product_detail->slug}}">
-                                            <input type="text" name="quant[1]" class="input-number" data-min="100"
-                                                data-max="10000" value="100" id="quantity">
+                                            <input type="text" name="quant[1]" class="input-number" data-min="50"
+                                                data-max="10000" value="50" id="quantity">
                                             <div class="button plus">
                                                 <button type="button" class="btn btn-primary btn-number"
                                                     data-type="plus" data-field="quant[1]">
@@ -456,9 +457,9 @@
         var type = $(this).attr('data-type');
         var input = $("input[name='" + fieldName + "']");
         var currentVal = parseFloat(input.val()) || 0;
-        var step = 99;
+        var step = 49;
 
-        var min = parseFloat(input.attr('data-min')) || 100;
+        var min = parseFloat(input.attr('data-min')) || 50;
         var max = parseFloat(input.attr('data-max')) || 10000;
 
         if (type === 'minus') {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Shipping;
+use App\Models\OrderItems;
 use App\User;
 use PDF;
 use Notification;
@@ -24,11 +25,11 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'     => 'required|string',
+        'name'     => 'required|string',
         'email'    => 'required|email',
         'phone'    => 'required|numeric',
-        'address1' => 'required|string',
-        'address2' => 'nullable|string',
+        'address_1' => 'required|string',
+        'address_2' => 'nullable|string',
         'post_code'=> 'nullable|string',
         'remarks'  => 'nullable|string',
 
@@ -49,21 +50,26 @@ class OrderController extends Controller
         $orderData['order_number'] = 'ORD-' . strtoupper(Str::random(10));
         $orderData['tracking_id'] = 'TRK-' . strtoupper(Str::random(10));
         $orderData['user_id'] = auth()->user()->id;
-        $orderData['shipping_id'] = $request->shipping ?? null;
+        // $orderData['shipping_id'] = $request->shipping ?? null;
+        $orderData['order_date'] = now();
+
 
         // Shipping price
         $shippingPrice = $request->shipping ? Shipping::find($request->shipping)->price : 0;
 
         // Cart totals
         $orderData['net_amount'] = Helper::totalCartPrice();
-        $orderData['total_quantity'] = Helper::cartCount();
+        $orderData['total_quantity'] = $cartItems->sum('quantity');
         $orderData['items_count'] = $cartItems->count();
 
         // Coupon discount
         $orderData['discount'] = session('coupon')['value'] ?? 0;
+        $orderData['coupons_id'] = session('coupon')['id'] ?? null;
+
 
         // Total amount including shipping & discount
         $orderData['total_amount'] = $orderData['net_amount'] + $shippingPrice - $orderData['discount'];
+        $orderData['paid_amount'] = 0;
 
         // Payment
         if ($request->payment_method === 'paypal') {
@@ -79,9 +85,29 @@ class OrderController extends Controller
 
         // Default order status
         $orderData['status'] = 'pending';
+        $orderData['tracking_status_id'] = 1; // Default: Pending (from tracking_status table)
+
 
         $order->fill($orderData);
         $order->save();
+
+        // Save each cart item into order_items table
+foreach ($cartItems as $cart) {
+    $product = \App\Models\Product::find($cart->product_id);
+
+    
+    OrderItems::create([
+        'orders_id'   => $order->id,
+        'product_id'  => $product->id,
+        'net_amount'  => $product->price,
+        'discount'    => $product->discount ?? 0,
+        'final_amount'=> $product->price - ($product->discount ?? 0),
+        'quantity'    => $cart->quantity,
+        'total_amount'=> ($product->price - ($product->discount ?? 0)) * $cart->quantity,
+    ]);
+}
+
+
 
         // Assign cart items to this order
         Cart::where('user_id', auth()->user()->id)
