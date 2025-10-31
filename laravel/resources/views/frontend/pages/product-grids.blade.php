@@ -209,8 +209,22 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                     'slug' => $priceSlug,
                     'title' => $price->title,
                     ];
+                    } else {
+                    if ($priceSlug == '50-above') {
+                    $title = '₹50 and above';
+                    } else {
+                    $parts = explode('-', $priceSlug);
+                    $min = $parts[0] ?? 0;
+                    $max = $parts[1] ?? 0;
+                    $title = "₹$min - ₹$max";
+                    }
+                    $selectedFilters['price_range'] = [
+                    'slug' => $priceSlug,
+                    'title' => $title,
+                    ];
                     }
                     }
+
 
                     // Get rating (just display the number, you can customize text)
                     if ($rating = request('rating')) {

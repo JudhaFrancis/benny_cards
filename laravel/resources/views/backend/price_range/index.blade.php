@@ -39,14 +39,52 @@
                         <td>{{ $priceRange->max_price }}</td>
 
                         <td>
-                            @if($priceRange->photo)
-                            <img src="{{($priceRange->photo) }}" class="img-fluid" style="max-width:80px"
-                                alt="{{ $priceRange->photo }}">
-                            @else
-                            <img src="{{ asset('backend/img/thumbnail-default.jpg') }}" class="img-fluid"
-                                style="max-width:80px" alt="avatar.png">
-                            @endif
-                        </td>
+    @if($priceRange->photo)
+        <!-- Thumbnail Image -->
+        <img src="{{ asset($priceRange->photo) }}" 
+             class="img-fluid preview-img"
+             style="max-width:80px; cursor:pointer;" 
+             alt="price range image"
+             data-toggle="modal"
+             data-target="#imagePreviewModal{{$priceRange->id}}">
+    @else
+        <img src="{{ asset('backend/img/thumbnail-default.jpg') }}" 
+             class="img-fluid"
+             style="max-width:80px" 
+             alt="default image">
+    @endif
+</td>
+
+<!-- Image Preview Modal -->
+<div class="modal fade image-preview-modal" 
+     id="imagePreviewModal{{$priceRange->id}}" 
+     tabindex="-1"
+     role="dialog" 
+     aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content"
+             style="background: transparent; border: none; box-shadow: none;">
+             
+            <div class="modal-body text-center p-0 position-relative">
+                <!-- Close Button -->
+                <button type="button" 
+                        class="close text-white position-absolute"
+                        data-dismiss="modal" 
+                        aria-label="Close"
+                        style="top:10px; right:20px; font-size:2rem; z-index:10;">
+                    &times;
+                </button>
+
+                <!-- Full Image -->
+                <img src="{{ asset($priceRange->photo) }}" 
+                     class="img-fluid rounded shadow"
+                     style="max-height: 80vh;">
+            </div>
+
+        </div>
+    </div>
+</div>
+
                         <td>
                             @if($priceRange->status == 'active')
                             <span class="badge badge-success">{{ $priceRange->status }}</span>
@@ -109,7 +147,7 @@
                                         </p>
                                         <p><strong>Photo:</strong></p>
                                         @if($priceRange->photo)
-                                        <img src="{{ asset($priceRange->photo) }}" class="img-fluid"
+                                        <img src="{{ asset($priceRange->photo) }}" class="img-fluid mr-2 mb-2 preview-click"
                                             style="max-width:150px" alt="{{ $priceRange->title }}">
                                         @else
                                         <img src="{{ asset('backend/img/thumbnail-default.jpg') }}" class="img-fluid"
@@ -137,11 +175,58 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
+      <div class="modal-body text-center p-0 position-relative">
+        <!-- Close Button -->
+        <button type="button" class="close text-white position-absolute" data-dismiss="modal" aria-label="Close"
+          style="top:10px; right:20px; font-size:2rem; z-index:10;">
+          &times;
+        </button>
+
+        <!-- Image -->
+        <img id="previewImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;">
+      </div>
+    </div>
+  </div>
+</div>
 @endsection
 
 @push('styles')
 <link href="{{ asset('backend/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+<style>
+div.dataTables_wrapper div.dataTables_paginate {
+    display: none;
+}
+
+.zoom {
+    transition: transform .2s;
+}
+
+.zoom:hover {
+    transform: scale(5);
+}
+
+.image-preview-modal .modal-dialog {
+    max-width: 80%;
+}
+
+.image-preview-modal .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.modal-backdrop.show {
+    opacity: 0.9;
+}
+</style>
 @endpush
 
 @push('scripts')
@@ -174,6 +259,25 @@
                 }
             });
         });
+
+        $(document).on('click', '.preview-click', function() {
+        var src = $(this).attr('src');
+        var parentModal = $(this).closest('.modal');
+        $('#imagePreviewModal').data('parentModal', parentModal);
+        if (parentModal.length) {
+            parentModal.modal('hide');
+        }
+        $('#previewImage').attr('src', src);
+        $('#imagePreviewModal').modal('show');
+    });
+
+    $('#imagePreviewModal').on('hidden.bs.modal', function() {
+        var parentModal = $(this).data('parentModal');
+        if (parentModal && parentModal.length) {
+            parentModal.modal('show');
+            $(this).removeData('parentModal');
+        }
+    });
     });
 </script>
 @endpush

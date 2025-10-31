@@ -95,13 +95,13 @@ class FrontendController extends Controller
 
         // Price filter
         if (!empty($_GET['price_range'])) {
-            $priceSlug = $_GET['price_range'];
-            $priceRange = PriceRange::where('slug', $priceSlug)->first();
-            if ($priceRange) {
-                $products->whereBetween('price', [$priceRange->min_price, $priceRange->max_price]);
-            }
-        }
-
+    $range = explode('-', $_GET['price_range']);
+    if (count($range) == 2) {
+        $min = (float) $range[0];
+        $max = (float) $range[1];
+        $products->whereBetween('price', [$min, $max]);
+    }
+}
         // Sorting
         if (!empty($_GET['sortBy'])) {
             switch ($_GET['sortBy']) {
