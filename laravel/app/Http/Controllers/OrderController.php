@@ -13,31 +13,36 @@ use Notification;
 use Helper;
 use Illuminate\Support\Str;
 use App\Notifications\StatusNotification;
+use App\Services\WhatsAppService;
+use Illuminate\Support\Facades\Log;
+
 
 class OrderController extends Controller
 {
+    protected $whatsApp;
+
+    public function __construct(WhatsAppService $whatsApp)
+    {
+        $this->whatsApp = $whatsApp;
+    }
     public function index()
     {
-        $orders = Order::orderBy('id','DESC')->paginate(10);
+        $orders = Order::orderBy('id', 'DESC')->paginate(10);
         return view('backend.order.index', compact('orders'));
     }
 
     public function store(Request $request)
     {
         $this->validate($request, [
-        'name'     => 'required|string',
-        'email'    => 'required|email',
-        'phone'    => 'required|numeric',
-        'address_1' => 'required|string',
-        'address_2' => 'nullable|string',
-        'post_code'=> 'nullable|string',
-        'remarks'  => 'nullable|string',
+            'name'     => 'required|string',
+            'phone'    => 'required|numeric',
+            'address_1' => 'required|string',
 
         ]);
 
         $cartItems = Cart::where('user_id', auth()->user()->id)
-                         ->where('order_id', null)
-                         ->get();
+            ->where('order_id', null)
+            ->get();
 
         if ($cartItems->isEmpty()) {
             session()->flash('error', 'Cart is Empty!');
@@ -92,38 +97,43 @@ class OrderController extends Controller
         $order->save();
 
         // Save each cart item into order_items table
-foreach ($cartItems as $cart) {
-    $product = \App\Models\Product::find($cart->product_id);
-
-    
-    OrderItems::create([
-        'orders_id'   => $order->id,
-        'product_id'  => $product->id,
-        'net_amount'  => $product->price,
-        'discount'    => $product->discount ?? 0,
-        'final_amount'=> $product->price - ($product->discount ?? 0),
-        'quantity'    => $cart->quantity,
-        'total_amount'=> ($product->price - ($product->discount ?? 0)) * $cart->quantity,
-    ]);
-}
+        foreach ($cartItems as $cart) {
+            $product = \App\Models\Product::find($cart->product_id);
 
 
+            OrderItems::create([
+                'orders_id'    => $order->id,
+                'product_id'   => $product->id,
+                'net_amount'   => $product->price,
+                'discount'     => $product->discount ?? 0,
+                'final_amount' => $product->price - ($product->discount ?? 0),
+                'quantity'     => $cart->quantity,
+                'total_amount' => ($product->price - ($product->discount ?? 0)) * $cart->quantity,
+            ]);
+        }
 
         // Assign cart items to this order
         Cart::where('user_id', auth()->user()->id)
             ->where('order_id', null)
             ->update(['order_id' => $order->id]);
 
-        // Notify admin
-        $admin = User::where('role', 'admin')->first();
-        if ($admin) {
-            $details = [
-                'title'     => 'New order created',
-                'actionURL' => route('order.show', $order->id),
-                'fas'       => 'fa-file-alt',
+        // Notify User via WhatsApp
+        try {
+            $whatsAppData = [
+                'customerName' => $request->name,
+                'mobile_no' => $request->phone,
+                'order_id' => $orderData['order_number'],
             ];
-            Notification::send($admin, new StatusNotification($details));
+
+            $whatsappSentRes = $this->whatsApp->send( $whatsAppData, true, 1);
+
+            // Optionally log success or response
+            Log::info('WhatsApp notification sent', $whatsappSentRes);
+        } catch (\Throwable $e) {
+            // Log the error but do not break the order flow
+            Log::error('WhatsApp notification failed: ' . $e->getMessage());
         }
+
 
         session()->forget(['cart', 'coupon']);
         session()->flash('success', 'Your order has been placed successfully.');
@@ -182,8 +192,8 @@ foreach ($cartItems as $cart) {
     public function productTrackOrder(Request $request)
     {
         $order = Order::where('user_id', auth()->user()->id)
-                      ->where('order_number', $request->order_number)
-                      ->first();
+            ->where('order_number', $request->order_number)
+            ->first();
 
         if (!$order) {
             session()->flash('error', 'Invalid order number.');
