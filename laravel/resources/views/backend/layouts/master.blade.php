@@ -6,7 +6,7 @@
 <body id="page-top">
 
   <!-- Page Wrapper -->
-  <div id="wrapper">
+  <div id="wrapper" style="background-image: linear-gradient(180deg, #04AAF4 -20%, #FF2C18 150%);">
 
     <!-- Sidebar -->
     @include('backend.layouts.sidebar')

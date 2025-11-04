@@ -2,19 +2,19 @@
 @section('title', 'BENNY CARDS || Comment Page')
 @section('main-content')
   <!-- DataTales Example -->
-  <div class="card shadow mb-4">
+  <div class="card my-4">
     <div class="row">
     <div class="col-md-12">
       @include('backend.layouts.notification')
     </div>
     </div>
-    <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary float-left">Comment Lists</h6>
+    <div class="card-header">
+    <h3 class="m-0 font-weight-bold text-primary float-left">Comment Lists</h3>
     </div>
     <div class="card-body">
     <div class="table-responsive">
       @if(count($comments) > 0)
-      <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
+      <table class="table table-custom" id="order-dataTable" width="100%" cellspacing="0">
       <thead>
       <tr>
       <th>S.N.</th>
@@ -43,7 +43,7 @@
       @endif
       </td>
       <td>
-      <a href="{{route('comment.edit', $comment->id)}}" class="btn btn-primary btn-sm float-left mr-1"
+      <a href="{{route('comment.edit', $comment->id)}}" class="btn btn-primary btn-sm mr-1"
       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
       data-placement="bottom"><i class="fas fa-edit"></i></a>
       <form method="POST" action="{{route('comment.destroy', [$comment->id])}}">

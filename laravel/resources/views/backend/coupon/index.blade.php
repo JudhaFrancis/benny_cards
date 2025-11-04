@@ -2,21 +2,21 @@
 
 @section('main-content')
   <!-- DataTales Example -->
-  <div class="card shadow mb-4">
+  <div class="card my-4">
     <div class="row">
     <div class="col-md-12">
       @include('backend.layouts.notification')
     </div>
     </div>
-    <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary float-left">Coupon List</h6>
+    <div class="card-header">
+    <h3 class="m-0 font-weight-bold text-primary float-left">Coupon List</h3>
     <a href="{{route('coupon.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
       data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Coupon</a>
     </div>
     <div class="card-body">
     <div class="table-responsive">
       @if(count($coupons) > 0)
-      <table class="table table-bordered" id="banner-dataTable" width="100%" cellspacing="0">
+      <table class="table table-custom" id="banner-dataTable" width="100%" cellspacing="0">
       <thead>
       <tr>
       <th>S.N.</th>
@@ -54,10 +54,10 @@
       @endif
       </td>
       <td>
-      <a href="{{route('coupon.edit', $coupon->id)}}" class="btn btn-primary btn-sm float-left mr-1"
+      <a href="{{route('coupon.edit', $coupon->id)}}" class="btn btn-primary btn-sm mr-1"
       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
       data-placement="bottom"><i class="fas fa-edit"></i></a>
-      <form method="POST" action="{{route('coupon.destroy', [$coupon->id])}}">
+      <form method="POST" action="{{route('coupon.destroy', [$coupon->id])}}" style="display:inline-block;">
       @csrf
       @method('delete')
       <button class="btn btn-danger btn-sm dltBtn" data-id={{$coupon->id}}

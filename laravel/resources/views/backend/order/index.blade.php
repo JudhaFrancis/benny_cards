@@ -2,19 +2,19 @@
 
 @section('main-content')
   <!-- DataTales Example -->
-  <div class="card shadow mb-4">
+  <div class="card my-4">
     <div class="row">
     <div class="col-md-12">
       @include('backend.layouts.notification')
     </div>
     </div>
-    <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary float-left">Order Lists</h6>
+    <div class="card-header">
+    <h3 class="m-0 font-weight-bold text-primary float-left">Order Lists</h3>
     </div>
     <div class="card-body">
     <div class="table-responsive">
       @if(count($orders) > 0)
-      <table class="table table-bordered" id="order-dataTable" width="100%" cellspacing="0">
+      <table class="table table-custom" id="order-dataTable" width="100%" cellspacing="0">
       <thead>
       <tr>
       <th>S.N.</th>
@@ -53,13 +53,13 @@
       @endif
       </td>
       <td>
-      <a href="{{route('order.show', $order->id)}}" class="btn btn-warning btn-sm float-left mr-1"
+      <a href="{{route('order.show', $order->id)}}" class="btn btn-warning btn-sm mr-1"
       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view"
       data-placement="bottom"><i class="fas fa-eye"></i></a>
-      <a href="{{route('order.edit', $order->id)}}" class="btn btn-primary btn-sm float-left mr-1"
+      <a href="{{route('order.edit', $order->id)}}" class="btn btn-primary btn-sm mr-1"
       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
       data-placement="bottom"><i class="fas fa-edit"></i></a>
-      <form method="POST" action="{{route('order.destroy', [$order->id])}}">
+      <form method="POST" action="{{route('order.destroy', [$order->id])}}" style="display:inline-block;">
       @csrf
       @method('delete')
       <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}}

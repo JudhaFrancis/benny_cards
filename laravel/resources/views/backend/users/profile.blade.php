@@ -4,13 +4,13 @@
 
 @section('main-content')
 
-<div class="card shadow mb-4">
+<div class="card my-4">
     <div class="row">
         <div class="col-md-12">
            @include('backend.layouts.notification')
         </div>
     </div>
-   <div class="card-header py-3">
+   <div class="card-header">
      <h4 class=" font-weight-bold">Profile</h4>
      <ul class="breadcrumbs">
          <li><a href="{{route('admin')}}" style="color:#999">Dashboard</a></li>
