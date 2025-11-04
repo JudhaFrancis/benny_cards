@@ -133,7 +133,7 @@
                                     </div>
 
                                     <div class="modal-body">
-                                        <p><strong>ID:</strong> <?php echo e($priceRange->id); ?></p>
+                                        <!-- <p><strong>ID:</strong> <?php echo e($priceRange->id); ?></p> -->
                                         <p><strong>Title:</strong> <?php echo e($priceRange->title); ?></p>
                                         <p><strong>Slug:</strong> <?php echo e($priceRange->slug); ?></p>
                                         <p><strong>Min Price:</strong> <?php echo e($priceRange->min_price); ?></p>

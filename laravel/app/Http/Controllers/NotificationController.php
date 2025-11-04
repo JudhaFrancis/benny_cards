@@ -26,6 +26,17 @@ class NotificationController extends Controller
             return redirect($notification->data['actionURL']);
         }
     }
+
+    public function resend($id)
+{
+    $notification = Notification::findOrFail($id);
+    
+    $notification->status = 'not_sent';
+    $notification->save();
+
+    return redirect()->route('all.notification')->with('success', 'Notification resend successfully.');
+}
+
     public function delete($id)
     {
         $notification = Notification::find($id);
