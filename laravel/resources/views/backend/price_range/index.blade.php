@@ -1,14 +1,14 @@
 @extends('backend.layouts.master')
 
 @section('main-content')
-<div class="card shadow mb-4">
+<div class="card my-4">
     <div class="row">
         <div class="col-md-12">
             @include('backend.layouts.notification')
         </div>
     </div>
-    <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary float-left">Price Range List</h6>
+    <div class="card-header">
+        <h3 class="m-0 font-weight-bold text-primary float-left">Price Range List</h3>
         <a href="{{ route('price-range.create') }}" class="btn btn-primary btn-sm float-right" title="Add Price Range">
             <i class="fas fa-plus"></i> Add Price Range
         </a>
@@ -16,7 +16,7 @@
     <div class="card-body">
         <div class="table-responsive">
             @if(count($priceRanges) > 0)
-            <table class="table table-bordered" id="priceRange-dataTable" width="100%" cellspacing="0">
+            <table class="table table-custom" id="priceRange-dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
                         <th>S.N.</th>
@@ -94,7 +94,7 @@
                         </td>
                         <td>
                             <!-- View button -->
-                            <button type="button" class="btn btn-info btn-sm float-left mr-1" data-toggle="modal"
+                            <button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal"
                                 data-target="#viewModal{{ $priceRange->id }}"
                                 style="height:30px; width:30px;border-radius:50%" title="View">
                                 <i class="fas fa-eye"></i>
@@ -102,7 +102,7 @@
 
                             <!-- Edit -->
                             <a href="{{ route('price-range.edit', $priceRange->id) }}"
-                                class="btn btn-primary btn-sm float-left mr-1"
+                                class="btn btn-primary btn-sm mr-1"
                                 style="height:30px; width:30px;border-radius:50%" title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>

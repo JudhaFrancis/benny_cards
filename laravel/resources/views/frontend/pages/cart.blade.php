@@ -30,7 +30,7 @@
 					@foreach(Helper::getAllProductFromCart() as $key => $cart)
 					@php $photo = explode(',', $cart->product['photo']); @endphp
 
-					<div class="cart-card shadow-sm mb-3 p-3 rounded d-flex align-items-center justify-content-between">
+					<div class="cart-card-sm mb-3 p-3 rounded d-flex align-items-center justify-content-between">
 						<!-- Product Image -->
 						<div class="cart-img me-3 flex-shrink-0">
 							<img src="{{$photo[0]}}" class="img-fluid rounded" alt="{{$cart->product['title']}}" style="width: 80px; height: 80px; object-fit: cover;">
@@ -90,7 +90,7 @@
 
 			<!-- Price Details & Coupon -->
 			<div class="col-lg-4">
-				<div class="card shadow-sm p-3 sticky-top price-card" style="z-index:1;">
+				<div class="card-sm p-3 sticky-top price-card" style="z-index:1;">
 					<h5 class="mb-3 text-uppercase fw-bold">Price Details</h5>
 
 					<!-- Coupon Section -->

@@ -27,8 +27,8 @@
           <td>{{$notification->created_at->format('F d, Y h:i A')}}</td>
           <td>{{$notification->data['title']}}</td>
           <td>
-            <a href="{{route('admin.notification', $notification->id) }}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
-            <form method="POST" action="{{ route('notification.delete', $notification->id) }}">
+            <a href="{{route('admin.notification', $notification->id) }}" class="btn btn-primary btn-sm mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view" data-placement="bottom"><i class="fas fa-eye"></i></a>
+            <form method="POST" action="{{ route('notification.delete', $notification->id) }}" style="display:inline-block;">
               @csrf
               @method('delete')
                   <button class="btn btn-danger btn-sm dltBtn" data-id={{$notification->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>

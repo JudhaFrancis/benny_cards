@@ -2,21 +2,21 @@
 
 @section('main-content')
   <!-- DataTales Example -->
-  <div class="card shadow mb-4">
+  <div class="card my-4">
     <div class="row">
     <div class="col-md-12">
       @include('backend.layouts.notification')
     </div>
     </div>
-    <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary float-left">Post Tag Lists</h6>
+    <div class="card-header">
+    <h3 class="m-0 font-weight-bold text-primary float-left">Post Tag Lists</h3>
     <a href="{{route('post-tag.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
       data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Post Tag</a>
     </div>
     <div class="card-body">
     <div class="table-responsive">
       @if(count($postTags) > 0)
-      <table class="table table-bordered" id="post-category-dataTable" width="100%" cellspacing="0">
+      <table class="table table-custom" id="post-category-dataTable" width="100%" cellspacing="0">
       <thead>
       <tr>
       <th>S.N.</th>
@@ -42,15 +42,15 @@
       </td>
       <td>
       <!-- View Button -->
-      <button type="button" class="btn btn-info btn-sm float-left mr-1" data-toggle="modal"
+      <button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal"
       data-target="#viewModal{{$data->id}}" style="height:30px; width:30px;border-radius:50%" title="View">
       <i class="fas fa-eye"></i>
       </button>
 
-      <a href="{{route('post-tag.edit', $data->id)}}" class="btn btn-primary btn-sm float-left mr-1"
+      <a href="{{route('post-tag.edit', $data->id)}}" class="btn btn-primary btn-sm mr-1"
       style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
       data-placement="bottom"><i class="fas fa-edit"></i></a>
-      <form method="POST" action="{{route('post-tag.destroy', [$data->id])}}">
+      <form method="POST" action="{{route('post-tag.destroy', [$data->id])}}" style="display:inline-block;">
       @csrf
       @method('delete')
       <button class="btn btn-danger btn-sm dltBtn" data-id={{$data->id}}
