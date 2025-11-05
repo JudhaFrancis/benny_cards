@@ -22,7 +22,7 @@
                 <div class="right-bar-1 col-lg-4 col-md-8 col-8">
                     <div class="right-content">
                         <ul class="list-main">
-                            <li><i class="ti-package"></i><a href="{{route('order.track')}}">My Orders</a></li>
+<li><i class="ti-package"></i><a href="{{route('my.orders')}}">My Orders</a></li>
                             @auth
                             @if(Auth::user()->role=='admin')
                             <li><i class="ti-user"></i><a href="{{route('admin')}}" target="_blank">Dashboard</a></li>
@@ -192,7 +192,7 @@
                                 <li><a href="{{ route('contact') }}">Contact</a></li>
                                 <li class="icon-space"><i class="fa fa-heart-o"></i><a href="{{route('wishlist')}}">View Wishlist</a></li>
                                 <li class="icon-space"><i class="ti-shopping-cart"></i><a href="{{route('cart')}}">View Cart</a></li>
-                                <li class="icon-space"><i class="ti-package"></i><a href="{{route('order.track')}}">My Orders</a></li>
+<li class="icon-space"><i class="ti-package"></i><a href="{{route('my.orders')}}">My Orders</a></li>
                                 @auth
                                 @if(Auth::user()->role=='admin')
                                 <li class="icon-space"><i class="ti-user"></i><a href="{{route('admin')}}" target="_blank">Dashboard</a></li>

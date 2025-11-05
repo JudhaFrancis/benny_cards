@@ -1,156 +1,130 @@
 @extends('backend.layouts.master')
 
-@section('title','Order Detail')
+@section('title','View Order')
 
 @section('main-content')
-<div class="card">
-<h5 class="card-header">Order       <a href="{{route('order.pdf',$order->id)}}" class=" btn btn-sm btn-primary shadow-sm float-right"><i class="fas fa-download fa-sm text-white-50"></i> Generate PDF</a>
-  </h5>
-  <div class="card-body">
-    @if($order)
-    <table class="table table-striped table-hover">
-      <thead>
-        <tr>
-            <th>S.N.</th>
-            <th>Order No.</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Quantity</th>
-            <th>Charge</th>
-            <th>Total Amount</th>
-            <th>Status</th>
-            <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-            <td>{{$order->id}}</td>
-            <td>{{$order->order_number}}</td>
-            <td>{{$order->first_name}} {{$order->last_name}}</td>
-            <td>{{$order->email}}</td>
-            <td>{{$order->quantity}}</td>
-            <td>${{$order->shipping->price}}</td>
-            <td>${{number_format($order->total_amount,2)}}</td>
-            <td>
-                @if($order->status=='new')
-                  <span class="badge badge-primary">{{$order->status}}</span>
-                @elseif($order->status=='process')
-                  <span class="badge badge-warning">{{$order->status}}</span>
-                @elseif($order->status=='delivered')
-                  <span class="badge badge-success">{{$order->status}}</span>
-                @else
-                  <span class="badge badge-danger">{{$order->status}}</span>
-                @endif
-            </td>
-            <td>
-                <a href="{{route('order.edit',$order->id)}}" class="btn btn-primary btn-sm mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
-                <form method="POST" action="{{route('order.destroy',[$order->id])}}">
-                  @csrf
-                  @method('delete')
-                      <button class="btn btn-danger btn-sm dltBtn" data-id={{$order->id}} style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
-                </form>
-            </td>
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">
+            Order Details #{{ $order->order_number }}
+        </h6>
+        <a href="{{ route('order.edit', $order->id) }}" class="btn btn-sm btn-primary">
+            <i class="fas fa-edit"></i> Edit Order
+        </a>
+    </div>
 
-        </tr>
-      </tbody>
-    </table>
+    <div class="card-body">
 
-    <section class="confirmation_part section_padding">
-      <div class="order_boxes">
-        <div class="row">
-          <div class="col-lg-6 col-lx-4">
-            <div class="order-info">
-              <h4 class="text-center pb-4">ORDER INFORMATION</h4>
-              <table class="table">
-                    <tr class="">
-                        <td>Order Number</td>
-                        <td> : {{$order->order_number}}</td>
-                    </tr>
-                    <tr>
-                        <td>Order Date</td>
-                        <td> : {{$order->created_at->format('D d M, Y')}} at {{$order->created_at->format('g : i a')}} </td>
-                    </tr>
-                    <tr>
-                        <td>Quantity</td>
-                        <td> : {{$order->quantity}}</td>
-                    </tr>
-                    <tr>
-                        <td>Order Status</td>
-                        <td> : {{$order->status}}</td>
-                    </tr>
-                    <tr>
-                        <td>Shipping Charge</td>
-                        <td> : $ {{$order->shipping->price}}</td>
-                    </tr>
-                    <tr>
-                      <td>Coupon</td>
-                      <td> : $ {{number_format($order->coupon,2)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Amount</td>
-                        <td> : $ {{number_format($order->total_amount,2)}}</td>
-                    </tr>
-                    <tr>
-                        <td>Payment Method</td>
-                        <td> : @if($order->payment_method=='cod') Cash on Delivery @else Paypal @endif</td>
-                    </tr>
-                    <tr>
-                        <td>Payment Status</td>
-                        <td> : {{$order->payment_status}}</td>
-                    </tr>
-              </table>
+        {{-- ===================== ORDER INFORMATION ===================== --}}
+        <h5 class="mb-3"><strong>Order Information</strong></h5>
+        <div class="row mb-3">
+            <div class="col-md-3"><label><strong>Tracking ID:</strong></label> {{ $order->tracking_id ?? 'N/A' }}</div>
+            <div class="col-md-3"><label><strong>Payment Status:</strong></label> {{ ucfirst($order->payment_status) }}
             </div>
-          </div>
-
-          <div class="col-lg-6 col-lx-4">
-            <div class="shipping-info">
-              <h4 class="text-center pb-4">SHIPPING INFORMATION</h4>
-              <table class="table">
-                    <tr class="">
-                        <td>Full Name</td>
-                        <td> : {{$order->first_name}} {{$order->last_name}}</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td> : {{$order->email}}</td>
-                    </tr>
-                    <tr>
-                        <td>Phone No.</td>
-                        <td> : {{$order->phone}}</td>
-                    </tr>
-                    <tr>
-                        <td>Address</td>
-                        <td> : {{$order->address1}}, {{$order->address2}}</td>
-                    </tr>
-                    <tr>
-                        <td>Country</td>
-                        <td> : {{$order->country}}</td>
-                    </tr>
-                    <tr>
-                        <td>Post Code</td>
-                        <td> : {{$order->post_code}}</td>
-                    </tr>
-              </table>
-            </div>
-          </div>
+            <div class="col-md-3"><label><strong>Order Status:</strong></label> {{ ucfirst($order->status) }}</div>
+            <div class="col-md-3"><label><strong>Order Date:</strong></label>
+                {{ \Carbon\Carbon::parse($order->order_date)->format('d M Y') }}</div>
         </div>
-      </div>
-    </section>
-    @endif
 
-  </div>
-</div>
-@endsection
+        <hr>
 
-@push('styles')
-<style>
-    .order-info,.shipping-info{
-        background:#ECECEC;
-        padding:20px;
-    }
-    .order-info h4,.shipping-info h4{
-        text-decoration: underline;
-    }
+        {{-- ===================== ORDER ITEMS ===================== --}}
+        <h5 class="mb-3"><strong>Order Items</strong></h5>
+        @foreach ($order->items as $key => $item)
+        <div class="card mb-3 p-3">
+            <div class="row align-items-center">
+                <div class="col-md-2 text-center">
+                    @if(!empty($item->product->photo))
+                    <img src="{{ asset($item->product->photo) }}" alt="{{ $item->product->title }}"
+                        class="img-fluid rounded shadow-sm" style="max-height: 80px; object-fit: cover;">
+                    @else
+                    <img src="{{ asset('backend/img/placeholder.png') }}" alt="No Image"
+                        class="img-fluid rounded shadow-sm" style="max-height: 80px;">
+                    @endif
+                </div>
 
-</style>
-@endpush
+                <div class="col-md-3">
+                    <label><strong>Product:</strong></label>
+                    <div style="white-space: normal; word-wrap: break-word;">
+                        {{ $item->product->title ?? 'Unknown Product' }}
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <label><strong>Quantity:</strong></label>
+                    <div>{{ $item->quantity }}</div>
+                </div>
+
+                <div class="col-md-2">
+                    <label><strong>Price:</strong></label>
+                    <div>₹{{ number_format($item->final_amount, 2) }}</div>
+                </div>
+
+                <div class="col-md-2">
+                    <label><strong>Total:</strong></label>
+                    <div>₹{{ number_format($item->total_amount, 2) }}</div>
+                </div>
+            </div>
+        </div>
+        @endforeach
+
+        <hr>
+
+        {{-- ===================== CUSTOMER & SHIPPING DETAILS ===================== --}}
+        <h5 class="mb-3"><strong>Customer Details</strong></h5>
+
+        <div class="card p-3 mb-3" style="background-color:#f9f9f9;">
+            <div class="row mb-3">
+                <div class="col-md-4"><label><strong>Name:</strong></label> {{ $order->name }}</div>
+                <div class="col-md-4"><label><strong>Email:</strong></label> {{ $order->email }}</div>
+                <div class="col-md-4"><label><strong>Phone:</strong></label> {{ $order->phone }}</div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-6 mb-2">
+                    <label class="text-muted d-block"><strong>Address Line 1</strong></label>
+                    <span class="h6 text-dark">{{ $order->address_1 }}</span>
+                </div>
+
+                @if(!empty($order->address_2))
+                <div class="col-md-6 mb-2">
+                    <label class="text-muted d-block"><strong>Address Line 2</strong></label>
+                    <span class="h6 text-dark">{{ $order->address_2 }}</span>
+                </div>
+                @endif
+            </div>
+
+            <div class="row mb-3">
+                @if(!empty($order->country))
+                <div class="col-md-4">
+                    <label><strong>Country:</strong></label> {{ $order->country }}
+                </div>
+                @endif
+
+                @if(!empty($order->post_code))
+                <div class="col-md-4">
+                    <label><strong>Postal Code:</strong></label> {{ $order->post_code }}
+                </div>
+                @endif
+                @if(!empty($order->remarks))
+                <div class="col-md-4">
+                    <label><strong>Remarks:</strong></label> {{ $order->remarks }}
+                </div>
+                @endif
+            </div>
+        </div>
+
+        <hr>
+
+        {{-- ===================== AMOUNT SUMMARY ===================== --}}
+        <h5 class="mb-3"><strong>Order Summary</strong></h5>
+        <div class="card p-3" style="background-color:#f9f9f9;">
+            <div class="row">
+                <div class="col-md-12 text-end">
+                    <h5 class="m-0">
+                        <strong>Total Amount:</strong> ₹{{ number_format($order->net_amount, 2) }}
+                    </h5>
+                </div>
+            </div>
+        </div>
+        @endsection
