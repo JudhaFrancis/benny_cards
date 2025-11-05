@@ -18,7 +18,7 @@
         "spatie/laravel-newsletter": "^5.1",
         "srmklive/paypal": "^3.0",
         "symfony/filesystem": "^7.3",
-        "unisharp/laravel-filemanager": "^2.6"
+        "unisharp/laravel-filemanager": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
