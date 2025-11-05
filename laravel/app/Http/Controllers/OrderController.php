@@ -158,19 +158,47 @@ class OrderController extends Controller
     }
 
     public function update(Request $request, $id)
-    {
-        $order = Order::findOrFail($id);
+{
+    $order = Order::findOrFail($id);
 
-        $this->validate($request, [
-            'status' => 'required|in:active,pending,completed,returned,cancelled',
-        ]);
+    // Update order details
+    $order->update([
+        'tracking_id' => $request->tracking_id,
+        'payment_status' => $request->payment_status,
+        'status' => $request->status,
+        'order_date' => $request->order_date,
+        'name' => $request->name,
+        'email' => $request->email,
+        'phone' => $request->phone,
+        'country' => $request->country,
+        'post_code' => $request->post_code,
+        'address_1' => $request->address_1,
+        'address_2' => $request->address_2,
+        'remarks' => $request->remarks,
+    ]);
 
-        $order->status = $request->status;
-        $order->save();
+    //  Update order items
+    if ($request->has('items')) {
+        foreach ($request->items as $itemId => $itemData) {
+            $orderItem = OrderItems::find($itemId);
+            if ($orderItem) {
+                $orderItem->update([
+                    'quantity' => $itemData['quantity'],
+                    'final_amount' => $itemData['final_amount'],
+                    'total_amount' => $itemData['quantity'] * $itemData['final_amount'],
+                ]);
+            }
+        }
 
-        session()->flash('success', 'Order updated successfully.');
-        return redirect()->route('order.index');
+        //  Recalculate order total after item updates
+        $totalAmount = OrderItems::where('orders_id', $order->id)->sum('total_amount');
+        $order->update(['total_amount' => $totalAmount]);
     }
+
+    session()->flash('success', 'Order updated successfully.');
+    return redirect()->route('order.index');
+}
+
 
     public function destroy($id)
     {
@@ -218,4 +246,17 @@ class OrderController extends Controller
 
         return redirect()->route('home');
     }
+
+   public function myOrders()
+{
+    $userId = auth()->id();
+
+    $orders = \App\Models\Order::where('user_id', $userId)
+        ->orderBy('created_at', 'desc')
+        ->get();
+
+    return view('frontend.pages.my-orders', compact('orders'));
+}
+
+
 }

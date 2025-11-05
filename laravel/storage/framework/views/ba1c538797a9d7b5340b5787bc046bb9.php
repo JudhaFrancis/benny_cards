@@ -39,51 +39,40 @@
                         <td><?php echo e($priceRange->max_price); ?></td>
 
                         <td>
-    <?php if($priceRange->photo): ?>
-        <!-- Thumbnail Image -->
-        <img src="<?php echo e(asset($priceRange->photo)); ?>" 
-             class="img-fluid preview-img"
-             style="max-width:80px; cursor:pointer;" 
-             alt="price range image"
-             data-toggle="modal"
-             data-target="#imagePreviewModal<?php echo e($priceRange->id); ?>">
-    <?php else: ?>
-        <img src="<?php echo e(asset('backend/img/thumbnail-default.jpg')); ?>" 
-             class="img-fluid"
-             style="max-width:80px" 
-             alt="default image">
-    <?php endif; ?>
-</td>
+                            <?php if($priceRange->photo): ?>
+                            <!-- Thumbnail Image -->
+                            <img src="<?php echo e(asset($priceRange->photo)); ?>" class="img-fluid preview-img"
+                                style="max-width:80px; cursor:pointer;" alt="price range image" data-toggle="modal"
+                                data-target="#imagePreviewModal<?php echo e($priceRange->id); ?>">
+                            <?php else: ?>
+                            <img src="<?php echo e(asset('backend/img/thumbnail-default.jpg')); ?>" class="img-fluid"
+                                style="max-width:80px" alt="default image">
+                            <?php endif; ?>
+                        </td>
 
-<!-- Image Preview Modal -->
-<div class="modal fade image-preview-modal" 
-     id="imagePreviewModal<?php echo e($priceRange->id); ?>" 
-     tabindex="-1"
-     role="dialog" 
-     aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content"
-             style="background: transparent; border: none; box-shadow: none;">
-             
-            <div class="modal-body text-center p-0 position-relative">
-                <!-- Close Button -->
-                <button type="button" 
-                        class="close text-white position-absolute"
-                        data-dismiss="modal" 
-                        aria-label="Close"
-                        style="top:10px; right:20px; font-size:2rem; z-index:10;">
-                    &times;
-                </button>
+                        <!-- Image Preview Modal -->
+                        <div class="modal fade image-preview-modal" id="imagePreviewModal<?php echo e($priceRange->id); ?>"
+                            tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content"
+                                    style="background: transparent; border: none; box-shadow: none;">
 
-                <!-- Full Image -->
-                <img src="<?php echo e(asset($priceRange->photo)); ?>" 
-                     class="img-fluid rounded shadow"
-                     style="max-height: 80vh;">
-            </div>
+                                    <div class="modal-body text-center p-0 position-relative">
+                                        <!-- Close Button -->
+                                        <button type="button" class="close text-white position-absolute"
+                                            data-dismiss="modal" aria-label="Close"
+                                            style="top:10px; right:20px; font-size:2rem; z-index:10;">
+                                            &times;
+                                        </button>
 
-        </div>
-    </div>
-</div>
+                                        <!-- Full Image -->
+                                        <img src="<?php echo e(asset($priceRange->photo)); ?>" class="img-fluid rounded shadow"
+                                            style="max-height: 80vh;">
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
 
                         <td>
                             <?php if($priceRange->status == 'active'): ?>
@@ -102,8 +91,8 @@
 
                             <!-- Edit -->
                             <a href="<?php echo e(route('price-range.edit', $priceRange->id)); ?>"
-                                class="btn btn-primary btn-sm mr-1"
-                                style="height:30px; width:30px;border-radius:50%" title="Edit">
+                                class="btn btn-primary btn-sm mr-1" style="height:30px; width:30px;border-radius:50%"
+                                title="Edit">
                                 <i class="fas fa-edit"></i>
                             </a>
 
@@ -147,8 +136,9 @@
                                         </p>
                                         <p><strong>Photo:</strong></p>
                                         <?php if($priceRange->photo): ?>
-                                        <img src="<?php echo e(asset($priceRange->photo)); ?>" class="img-fluid mr-2 mb-2 preview-click"
-                                            style="max-width:150px" alt="<?php echo e($priceRange->title); ?>">
+                                        <img src="<?php echo e(asset($priceRange->photo)); ?>"
+                                            class="img-fluid mr-2 mb-2 preview-click" style="max-width:150px"
+                                            alt="<?php echo e($priceRange->title); ?>">
                                         <?php else: ?>
                                         <img src="<?php echo e(asset('backend/img/thumbnail-default.jpg')); ?>" class="img-fluid"
                                             style="max-width:150px" alt="default">
@@ -177,20 +167,20 @@
 </div>
 
 <div class="modal fade" id="imagePreviewModal" tabindex="-1" role="dialog" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
-      <div class="modal-body text-center p-0 position-relative">
-        <!-- Close Button -->
-        <button type="button" class="close text-white position-absolute" data-dismiss="modal" aria-label="Close"
-          style="top:10px; right:20px; font-size:2rem; z-index:10;">
-          &times;
-        </button>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content" style="background: transparent; border: none; box-shadow: none;">
+            <div class="modal-body text-center p-0 position-relative">
+                <!-- Close Button -->
+                <button type="button" class="close text-white position-absolute" data-dismiss="modal" aria-label="Close"
+                    style="top:10px; right:20px; font-size:2rem; z-index:10;">
+                    &times;
+                </button>
 
-        <!-- Image -->
-        <img id="previewImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;">
-      </div>
+                <!-- Image -->
+                <img id="previewImage" src="" class="img-fluid rounded shadow" style="max-height: 80vh;">
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 <?php $__env->stopSection(); ?>
 
@@ -234,33 +224,43 @@ div.dataTables_wrapper div.dataTables_paginate {
 <script src="<?php echo e(asset('backend/vendor/datatables/dataTables.bootstrap4.min.js')); ?>"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
+<!-- Page level custom scripts -->
+<script src="<?php echo e(asset('backend/js/demo/datatables-demo.js')); ?>"></script>
 <script>
-    // Sweet alert delete
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+$('#priceRange-dataTable').DataTable({
+    "columnDefs": [{
+        "orderable": false,
+        "targets": [3, 4, 5]
+    }],
+});
+</script>
+<script>
+// Sweet alert delete
+$(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $('.dltBtn').click(function(e) {
+        e.preventDefault();
+        var form = $(this).closest('form');
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this data!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if (willDelete) {
+                form.submit();
+            } else {
+                swal("Your data is safe!");
             }
         });
-        $('.dltBtn').click(function(e) {
-            e.preventDefault();
-            var form = $(this).closest('form');
-            swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this data!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            }).then((willDelete) => {
-                if (willDelete) {
-                    form.submit();
-                } else {
-                    swal("Your data is safe!");
-                }
-            });
-        });
+    });
 
-        $(document).on('click', '.preview-click', function() {
+    $(document).on('click', '.preview-click', function() {
         var src = $(this).attr('src');
         var parentModal = $(this).closest('.modal');
         $('#imagePreviewModal').data('parentModal', parentModal);
@@ -278,7 +278,7 @@ div.dataTables_wrapper div.dataTables_paginate {
             $(this).removeData('parentModal');
         }
     });
-    });
+});
 </script>
 <?php $__env->stopPush(); ?>
 <?php echo $__env->make('backend.layouts.master', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\benny_cards\laravel\resources\views/backend/price_range/index.blade.php ENDPATH**/ ?>

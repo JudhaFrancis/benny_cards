@@ -27,7 +27,6 @@
         <form class="form" method="POST" action="{{route('cart.order')}}">
             @csrf
             <div class="row">
-
                 <div class="col-lg-8 col-12">
                     <div class="checkout-form">
                         <h2>Make Your Checkout Here</h2>

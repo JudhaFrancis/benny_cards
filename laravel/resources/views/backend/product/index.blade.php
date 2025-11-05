@@ -265,14 +265,12 @@ div.dataTables_wrapper div.dataTables_paginate {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
-<script>
-$('#product-dataTable').DataTable({
-    "scrollX": false "columnDefs": [{
-        "orderable": false,
-        "targets": [10, 11, 12]
+<script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script> 
+<script> $('#product-dataTable').DataTable({
+     "columnDefs": [{ "orderable": false, 
+        "targets": [3, 4, 5] 
     }]
-});
+ });
 
 // Sweet alert
 
