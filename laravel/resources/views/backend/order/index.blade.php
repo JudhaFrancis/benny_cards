@@ -8,7 +8,7 @@
       @include('backend.layouts.notification')
     </div>
     </div>
-    <div class="card-header">
+    <div class="carindexd-header">
     <h3 class="m-0 font-weight-bold text-primary float-left">Order Lists</h3>
     </div>
     <div class="card-body">
@@ -102,6 +102,7 @@
   <script>
 
     $('#order-dataTable').DataTable({
+    "order": [[0, "desc"]],
     "columnDefs": [
       {
       "orderable": false,

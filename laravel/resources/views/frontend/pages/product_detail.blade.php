@@ -50,336 +50,108 @@
 
 <!-- End Breadcrumbs -->
 
-<!-- Shop Single -->
-<section class="shop single section">
-    <div class="section-container">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-lg-6 col-12">
-                        <!-- Product Slider -->
-                        <div class="product-gallery">
-                            <!-- Images slider -->
-                            <div class="flexslider-thumbnails">
-                                <ul class="slides">
+<!-- ===== PRODUCT DETAIL ===== -->
+<div class="container">
+    <div class="product-page">
+        <!-- LEFT -->
+        <div class="product-gallery">
+            <div style="display:flex;align-items:flex-start;">
+                @if($product_detail->images && count($product_detail->images) > 0)
+                <div class="thumbnail-list">
+                    @foreach($product_detail->images as $img)
+                    <img src="{{ $img->image_path }}" alt="thumb"
+                        onclick="document.getElementById('mainImage').src='{{ $img->image_path }}'">
+                    @endforeach
+                </div>
+                @endif
+                <img id="mainImage" src="{{ $product_detail->photo }}" alt="main image" class="main-image">
+            </div>
+        </div>
 
-                                    <li data-thumb="{{ $product_detail->photo }}" rel="adjustX:10, adjustY:" class="image-slide">
-                                        <div class="main-image-wrapper rounded border overflow-hidden">
-                                            <img src="{{ $product_detail->photo }}" alt="Main Product Image" class="img-fluid w-100 h-auto image" style="object-fit: cover; max-height: 500px;">
-                                        </div>
-                                    </li>
+        <!-- RIGHT -->
+        <div class="product-info">
+            <h2>{{ $product_detail->title }}</h2>
 
-                                    @if($product_detail->images && count($product_detail->images) > 0)
-                                    @foreach($product_detail->images as $img)
-                                    <li data-thumb="{{ $img->image_path }}" rel="adjustX:10, adjustY:">
-                                        <img src="{{ $img->image_path }}" alt="Product Thumbnail">
-                                    </li>
-                                    @endforeach
-                                    @endif
-                                </ul>
-                            </div>
-                        </div>
+            <div class="rating">
+                @php $rate=ceil($product_detail->getReview->avg('rate')) @endphp
+                @for($i=1;$i<=5;$i++) @if($rate>=$i)
+                    <i class="fa fa-star"></i>
+                    @else
+                    <i class="fa fa-star-o"></i>
+                    @endif
+                    @endfor
+                    <span>({{ $product_detail['getReview']->count() }} Reviews)</span>
+            </div>
 
-                        <!-- End Product slider -->
-                    </div>
-                    <div class="col-lg-6 col-12">
-                        <div class="product-des">
-                            <!-- Description -->
-                            <div class="short">
-                                <h4>{{$product_detail->title}}</h4>
-                                <p class="product-summary">{!! $product_detail->summary !!}</p>
-                                <div class="rating-main">
-                                    <ul class="rating">
-                                        @php
-                                        $rate=ceil($product_detail->getReview->avg('rate'))
-                                        @endphp
-                                        @for($i=1; $i<=5; $i++) @if($rate>=$i)
-                                            <li><i class="fa fa-star"></i></li>
-                                            @else
-                                            <li><i class="fa fa-star-o"></i></li>
-                                            @endif
-                                            @endfor
-                                    </ul>
-                                    <a href="#" class="total-review">({{$product_detail['getReview']->count()}})
-                                        Review</a>
-                                </div>
-                                @php
-                                $after_discount=($product_detail->price-(($product_detail->price*$product_detail->discount)/100));
-                                @endphp
-                                <p class="price">
-                                    <span class="discount">₹{{ number_format($after_discount,2) }}</span>
-                                    @if($product_detail->discount > 0)
-                                    <s>₹{{ number_format($product_detail->price,2) }}</s>
-                                    <span class="discount-badge">{{ $product_detail->discount }}% OFF</span>
-                                    @endif
-                                </p>
+            @php
+            $after_discount = ($product_detail->price - (($product_detail->price * $product_detail->discount) / 100));
+            @endphp
+            <p class="price">
+                ₹{{ number_format($after_discount, 2) }}
+                @if($product_detail->discount > 0)
+                <s>₹{{ number_format($product_detail->price, 2) }}</s>
+                @endif
+            </p>
 
+            <p class="product-description">{!! $product_detail->summary !!}</p>
 
+            <!-- ===== Add to Cart (Outside Card) ===== -->
+            <div class="add-cart-bar">
+                <form action="{{ route('single-add-to-cart') }}" method="POST" style="display:flex;flex:1;">
+                    @csrf
+                    <input type="hidden" name="slug" value="{{ $product_detail->slug }}">
+                    <button type="submit" class="btn-add-cart">
+                        <i class="fa fa-shopping-cart"></i> Add to Cart
+                    </button>
+                </form>
+                <div class="heart-btn">
+                    <i class="fa fa-heart-o"></i>
+                </div>
+            </div>
 
-                            </div>
-                            <!--/ End Description -->
-                            <!-- Color -->
-                            {{-- <div class="color">
-												<h4>Available Options <span>Color</span></h4>
-												<ul>
-													<li><a href="#" class="one"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="two"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="three"><i class="ti-check"></i></a></li>
-													<li><a href="#" class="four"><i class="ti-check"></i></a></li>
-												</ul>
-											</div> --}}
-                            <!--/ End Color -->
-                            <!-- Size -->
-                            @if($product_detail->size)
-                            <div class="size mt-4">
-                                <h4>Size</h4>
-                                <ul>
-                                    @php
-                                    $sizes=explode(',',$product_detail->size);
-                                    // dd($sizes);
-                                    @endphp
-                                    @foreach($sizes as $size)
-                                    <li><a href="#" class="one">{{$size}}</a></li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @endif
-                            <!--/ End Size -->
-                            <!-- Product Buy -->
-                            <div class="product-buy">
-                                <form action="{{route('single-add-to-cart')}}" method="POST">
-                                    @csrf
-                                    <div class="quantity">
-                                        <h6>Quantity :</h6>
-                                        <!-- Input Order -->
-                                        <div class="input-group">
-                                            <div class="button minus">
-                                                <button type="button" class="btn btn-primary btn-number"
-                                                    disabled="disabled" data-type="minus" data-field="quant[1]">
-                                                    <i class="ti-minus"></i>
-                                                </button>
-                                            </div>
-                                            <input type="hidden" name="slug" value="{{$product_detail->slug}}">
-                                            <input type="text" name="quant[1]" class="input-number" data-min="50"
-                                                data-max="10000" value="50" id="quantity">
-                                            <div class="button plus">
-                                                <button type="button" class="btn btn-primary btn-number"
-                                                    data-type="plus" data-field="quant[1]">
-                                                    <i class="ti-plus"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                        <!--/ End Input Order -->
-                                    </div>
-                                    <div class="add-to-cart mt-4">
-                                        <button type="submit" class="btn">Add to cart</button>
-                                        <a href="{{route('add-to-wishlist',$product_detail->slug)}}" class="btn min"><i
-                                                class="ti-heart"></i></a>
-                                    </div>
-                                </form>
-
-                                <h3 class="cat">Category :<a
-                                        href="{{route('product-cat',$product_detail->cat_info['slug'])}}">{{$product_detail->cat_info['title']}}</a>
-                                </h3>
-                                @if($product_detail->sub_cat_info)
-                                <h3 class="cat mt-1">Sub Category :<a
-                                        href="{{route('product-sub-cat',[$product_detail->cat_info['slug'],$product_detail->sub_cat_info['slug']])}}">{{$product_detail->sub_cat_info['title']}}</a>
-                                </h3>
-                                @endif
-                                <h3 class="availability">Stock : @if($product_detail->stock>0)<span
-                                        class="badge badge-success">{{$product_detail->stock}}</span>@else <span
-                                        class="badge badge-danger">{{$product_detail->stock}}</span> @endif</h3>
-                            </div>
-                            <!--/ End Product Buy -->
-                        </div>
+            <!-- ===== White Card (Below) ===== -->
+            <div class="detail-card">
+                @if($product_detail->size)
+                <div class="size-options">
+                    <h6>Size</h6>
+                    <div class="size-buttons">
+                        @php $sizes = explode(',', $product_detail->size); @endphp
+                        @foreach($sizes as $size)
+                        <button type="button" class="size-btn">{{ $size }}</button>
+                        @endforeach
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="product-info">
-                            <div class="nav-main">
-                                <!-- Tab Nav -->
-                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item"><a class="nav-link active" data-toggle="tab"
-                                            href="#description" role="tab">Description</a></li>
-                                    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#reviews"
-                                            role="tab">Reviews</a></li>
-                                </ul>
-                                <!--/ End Tab Nav -->
-                            </div>
-                            <div class="tab-content" id="myTabContent">
-                                <!-- Description Tab -->
-                                <div class="tab-pane fade show active" id="description" role="tabpanel">
-                                    <div class="tab-single">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="single-des">
-                                                    <p>{!! ($product_detail->description) !!}</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/ End Description Tab -->
-                                <!-- Reviews Tab -->
-                                <div class="tab-pane fade" id="reviews" role="tabpanel">
-                                    <div class="tab-single review-panel">
-                                        <div class="row">
-                                            <div class="col-12">
+                @endif
 
-                                                <!-- Review -->
-                                                <div class="comment-review">
-                                                    <div class="add-review">
-                                                        <h5>Add A Review</h5>
-                                                        <p>Your email address will not be published. Required fields are
-                                                            marked</p>
-                                                    </div>
-                                                    <h4>Your Rating <span class="text-danger">*</span></h4>
-                                                    <div class="review-inner">
-                                                        <!-- Form -->
-                                                        @auth
-                                                        <form class="form" method="post"
-                                                            action="{{route('review.store',$product_detail->slug)}}">
-                                                            @csrf
-                                                            <div class="row">
-                                                                <div class="col-lg-12 col-12">
-                                                                    <div class="rating_box">
-                                                                        <div class="star-rating">
-                                                                            <div class="star-rating__wrap">
-                                                                                <input class="star-rating__input"
-                                                                                    id="star-rating-5" type="radio"
-                                                                                    name="rate" value="5">
-                                                                                <label
-                                                                                    class="star-rating__ico fa fa-star-o"
-                                                                                    for="star-rating-5"
-                                                                                    title="5 out of 5 stars"></label>
-                                                                                <input class="star-rating__input"
-                                                                                    id="star-rating-4" type="radio"
-                                                                                    name="rate" value="4">
-                                                                                <label
-                                                                                    class="star-rating__ico fa fa-star-o"
-                                                                                    for="star-rating-4"
-                                                                                    title="4 out of 5 stars"></label>
-                                                                                <input class="star-rating__input"
-                                                                                    id="star-rating-3" type="radio"
-                                                                                    name="rate" value="3">
-                                                                                <label
-                                                                                    class="star-rating__ico fa fa-star-o"
-                                                                                    for="star-rating-3"
-                                                                                    title="3 out of 5 stars"></label>
-                                                                                <input class="star-rating__input"
-                                                                                    id="star-rating-2" type="radio"
-                                                                                    name="rate" value="2">
-                                                                                <label
-                                                                                    class="star-rating__ico fa fa-star-o"
-                                                                                    for="star-rating-2"
-                                                                                    title="2 out of 5 stars"></label>
-                                                                                <input class="star-rating__input"
-                                                                                    id="star-rating-1" type="radio"
-                                                                                    name="rate" value="1">
-                                                                                <label
-                                                                                    class="star-rating__ico fa fa-star-o"
-                                                                                    for="star-rating-1"
-                                                                                    title="1 out of 5 stars"></label>
-                                                                                @error('rate')
-                                                                                <span
-                                                                                    class="text-danger">{{$message}}</span>
-                                                                                @enderror
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-12 col-12">
-                                                                    <div class="form-group">
-                                                                        <label>Write a review</label>
-                                                                        <textarea name="review" rows="6"
-                                                                            placeholder=""></textarea>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-12 col-12">
-                                                                    <div class="form-group button5">
-                                                                        <button type="submit"
-                                                                            class="btn">Submit</button>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </form>
-                                                        @else
-                                                        <p class="text-center p-5">
-                                                            You need to <a href="{{route('login.form')}}"
-                                                                style="color:rgb(54, 54, 204)">Login</a> OR <a
-                                                                style="color:blue"
-                                                                href="{{route('register.form')}}">Register</a>
-
-                                                        </p>
-                                                        <!--/ End Form -->
-                                                        @endauth
-                                                    </div>
-                                                </div>
-
-                                                <div class="ratting-main">
-                                                    <div class="avg-ratting">
-                                                        {{-- @php 
-																			$rate=0;
-																			foreach($product_detail->rate as $key=>$rate){
-																				$rate +=$rate
-																			}
-																		@endphp --}}
-                                                        <h4>{{ceil($product_detail->getReview->avg('rate'))}}
-                                                            <span>(Overall)</span>
-                                                        </h4>
-                                                        <span>Based on {{$product_detail->getReview->count()}}
-                                                            Comments</span>
-                                                    </div>
-                                                    @foreach($product_detail['getReview'] as $data)
-                                                    <!-- Single Rating -->
-                                                    <div class="single-rating">
-                                                        <div class="rating-author">
-                                                            @if($data->user_info['photo'])
-                                                            <img src="{{$data->user_info['photo']}}"
-                                                                alt="{{$data->user_info['photo']}}">
-                                                            @else
-                                                            <img src="{{asset('backend/img/avatar.png')}}"
-                                                                alt="Profile.jpg">
-                                                            @endif
-                                                        </div>
-                                                        <div class="rating-des">
-                                                            <h6>{{$data->user_info['name']}}</h6>
-                                                            <div class="ratings">
-
-                                                                <ul class="rating">
-                                                                    @for($i=1; $i<=5; $i++) @if($data->rate>=$i)
-                                                                        <li><i class="fa fa-star"></i></li>
-                                                                        @else
-                                                                        <li><i class="fa fa-star-o"></i></li>
-                                                                        @endif
-                                                                        @endfor
-                                                                </ul>
-                                                                <div class="rate-count">(<span>{{$data->rate}}</span>)
-                                                                </div>
-                                                            </div>
-                                                            <p>{{$data->review}}</p>
-                                                        </div>
-                                                    </div>
-                                                    <!--/ End Single Rating -->
-                                                    @endforeach
-                                                </div>
-
-                                                <!--/ End Review -->
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <!--/ End Reviews Tab -->
-                            </div>
-                        </div>
+                <div class="quantity-section">
+                    <h6>Quantity</h6>
+                    <div class="quantity-wrapper">
+                        <button type="button" class="qty-minus">-</button>
+                        <input type="number" name="quant[1]" id="quantity" value="1" min="1">
+                        <button type="button" class="qty-plus">+</button>
                     </div>
                 </div>
+
+                <div class="product-meta">
+                    <div class="meta-row">
+                        <strong>Stock Status:</strong>
+                        @if($product_detail->stock > 0)
+                        <span class="stock-green"><i class="fa fa-check-circle"></i> In Stock
+                            ({{ $product_detail->stock }})</span>
+                        @else
+                        <span style="color:red;">Out of Stock</span>
+                        @endif
+                    </div>
+                    <div class="meta-row">
+                        <strong>Category:</strong>
+                        <span>{{ $product_detail->cat_info['title'] }}</span>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-</section>
+</div>
 <!--/ End Shop Single -->
 
 <!-- Start Most Popular -->
@@ -407,8 +179,7 @@
                             <img src="{{ $photo[0] }}" alt="{{ $data->title }}">
                         </a>
 
-                        @if($data->stock <= 0)
-                            <span class="badge out-of-stock">Sold Out</span>
+                        @if($data->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                             @elseif($data->condition == 'trending')
                             <span class="badge trending">Trending</span>
                             @elseif($data->condition == 'new')
@@ -444,92 +215,359 @@
     </div>
 </div>
 <!-- End Most Popular Area -->
+
+<style>
+.product-page {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 8rem;
+    padding: 40px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* --- Left Side --- */
+.product-gallery {
+    flex: 0 0 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.thumbnail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.thumbnail-list img {
+    width: 60px;
+    height: 75px;
+    border-radius: 6px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: 0.3s;
+}
+
+.thumbnail-list img:hover {
+    border-color: #8A5DFF;
+}
+
+.main-image {
+    width: 320px;
+    height: 420px;
+    object-fit: cover;
+    border-radius: 12px;
+    padding: 18px;
+    background: radial-gradient(circle at center, #f4e9ff 0%, #f6f4fb 100%);
+    box-shadow: 0 15px 35px rgba(138, 93, 255, 0.25);
+    border: 1px solid rgba(138, 93, 255, 0.08);
+    transition: all 0.3s ease;
+}
+
+.product-info {
+    flex: 1;
+    max-width: 480px;
+}
+
+.product-info h2 {
+    font-size: 1.7rem;
+    font-weight: 700;
+    color: #1c1b2a;
+    margin-bottom: 0.6rem;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 0.5rem;
+}
+
+.rating i {
+    color: #dc3545;
+}
+
+.rating span {
+    color: #666;
+}
+
+.price {
+    font-size: 1.5rem;
+    color: #00cec9;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.price s {
+    color: #888;
+    font-size: 1rem;
+}
+
+.product-description {
+    color: #444;
+    line-height: 1.6;
+    margin: 15px 0;
+}
+
+.product-page {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 5rem;
+    padding: 40px 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.add-cart-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin: 25px 0;
+}
+
+.btn-add-cart {
+    flex: 1;
+    background: #00cec9;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.heart-btn {
+    width: 45px;
+    height: 45px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.heart-btn i {
+    font-size: 20px;
+    color: #999;
+}
+
+.heart-btn:hover i {
+    color: #8A5DFF;
+}
+
+.detail-card {
+    background: #fff;
+    border: 1px solid #f0f0f0;
+    border-radius: 10px;
+    padding: 28px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+/* --- Size --- */
+.size-options {
+    margin-bottom: 25px;
+}
+
+.size-options h6 {
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.size-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.size-buttons button {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #00cec9;
+    padding: 10px 18px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: 0.3s;
+    color: #333;
+}
+
+/* --- Quantity --- */
+.quantity-section {
+    margin-bottom: 25px;
+}
+
+.quantity-section h6 {
+    font-weight: 600;
+    font-size: 1.05rem;
+    margin-bottom: 10px;
+    color: #222;
+}
+
+.quantity-wrapper {
+    display: flex;
+    align-items: center;
+    border: 1px solid #eee;
+    border-radius: 10px;
+    overflow: hidden;
+    width: 150px;
+}
+
+.quantity-wrapper button {
+    width: 45px;
+    height: 40px;
+    border: none;
+    background: #f6f4fb;
+    color: #555;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.quantity-wrapper input {
+    width: 60px;
+    text-align: center;
+    border: none;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* --- Stock & Category Row Layout --- */
+.product-meta {
+    border-top: 1px solid #eee;
+    padding-top: 18px;
+    font-size: 0.96rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.meta-row strong {
+    color: #333;
+    font-weight: 600;
+}
+
+.meta-row span {
+    color: #222;
+    font-weight: 500;
+}
+
+.stock-green {
+    color: #28a745 !important;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.stock-green i {
+    color: #28a745 !important;
+}
+</style>
+
 @endsection
 
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    $(document).on('click', '.btn-number', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
+$(document).on('click', '.btn-number', function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
 
-        var fieldName = $(this).attr('data-field');
-        var type = $(this).attr('data-type');
-        var input = $("input[name='" + fieldName + "']");
-        var currentVal = parseFloat(input.val()) || 0;
-        var step = 49;
+    var fieldName = $(this).attr('data-field');
+    var type = $(this).attr('data-type');
+    var input = $("input[name='" + fieldName + "']");
+    var currentVal = parseFloat(input.val()) || 0;
+    var step = 49;
 
-        var min = parseFloat(input.attr('data-min')) || 50;
-        var max = parseFloat(input.attr('data-max')) || 10000;
+    var min = parseFloat(input.attr('data-min')) || 50;
+    var max = parseFloat(input.attr('data-max')) || 10000;
 
-        if (type === 'minus') {
-            let newVal = currentVal - step;
-            if (newVal < min) newVal = min;
-            input.val(newVal);
-        } else if (type === 'plus') {
-            let newVal = currentVal + step;
-            if (newVal > max) newVal = max;
-            input.val(newVal);
+    if (type === 'minus') {
+        let newVal = currentVal - step;
+        if (newVal < min) newVal = min;
+        input.val(newVal);
+    } else if (type === 'plus') {
+        let newVal = currentVal + step;
+        if (newVal > max) newVal = max;
+        input.val(newVal);
+    }
+});
+
+var $topeContainer = $('.isotope-grid');
+var $filter = $('.filter-tope-group');
+
+// filter items on button click
+$filter.each(function() {
+    $filter.on('click', 'button', function() {
+        var filterValue = $(this).attr('data-filter');
+        $topeContainer.isotope({
+            filter: filterValue
+        });
+    });
+
+});
+
+$(window).on('load', function() {
+    var $grid = $topeContainer.each(function() {
+        $(this).isotope({
+            itemSelector: '.isotope-item',
+            layoutMode: 'fitRows',
+            percentPosition: true,
+            animationEngine: 'best-available',
+            masonry: {
+                columnWidth: '.isotope-item'
+            }
+        });
+    });
+});
+
+var isotopeButton = $('.filter-tope-group button');
+
+$(isotopeButton).each(function() {
+    $(this).on('click', function() {
+        for (var i = 0; i < isotopeButton.length; i++) {
+            $(isotopeButton[i]).removeClass('how-active1');
+        }
+
+        $(this).addClass('how-active1');
+    });
+});
+
+function setEqualHeight() {
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
+
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
         }
     });
 
-    var $topeContainer = $('.isotope-grid');
-    var $filter = $('.filter-tope-group');
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
 
-    // filter items on button click
-    $filter.each(function() {
-        $filter.on('click', 'button', function() {
-            var filterValue = $(this).attr('data-filter');
-            $topeContainer.isotope({
-                filter: filterValue
-            });
-        });
-
-    });
-
-    // init Isotope
-    $(window).on('load', function() {
-        var $grid = $topeContainer.each(function() {
-            $(this).isotope({
-                itemSelector: '.isotope-item',
-                layoutMode: 'fitRows',
-                percentPosition: true,
-                animationEngine: 'best-available',
-                masonry: {
-                    columnWidth: '.isotope-item'
-                }
-            });
-        });
-    });
-
-    var isotopeButton = $('.filter-tope-group button');
-
-    $(isotopeButton).each(function() {
-        $(this).on('click', function() {
-            for (var i = 0; i < isotopeButton.length; i++) {
-                $(isotopeButton[i]).removeClass('how-active1');
-            }
-
-            $(this).addClass('how-active1');
-        });
-    });
-
-    function setEqualHeight() {
-        var maxHeight = 0;
-        $('.product-card-modern').css('height', 'auto'); // reset
-
-        $('.product-card-modern').each(function() {
-            var cardHeight = $(this).outerHeight();
-            if (cardHeight > maxHeight) {
-                maxHeight = cardHeight;
-            }
-        });
-
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
-
-    // Run on page load and window resize
-    $(document).ready(setEqualHeight);
-    $(window).resize(setEqualHeight);
+// Run on page load and window resize
+$(document).ready(setEqualHeight);
+$(window).resize(setEqualHeight);
 </script>
+
+
 @endpush

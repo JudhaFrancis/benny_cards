@@ -117,6 +117,13 @@
         </a>
     </li>
 
+    <li class="nav-item">
+    <a class="nav-link" href="{{route('all.notification')}}">
+        <i class="fas fa-envelope"></i>
+        <span>Message Log</span>
+    </a>
+</li>
+
 
     <!-- Divider -->
     <!-- <hr class="sidebar-divider"> -->

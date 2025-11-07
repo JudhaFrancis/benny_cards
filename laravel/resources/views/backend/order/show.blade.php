@@ -1,130 +1,284 @@
 @extends('backend.layouts.master')
 
-@section('title','View Order')
+@section('title', 'View Order')
 
 @section('main-content')
-<div class="card shadow mb-4">
-    <div class="card-header py-3 d-flex justify-content-between align-items-center">
-        <h6 class="m-0 font-weight-bold text-primary">
-            Order Details #{{ $order->order_number }}
-        </h6>
-        <a href="{{ route('order.edit', $order->id) }}" class="btn btn-sm btn-primary">
-            <i class="fas fa-edit"></i> Edit Order
+
+<div class="container-fluid py-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="order-header">Order Details</h4>
+            <span class="order-label">#{{ $order->order_number }}</span>
+        </div>
+        <a href="{{ route('order.edit', $order->id) }}" class="btn btn-primary edit-btn">
+            <i class="fa-solid fa-pen"></i>
+            <span>Edit Order</span>
         </a>
     </div>
 
-    <div class="card-body">
+    <div class="row g-4">
 
-        {{-- ===================== ORDER INFORMATION ===================== --}}
-        <h5 class="mb-3"><strong>Order Information</strong></h5>
-        <div class="row mb-3">
-            <div class="col-md-3"><label><strong>Tracking ID:</strong></label> {{ $order->tracking_id ?? 'N/A' }}</div>
-            <div class="col-md-3"><label><strong>Payment Status:</strong></label> {{ ucfirst($order->payment_status) }}
-            </div>
-            <div class="col-md-3"><label><strong>Order Status:</strong></label> {{ ucfirst($order->status) }}</div>
-            <div class="col-md-3"><label><strong>Order Date:</strong></label>
-                {{ \Carbon\Carbon::parse($order->order_date)->format('d M Y') }}</div>
-        </div>
+        <!-- LEFT COLUMN -->
+        <div class="col-lg-8">
 
-        <hr>
-
-        {{-- ===================== ORDER ITEMS ===================== --}}
-        <h5 class="mb-3"><strong>Order Items</strong></h5>
-        @foreach ($order->items as $key => $item)
-        <div class="card mb-3 p-3">
-            <div class="row align-items-center">
-                <div class="col-md-2 text-center">
-                    @if(!empty($item->product->photo))
-                    <img src="{{ asset($item->product->photo) }}" alt="{{ $item->product->title }}"
-                        class="img-fluid rounded shadow-sm" style="max-height: 80px; object-fit: cover;">
-                    @else
-                    <img src="{{ asset('backend/img/placeholder.png') }}" alt="No Image"
-                        class="img-fluid rounded shadow-sm" style="max-height: 80px;">
-                    @endif
-                </div>
-
-                <div class="col-md-3">
-                    <label><strong>Product:</strong></label>
-                    <div style="white-space: normal; word-wrap: break-word;">
-                        {{ $item->product->title ?? 'Unknown Product' }}
+            <!-- ORDER INFO -->
+            <div class="order-section">
+                <h6 class="order-title">Order Information</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <span class="order-label">Tracking ID</span>
+                        <span class="order-value">{{ $order->tracking_id ?? 'N/A' }}</span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="order-label">Payment Status</span>
+                        <span class="order-badge 
+                            @if($order->payment_status=='paid') badge-paid 
+                            @elseif($order->payment_status=='unpaid') badge-unpaid 
+                            @else badge-pending @endif">
+                            {{ ucfirst($order->payment_status) }}
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="order-label">Order Status</span>
+                        <span class="order-badge 
+                            @if($order->status=='pending') badge-pending 
+                            @elseif($order->status=='completed') badge-paid 
+                            @else badge-unpaid @endif">
+                            {{ ucfirst($order->status) }}
+                        </span>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="order-label">Order Date</span>
+                        <span
+                            class="order-value">{{ \Carbon\Carbon::parse($order->order_date)->format('d M Y') }}</span>
                     </div>
                 </div>
-
-                <div class="col-md-2">
-                    <label><strong>Quantity:</strong></label>
-                    <div>{{ $item->quantity }}</div>
-                </div>
-
-                <div class="col-md-2">
-                    <label><strong>Price:</strong></label>
-                    <div>₹{{ number_format($item->final_amount, 2) }}</div>
-                </div>
-
-                <div class="col-md-2">
-                    <label><strong>Total:</strong></label>
-                    <div>₹{{ number_format($item->total_amount, 2) }}</div>
-                </div>
             </div>
+
+            <!-- ORDER ITEMS -->
+            <div class="order-section">
+                <h6 class="order-title">Order Items</h6>
+                @php $subTotal = 0; @endphp
+                @foreach ($order->items as $item)
+                @php
+                $itemTotal = $item->final_amount * $item->quantity;
+                $subTotal += $itemTotal;
+                @endphp
+                <div class="order-item">
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <img src="{{ !empty($item->product->photo) ? asset($item->product->photo) : asset('backend/img/placeholder.png') }}"
+                            alt="{{ $item->product->title }}">
+                        <div>
+                            <div class="order-item-title">{{ $item->product->title ?? 'Unknown Product' }}</div>
+                        </div>
+                    </div>
+                    <div class="order-item-details text-end">
+                        <span class="item-qty">{{ $item->quantity }}</span>
+                        <span class="item-price">₹{{ number_format($item->final_amount, 2) }}</span>
+                        <span class="item-total fw-semibold">₹{{ number_format($itemTotal, 2) }}</span>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
         </div>
-        @endforeach
 
-        <hr>
+        <!-- RIGHT COLUMN -->
+        <div class="col-lg-4">
 
-        {{-- ===================== CUSTOMER & SHIPPING DETAILS ===================== --}}
-        <h5 class="mb-3"><strong>Customer Details</strong></h5>
-
-        <div class="card p-3 mb-3" style="background-color:#f9f9f9;">
-            <div class="row mb-3">
-                <div class="col-md-4"><label><strong>Name:</strong></label> {{ $order->name }}</div>
-                <div class="col-md-4"><label><strong>Email:</strong></label> {{ $order->email }}</div>
-                <div class="col-md-4"><label><strong>Phone:</strong></label> {{ $order->phone }}</div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-6 mb-2">
-                    <label class="text-muted d-block"><strong>Address Line 1</strong></label>
-                    <span class="h6 text-dark">{{ $order->address_1 }}</span>
+            <!-- CUSTOMER DETAILS -->
+            <div class="order-section">
+                <h6 class="order-title">Customer Details</h6>
+                <div class="mb-2">
+                    <span class="order-label">Name</span>
+                    <span class="order-value">{{ $order->name }}</span>
                 </div>
-
-                @if(!empty($order->address_2))
-                <div class="col-md-6 mb-2">
-                    <label class="text-muted d-block"><strong>Address Line 2</strong></label>
-                    <span class="h6 text-dark">{{ $order->address_2 }}</span>
+                <div class="mb-2">
+                    <span class="order-label">Contact</span>
+                    <div class="order-value">{{ $order->email }}<br>{{ $order->phone }}</div>
                 </div>
-                @endif
-            </div>
-
-            <div class="row mb-3">
-                @if(!empty($order->country))
-                <div class="col-md-4">
-                    <label><strong>Country:</strong></label> {{ $order->country }}
+                <div class="mb-2">
+                    <span class="order-label">Shipping Address</span>
+                    <div class="order-value">
+                        {{ $order->address_1 }}
+                        @if($order->address_2), {{ $order->address_2 }} @endif<br>
+                        {{ $order->country ?? 'IND' }}, {{ $order->post_code }}
+                    </div>
                 </div>
-                @endif
-
-                @if(!empty($order->post_code))
-                <div class="col-md-4">
-                    <label><strong>Postal Code:</strong></label> {{ $order->post_code }}
-                </div>
-                @endif
                 @if(!empty($order->remarks))
-                <div class="col-md-4">
-                    <label><strong>Remarks:</strong></label> {{ $order->remarks }}
+                <div class="mb-0">
+                    <span class="order-label">Remarks</span>
+                    <div class="order-value">{{ $order->remarks }}</div>
                 </div>
                 @endif
             </div>
-        </div>
 
-        <hr>
-
-        {{-- ===================== AMOUNT SUMMARY ===================== --}}
-        <h5 class="mb-3"><strong>Order Summary</strong></h5>
-        <div class="card p-3" style="background-color:#f9f9f9;">
-            <div class="row">
-                <div class="col-md-12 text-end">
-                    <h5 class="m-0">
-                        <strong>Total Amount:</strong> ₹{{ number_format($order->net_amount, 2) }}
-                    </h5>
+            <!-- ORDER SUMMARY -->
+            @php
+            $tax = $order->tax ?? 7;
+            $total = $subTotal + $tax;
+            @endphp
+            <div class="order-section order-summary">
+                <h6 class="order-title">Order Summary</h6>
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Subtotal</span>
+                    <span>₹{{ number_format($subTotal, 2) }}</span>
+                </div>
+                <div class="d-flex justify-content-between mb-1">
+                    <span>Tax</span>
+                    <span>₹{{ number_format($tax, 2) }}</span>
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <strong>Total Amount</strong>
+                    <strong>₹{{ number_format($total, 2) }}</strong>
                 </div>
             </div>
+
         </div>
-        @endsection
+    </div>
+</div>
+
+<style>
+/* Header */
+.order-header {
+    font-weight: 700;
+    font-size: 22px;
+    color: #111827;
+    margin-bottom: 0.25rem;
+}
+
+.edit-btn {
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 6px 13px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.edit-btn i {
+    font-size: 10px;
+}
+
+/* Order Section */
+.order-section {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.order-title {
+    font-weight: 600;
+    font-size: 16px;
+    color: #111827;
+    margin-bottom: 15px;
+}
+
+.order-label {
+    font-size: 13px;
+    color: #6b7280;
+    display: block;
+}
+
+.order-value {
+    font-weight: 500;
+    color: #111827;
+    font-size: 14px;
+    display: block;
+}
+
+.order-label,
+.order-value {
+    display: block;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Badges */
+.order-badge {
+    padding: 0px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.badge-unpaid {
+    background: #fff0f0;
+    color: #d32f2f;
+}
+
+.badge-paid {
+    background: #f0fff4;
+    color: #2e7d32;
+}
+
+.badge-pending {
+    background: #fffdf0;
+    color: #f57c00;
+}
+
+/* Order Items */
+.order-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+.order-item:last-child {
+    border-bottom: none;
+}
+
+.order-item img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-right: 12px;
+}
+
+.order-item-title {
+    font-size: 14px;
+    color: #111827;
+    font-weight: 500;
+    max-width: 200px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.order-item-details {
+    display: grid;
+    grid-template-columns: 60px 80px 100px;
+    text-align: right;
+    gap: 90px;
+}
+
+.item-qty,
+.item-price,
+.item-total {
+    font-size: 14px;
+    color: #111827;
+}
+
+/* Order Summary */
+.order-summary span,
+.order-summary strong {
+    font-size: 14px;
+    color: #111827;
+}
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+@endsection
