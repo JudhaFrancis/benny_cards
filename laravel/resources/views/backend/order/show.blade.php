@@ -77,7 +77,7 @@
                     <div class="order-item-details text-end">
                         <span class="item-qty">{{ $item->quantity }}</span>
                         <span class="item-price">₹{{ number_format($item->final_amount, 2) }}</span>
-                        <span class="item-total fw-semibold">₹{{ number_format($itemTotal, 2) }}</span>
+                        <span class="item-total" style="color:#333">₹{{ number_format($itemTotal, 2) }}</span>
                     </div>
                 </div>
                 @endforeach
@@ -131,7 +131,7 @@
                     <span>₹{{ number_format($tax, 2) }}</span>
                 </div>
                 <hr>
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between order_total_amount">
                     <strong>Total Amount</strong>
                     <strong>₹{{ number_format($total, 2) }}</strong>
                 </div>
@@ -142,141 +142,151 @@
 </div>
 
 <style>
-/* Header */
-.order-header {
-    font-weight: 700;
-    font-size: 22px;
-    color: #111827;
-    margin-bottom: 0.25rem;
-}
+    /* Header */
+    .order-header {
+        font-weight: 800;
+        font-size: 21px;
+        color: #111827;
+        margin-bottom: 0.25rem;
+    }
 
-.edit-btn {
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-    padding: 6px 13px;
-    display: flex;
-    align-items: center;
-    gap: 4px;
-}
+    .edit-btn {
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 13px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
 
-.edit-btn i {
-    font-size: 10px;
-}
+    .edit-btn i {
+        font-size: 10px;
+    }
 
-/* Order Section */
-.order-section {
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-}
+    /* Order Section */
+    .order-section {
+        background: #fff;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    }
 
-.order-title {
-    font-weight: 600;
-    font-size: 16px;
-    color: #111827;
-    margin-bottom: 15px;
-}
+    .order-title {
+        font-weight: 700;
+        font-size: 17px;
+        color: #111827;
+        margin-bottom: 15px;
+    }
 
-.order-label {
-    font-size: 13px;
-    color: #6b7280;
-    display: block;
-}
+    .order-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #8c8c8c;
+        display: block;
+    }
 
-.order-value {
-    font-weight: 500;
-    color: #111827;
-    font-size: 14px;
-    display: block;
-}
+    .order-value {
+        font-weight: 500;
+        color: #111827;
+        font-size: 14px;
+        display: block;
+    }
 
-.order-label,
-.order-value {
-    display: block;
-    margin: 0;
-    line-height: 1.4;
-}
+    .order-label,
+    .order-value {
+        display: block;
+        margin: 0;
+        line-height: 1.5;
+        font-weight: 600;
+    }
 
-/* Badges */
-.order-badge {
-    padding: 0px 9px;
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 600;
-    display: inline-block;
-    text-align: center;
-    vertical-align: middle;
-}
+    /* Badges */
+    .order-badge {
+        padding: 0px 9px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 600;
+        display: inline-block;
+        text-align: center;
+        vertical-align: middle;
+    }
 
-.badge-unpaid {
-    background: #fff0f0;
-    color: #d32f2f;
-}
+    .badge-unpaid {
+        background: #fff0f0;
+        color: #d32f2f;
+    }
 
-.badge-paid {
-    background: #f0fff4;
-    color: #2e7d32;
-}
+    .badge-paid {
+        background: #f0fff4;
+        color: #2e7d32;
+    }
 
-.badge-pending {
-    background: #fffdf0;
-    color: #f57c00;
-}
+    .badge-pending {
+        background: #fffdf0;
+        color: #f57c00;
+    }
 
-/* Order Items */
-.order-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 0;
-    border-bottom: 1px solid #f3f4f6;
-}
+    /* Order Items */
+    .order-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
 
-.order-item:last-child {
-    border-bottom: none;
-}
+    .order-item:last-child {
+        border-bottom: none;
+    }
 
-.order-item img {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-right: 12px;
-}
+    .order-item img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-right: 12px;
+    }
 
-.order-item-title {
-    font-size: 14px;
-    color: #111827;
-    font-weight: 500;
-    max-width: 200px;
-    white-space: normal;
-    word-break: break-word;
-}
+    .order-item-title {
+        font-size: 16px;
+        color: #111827;
+        font-weight: 600;
+        max-width: 200px;
+        white-space: normal;
+        word-break: break-word;
+    }
 
-.order-item-details {
-    display: grid;
-    grid-template-columns: 60px 80px 100px;
-    text-align: right;
-    gap: 90px;
-}
+    .order-item-details {
+        display: grid;
+        grid-template-columns: 60px 80px 100px;
+        text-align: right;
+        gap: 90px;
+    }
 
-.item-qty,
-.item-price,
-.item-total {
-    font-size: 14px;
-    color: #111827;
-}
+    .item-qty,
+    .item-price,
+    .item-total {
+        font-size: 14px;
+        color: #111827;
+        font-weight: 600;
+        color: #8c8c8c;
+    }
 
-/* Order Summary */
-.order-summary span,
-.order-summary strong {
-    font-size: 14px;
-    color: #111827;
-}
+    /* Order Summary */
+    .order-summary span {
+        font-size: 14px;
+        font-weight: 600;
+        color: #8c8c8c; 
+    }
+
+    .order_total_amount {
+        font-size: 16px;
+        color: #333;
+        font-weight: 500;
+    }
 </style>
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
