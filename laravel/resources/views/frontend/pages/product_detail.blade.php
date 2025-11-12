@@ -50,71 +50,65 @@
 
 <!-- End Breadcrumbs -->
 
-<!-- ===== PRODUCT DETAIL ===== -->
-<div class="container">
-    <div class="product-page">
+<!-- Shop Single -->
+<div class="product-page-wrapper">
+    <div class="product-page-container">
+
         <!-- LEFT -->
-        <div class="product-gallery">
-            <div style="display:flex;align-items:flex-start;">
-                @if($product_detail->images && count($product_detail->images) > 0)
-                <div class="thumbnail-list">
-                    @foreach($product_detail->images as $img)
-                    <img src="{{ $img->image_path }}" alt="thumb"
-                        onclick="document.getElementById('mainImage').src='{{ $img->image_path }}'">
-                    @endforeach
-                </div>
-                @endif
-                <img id="mainImage" src="{{ $product_detail->photo }}" alt="main image" class="main-image">
+        <div class="product-left">
+            <div class="product-thumbnails">
+                @foreach($product_detail->images as $img)
+                <img src="{{ $img->image_path }}" alt="thumb"
+                    onclick="document.getElementById('mainImage').src='{{ $img->image_path }}'">
+                @endforeach
+            </div>
+            <div class="product-main-image">
+                <img id="mainImage" src="{{ $product_detail->photo }}" alt="{{ $product_detail->title }}">
             </div>
         </div>
 
         <!-- RIGHT -->
-        <div class="product-info">
-            <h2>{{ $product_detail->title }}</h2>
+        <div class="product-right">
+            <h2 class="product-heading">{{ $product_detail->title }}</h2>
 
-            <div class="rating">
-                @php $rate=ceil($product_detail->getReview->avg('rate')) @endphp
-                @for($i=1;$i<=5;$i++) @if($rate>=$i)
-                    <i class="fa fa-star"></i>
-                    @else
-                    <i class="fa fa-star-o"></i>
-                    @endif
+            <div class="product-rating">
+                @php $rate = ceil($product_detail->getReview->avg('rate')); @endphp
+                @for($i=1;$i<=5;$i++) <i class="fa {{ $rate >= $i ? 'fa-star' : 'fa-star-o' }}"></i>
                     @endfor
                     <span>({{ $product_detail['getReview']->count() }} Reviews)</span>
             </div>
 
             @php
-            $after_discount = ($product_detail->price - (($product_detail->price * $product_detail->discount) / 100));
+            $after_discount = $product_detail->price - (($product_detail->price * $product_detail->discount) / 100);
             @endphp
-            <p class="price">
+            <div class="product-prices">
                 ₹{{ number_format($after_discount, 2) }}
                 @if($product_detail->discount > 0)
                 <s>₹{{ number_format($product_detail->price, 2) }}</s>
                 @endif
-            </p>
-
-            <p class="product-description">{!! $product_detail->summary !!}</p>
-
-            <!-- ===== Add to Cart (Outside Card) ===== -->
-            <div class="add-cart-bar">
-                <form action="{{ route('single-add-to-cart') }}" method="POST" style="display:flex;flex:1;">
-                    @csrf
-                    <input type="hidden" name="slug" value="{{ $product_detail->slug }}">
-                    <button type="submit" class="btn-add-cart">
-                        <i class="fa fa-shopping-cart"></i> Add to Cart
-                    </button>
-                </form>
-                <div class="heart-btn">
-                    <i class="fa fa-heart-o"></i>
-                </div>
             </div>
 
-            <!-- ===== White Card (Below) ===== -->
-            <div class="detail-card">
+            <p class="product-summary">{!! $product_detail->summary !!}</p>
+
+            <form action="{{ route('single-add-to-cart') }}" method="POST" class="add-cart-form">
+                @csrf
+                <input type="hidden" name="slug" value="{{ $product_detail->slug }}">
+                <input type="hidden" name="quant[1]" id="quant_value" value="50">
+
+                <button type="submit" class="add-to-cart-btn">
+                    <i class="fa fa-shopping-cart"></i> Add to Cart
+                </button>
+                <a href="{{ route('add-to-wishlist', $product_detail->slug) }}" class="wishlist-btn">
+                    <i class="fa fa-heart-o"></i>
+                </a>
+            </form>
+
+
+            <div class="product-info-card">
                 @if($product_detail->size)
-                <div class="size-options">
+                <div class="product-size">
                     <h6>Size</h6>
-                    <div class="size-buttons">
+                    <div class="size-options">
                         @php $sizes = explode(',', $product_detail->size); @endphp
                         @foreach($sizes as $size)
                         <button type="button" class="size-btn">{{ $size }}</button>
@@ -123,35 +117,172 @@
                 </div>
                 @endif
 
-                <div class="quantity-section">
+                <div class="product-quantity">
                     <h6>Quantity</h6>
-                    <div class="quantity-wrapper">
-                        <button type="button" class="qty-minus">-</button>
-                        <input type="number" name="quant[1]" id="quantity" value="1" min="1">
-                        <button type="button" class="qty-plus">+</button>
+                    <div class="qty-box">
+                        <button type="button" onclick="changeQty(-1)">-</button>
+                        <input type="number" id="quantity" value="50" min="50">
+                        <button type="button" onclick="changeQty(1)">+</button>
                     </div>
                 </div>
 
-                <div class="product-meta">
-                    <div class="meta-row">
-                        <strong>Stock Status:</strong>
-                        @if($product_detail->stock > 0)
-                        <span class="stock-green"><i class="fa fa-check-circle"></i> In Stock
-                            ({{ $product_detail->stock }})</span>
-                        @else
-                        <span style="color:red;">Out of Stock</span>
-                        @endif
-                    </div>
-                    <div class="meta-row">
-                        <strong>Category:</strong>
-                        <span>{{ $product_detail->cat_info['title'] }}</span>
-                    </div>
+                <div class="meta-row">
+                    <span class="meta-label">Stock Status:</span>
+                    <span class="meta-value in-stock"><i class="fa fa-check-circle"></i> In Stock
+                        ({{ $product_detail->stock }})</span>
+                </div>
+
+                <div class="meta-row">
+                    <span class="meta-label">Category:</span>
+                    <span class="meta-value category-name">
+                        <a href="{{ route('product-cat', $product_detail->cat_info['slug']) }}">
+                            {{ $product_detail->cat_info['title'] }}
+                        </a>
+                    </span>
                 </div>
 
             </div>
         </div>
     </div>
+
+    <!-- Description / Customer Reviews -->
+    <div class="product-tabs-clean">
+        <div class="tab-header-clean">
+            <button class="tab-link-clean active" onclick="openTabClean(event,'desc')">Description</button>
+            <button class="tab-link-clean" onclick="openTabClean(event,'reviews')">Customer Reviews</button>
+        </div>
+
+        <div class="tab-body-clean">
+            <div id="desc" class="tab-content-clean active">
+                {!! $product_detail->description !!}
+            </div>
+
+            <div id="reviews" class="tab-content-clean">
+                <div class="reviews-container">
+                    <p class="reviews-subtitle">See what others are saying about this card.</p>
+
+                    <div class="reviews-summary">
+                        <div class="rating-left">
+                            <h1>4.8</h1>
+                            <div class="stars">
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star-half-o"></i>
+                            </div>
+                            <p>Based on 125 reviews</p>
+                        </div>
+
+                        <div class="rating-bars">
+                            <div class="bar-row"><span>5</span>
+                                <div class="bar">
+                                    <div class="fill" style="width:85%"></div>
+                                </div><span>85%</span>
+                            </div>
+                            <div class="bar-row"><span>4</span>
+                                <div class="bar">
+                                    <div class="fill" style="width:10%"></div>
+                                </div><span>10%</span>
+                            </div>
+                            <div class="bar-row"><span>3</span>
+                                <div class="bar">
+                                    <div class="fill" style="width:3%"></div>
+                                </div><span>3%</span>
+                            </div>
+                            <div class="bar-row"><span>2</span>
+                                <div class="bar">
+                                    <div class="fill" style="width:1%"></div>
+                                </div><span>1%</span>
+                            </div>
+                            <div class="bar-row"><span>1</span>
+                                <div class="bar">
+                                    <div class="fill" style="width:1%"></div>
+                                </div><span>1%</span>
+                            </div>
+                        </div>
+
+                        <button class="btn-write-review"><i class="fa fa-pencil"></i> Write a Review</button>
+                    </div>
+
+                    <!-- Reviews Item -->
+
+
+                    <div class="review-item">
+                        <div class="review-left">
+                            <div class="review-user">
+                                <img src="https://i.pravatar.cc/40" alt="User" class="review-avatar">
+                                <div>
+                                    <strong>Jessica L.</strong>
+                                    <p class="review-date">October 26, 2023</p>
+                                </div>
+                            </div>
+                            <h4 class="review-title">Absolutely beautiful card!</h4>
+                            <p class="review-text">
+                                The paper quality is fantastic and the design is even more vibrant in person.
+                                It was perfect for my friend's birthday and she loved it. Highly recommend!
+                            </p>
+                        </div>
+                        <div class="review-right">
+                            <div class="review-rating">★★★★★</div>
+                            <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=600"
+                                alt="Review Image" class="review-image">
+                        </div>
+                    </div>
+
+                    <!-- Review Item 2 -->
+                    <div class="review-item">
+                        <div class="review-left">
+                            <div class="review-user">
+                                <img src="https://i.pravatar.cc/41" alt="User" class="review-avatar">
+                                <div>
+                                    <strong>Rahul K.</strong>
+                                    <p class="review-date">November 8, 2023</p>
+                                </div>
+                            </div>
+                            <h4 class="review-title">Loved the quality and design!</h4>
+                            <p class="review-text">
+                                It’s really elegant and classy. The print is crisp and the colors are so rich.
+                                The envelope was also very premium. Perfect for gifting!
+                            </p>
+                        </div>
+                        <div class="review-right">
+                            <div class="review-rating">★★★★☆</div>
+                            <img src="https://images.unsplash.com/photo-1569867037406-6b9ad775b22e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                                alt="Review Image" class="review-image">
+                        </div>
+                    </div>
+
+                    <!-- Review Item 3 -->
+                    <div class="review-item">
+                        <div class="review-left">
+                            <div class="review-user">
+                                <img src="https://i.pravatar.cc/42" alt="User" class="review-avatar">
+                                <div>
+                                    <strong>Meena P.</strong>
+                                    <p class="review-date">October 15, 2023</p>
+                                </div>
+                            </div>
+                            <h4 class="review-title">Best card I’ve bought this year!</h4>
+                            <p class="review-text">
+                                This card looks even better than in the photos. The design feels luxurious,
+                                and delivery was quick. I’ll definitely order more soon!
+                            </p>
+                        </div>
+                        <div class="review-right">
+                            <div class="review-rating">★★★★★</div>
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=600"
+                                alt="Review Image" class="review-image">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+
 <!--/ End Shop Single -->
 
 <!-- Start Most Popular -->
@@ -216,358 +347,38 @@
 </div>
 <!-- End Most Popular Area -->
 
-<style>
-.product-page {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 8rem;
-    padding: 40px 20px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-/* --- Left Side --- */
-.product-gallery {
-    flex: 0 0 380px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.thumbnail-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    align-items: center;
-}
-
-.thumbnail-list img {
-    width: 60px;
-    height: 75px;
-    border-radius: 6px;
-    object-fit: cover;
-    cursor: pointer;
-    border: 2px solid transparent;
-    transition: 0.3s;
-}
-
-.thumbnail-list img:hover {
-    border-color: #8A5DFF;
-}
-
-.main-image {
-    width: 320px;
-    height: 420px;
-    object-fit: cover;
-    border-radius: 12px;
-    padding: 18px;
-    background: radial-gradient(circle at center, #f4e9ff 0%, #f6f4fb 100%);
-    box-shadow: 0 15px 35px rgba(138, 93, 255, 0.25);
-    border: 1px solid rgba(138, 93, 255, 0.08);
-    transition: all 0.3s ease;
-}
-
-.product-info {
-    flex: 1;
-    max-width: 480px;
-}
-
-.product-info h2 {
-    font-size: 1.7rem;
-    font-weight: 700;
-    color: #1c1b2a;
-    margin-bottom: 0.6rem;
-}
-
-.rating {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 0.5rem;
-}
-
-.rating i {
-    color: #dc3545;
-}
-
-.rating span {
-    color: #666;
-}
-
-.price {
-    font-size: 1.5rem;
-    color: #00cec9;
-    font-weight: 700;
-    margin: 10px 0;
-}
-
-.price s {
-    color: #888;
-    font-size: 1rem;
-}
-
-.product-description {
-    color: #444;
-    line-height: 1.6;
-    margin: 15px 0;
-}
-
-.product-page {
-    display: flex;
-    justify-content: flex-start;
-    align-items: flex-start;
-    gap: 5rem;
-    padding: 40px 20px;
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.add-cart-bar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin: 25px 0;
-}
-
-.btn-add-cart {
-    flex: 1;
-    background: #00cec9;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 8px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.heart-btn {
-    width: 45px;
-    height: 45px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    background: #fff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.heart-btn i {
-    font-size: 20px;
-    color: #999;
-}
-
-.heart-btn:hover i {
-    color: #8A5DFF;
-}
-
-.detail-card {
-    background: #fff;
-    border: 1px solid #f0f0f0;
-    border-radius: 10px;
-    padding: 28px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
-}
-
-/* --- Size --- */
-.size-options {
-    margin-bottom: 25px;
-}
-
-.size-options h6 {
-    font-weight: 600;
-    font-size: 1.05rem;
-    margin-bottom: 10px;
-    color: #222;
-}
-
-.size-buttons {
-    display: flex;
-    gap: 10px;
-}
-
-.size-buttons button {
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: #00cec9;
-    padding: 10px 18px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    cursor: pointer;
-    transition: 0.3s;
-    color: #333;
-}
-
-/* --- Quantity --- */
-.quantity-section {
-    margin-bottom: 25px;
-}
-
-.quantity-section h6 {
-    font-weight: 600;
-    font-size: 1.05rem;
-    margin-bottom: 10px;
-    color: #222;
-}
-
-.quantity-wrapper {
-    display: flex;
-    align-items: center;
-    border: 1px solid #eee;
-    border-radius: 10px;
-    overflow: hidden;
-    width: 150px;
-}
-
-.quantity-wrapper button {
-    width: 45px;
-    height: 40px;
-    border: none;
-    background: #f6f4fb;
-    color: #555;
-    font-size: 18px;
-    cursor: pointer;
-}
-
-.quantity-wrapper input {
-    width: 60px;
-    text-align: center;
-    border: none;
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-/* --- Stock & Category Row Layout --- */
-.product-meta {
-    border-top: 1px solid #eee;
-    padding-top: 18px;
-    font-size: 0.96rem;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.meta-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.meta-row strong {
-    color: #333;
-    font-weight: 600;
-}
-
-.meta-row span {
-    color: #222;
-    font-weight: 500;
-}
-
-.stock-green {
-    color: #28a745 !important;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 5px;
-}
-
-.stock-green i {
-    color: #28a745 !important;
-}
-</style>
-
 @endsection
-
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-$(document).on('click', '.btn-number', function(e) {
-    e.preventDefault();
-    e.stopImmediatePropagation();
+function changeQty(direction) {
+    const qtyInput = document.getElementById('quantity');
+    const hiddenInput = document.getElementById('quant_value');
+    let currentVal = parseInt(qtyInput.value) || 0;
+    const min = parseInt(qtyInput.getAttribute('min')) || 50;
+    const max = 10000;
+    const step = 50;
 
-    var fieldName = $(this).attr('data-field');
-    var type = $(this).attr('data-type');
-    var input = $("input[name='" + fieldName + "']");
-    var currentVal = parseFloat(input.val()) || 0;
-    var step = 49;
+    if (direction === 1) currentVal = Math.min(max, currentVal + step);
+    else currentVal = Math.max(min, currentVal - step);
 
-    var min = parseFloat(input.attr('data-min')) || 50;
-    var max = parseFloat(input.attr('data-max')) || 10000;
-
-    if (type === 'minus') {
-        let newVal = currentVal - step;
-        if (newVal < min) newVal = min;
-        input.val(newVal);
-    } else if (type === 'plus') {
-        let newVal = currentVal + step;
-        if (newVal > max) newVal = max;
-        input.val(newVal);
-    }
-});
-
-var $topeContainer = $('.isotope-grid');
-var $filter = $('.filter-tope-group');
-
-// filter items on button click
-$filter.each(function() {
-    $filter.on('click', 'button', function() {
-        var filterValue = $(this).attr('data-filter');
-        $topeContainer.isotope({
-            filter: filterValue
-        });
-    });
-
-});
-
-$(window).on('load', function() {
-    var $grid = $topeContainer.each(function() {
-        $(this).isotope({
-            itemSelector: '.isotope-item',
-            layoutMode: 'fitRows',
-            percentPosition: true,
-            animationEngine: 'best-available',
-            masonry: {
-                columnWidth: '.isotope-item'
-            }
-        });
-    });
-});
-
-var isotopeButton = $('.filter-tope-group button');
-
-$(isotopeButton).each(function() {
-    $(this).on('click', function() {
-        for (var i = 0; i < isotopeButton.length; i++) {
-            $(isotopeButton[i]).removeClass('how-active1');
-        }
-
-        $(this).addClass('how-active1');
-    });
-});
-
-function setEqualHeight() {
-    var maxHeight = 0;
-    $('.product-card-modern').css('height', 'auto'); // reset
-
-    $('.product-card-modern').each(function() {
-        var cardHeight = $(this).outerHeight();
-        if (cardHeight > maxHeight) {
-            maxHeight = cardHeight;
-        }
-    });
-
-    $('.product-card-modern').css('height', maxHeight + 'px');
+    qtyInput.value = currentVal;
+    hiddenInput.value = currentVal;
 }
 
-// Run on page load and window resize
-$(document).ready(setEqualHeight);
-$(window).resize(setEqualHeight);
+function openTabClean(e, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content-clean");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+    }
+    tablinks = document.getElementsByClassName("tab-link-clean");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+    }
+    document.getElementById(tabName).classList.add("active");
+    e.currentTarget.classList.add("active");
+}
 </script>
-
 
 @endpush
