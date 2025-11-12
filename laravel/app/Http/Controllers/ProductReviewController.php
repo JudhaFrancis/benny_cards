@@ -41,17 +41,31 @@ class ProductReviewController extends Controller
     public function store(Request $request)
     {
         $this->validate($request,[
-            'rate'=>'required|numeric|min:1'
+                    'reviewer_name' => 'required|string|max:255',
+                    'title' => 'required|string|max:255',
+                    'description' => 'required|string',
+                    'rating' => 'required|numeric|min:1|max:5',
+                    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $product_info=Product::getProductBySlug($request->slug);
         //  return $product_info;
         // return $request->all();
-        $data=$request->all();
+        $data = $request->only(['reviewer_name', 'title', 'description', 'rating']);
         $data['product_id']=$product_info->id;
         $data['user_id']=$request->user()->id;
         $data['status']='active';
         // dd($data);
+
+         if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images/reviews'), $fileName);
+        $data['image'] = 'images/reviews/' . $fileName;
+    }
+
         $status=ProductReview::create($data);
+
+        
 
         $user=User::where('role','admin')->get();
         $details=[
@@ -59,7 +73,7 @@ class ProductReviewController extends Controller
             'actionURL'=>route('product-detail',$product_info->slug),
             'fas'=>'fa-star'
         ];
-        Notification::send($user,new StatusNotification($details));
+        // Notification::send($user,new StatusNotification($details));
         if($status){
             request()->session()->flash('success','Thank you for your feedback');
         }
@@ -67,6 +81,8 @@ class ProductReviewController extends Controller
             request()->session()->flash('error','Something went wrong! Please try again!!');
         }
         return redirect()->back();
+
+        
     }
 
     /**
@@ -102,13 +118,34 @@ class ProductReviewController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        $this->validate($request, [
+        'reviewer_name' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'rating' => 'required|numeric|min:1|max:5',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+    ]);
         $review=ProductReview::find($id);
-        if($review){
+        if(!$review) {
+        request()->session()->flash('error', 'Review not found!');
+        return redirect()->route('review.index');
+        }
+
+            $data = $request->only(['reviewer_name', 'title', 'description', 'rating']);
+
+    if ($request->hasFile('image')) {
+        $file = $request->file('image');
+        $fileName = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('images/reviews'), $fileName);
+        $data['image'] = 'images/reviews/' . $fileName;
+    }
+
             // $product_info=Product::getProductBySlug($request->slug);
             //  return $product_info;
             // return $request->all();
-            $data=$request->all();
-            $status=$review->fill($data)->update();
+            // $data=$request->all();
+            // $status=$review->fill($data)->update();
 
             // $user=User::where('role','admin')->get();
             // return $user;
@@ -118,16 +155,16 @@ class ProductReviewController extends Controller
             //     'fas'=>'fa-star'
             // ];
             // Notification::send($user,new StatusNotification($details));
+
+    $status = $review->update($data);
+
             if($status){
                 request()->session()->flash('success','Review Successfully updated');
             }
             else{
                 request()->session()->flash('error','Something went wrong! Please try again!!');
             }
-        }
-        else{
-            request()->session()->flash('error','Review not found!!');
-        }
+        
 
         return redirect()->route('review.index');
     }

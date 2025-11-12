@@ -157,7 +157,7 @@
     padding: 6px 13px;
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
 }
 
 .edit-btn i {
