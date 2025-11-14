@@ -14,7 +14,7 @@ class CreateOrdersTable extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-             $table->id();
+            $table->id();
             $table->string('order_number')->unique(); // Auto generate in model or observer
             $table->string('tracking_id')->unique();  // Auto generate
             $table->dateTime('order_date')->nullable();
@@ -40,7 +40,6 @@ class CreateOrdersTable extends Migration
             $table->text('remarks')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
 
     }

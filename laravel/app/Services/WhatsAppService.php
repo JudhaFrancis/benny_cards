@@ -87,9 +87,9 @@ class WhatsAppService
      */
     public function sendWhatsAppMessage($mobileNo, $message, $type = 'TEXT', $file = '', $templateId = ''): array
     {
-        // if (config('app.env') !== 'production') {
-        //     $mobileNo = config('services.whatsapp.test_number', '919790124351');
-        // }
+        if (config('app.env') !== 'production') {
+            $mobileNo = config('services.whatsapp.test_number', '919790124351');
+        }
 
         $payload = [
             'appkey'  => config('services.whatsapp.appkey'),

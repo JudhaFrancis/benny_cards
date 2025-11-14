@@ -10,6 +10,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OrderItemController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\CouponController;
@@ -170,6 +171,12 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 
     // Order
     Route::resource('/order', 'OrderController');
+    Route::get('/products/search', [App\Http\Controllers\ProductController::class, 'search'])->name('admin.products.search');
+
+    //OrderItem
+    Route::post('/order/item/delete', [OrderItemController::class, 'destroy'])->name('order.item.delete');
+    Route::post('/order-item/add', [OrderItemController::class, 'store'])->name('order.item.add');
+
     // Shipping
     Route::resource('/shipping', 'ShippingController');
     // Coupon
