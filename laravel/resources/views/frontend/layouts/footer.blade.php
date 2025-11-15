@@ -100,7 +100,7 @@
 					</div>
 					<div class="col-lg-6 col-12">
 						<div class="right">
-							<!-- <img src="{{asset('frontend/img/payments.png')}}" alt="#"> -->
+							<img src="{{asset('frontend/img/payments.png')}}" alt="#">
 						</div>
 					</div>
 				</div>

@@ -57,8 +57,10 @@ protected $fillable = [
 
 // Order -> Order Items
 public function items(){
-    return $this->hasMany(OrderItems::class, 'orders_id', 'id');
+    return $this->hasMany(OrderItems::class, 'orders_id', 'id')
+                ->where('status', 1);
 }
+
 
 // Order -> Tracking history
 public function trackingHistory(){

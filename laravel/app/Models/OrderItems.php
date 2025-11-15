@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+
 class OrderItems extends Model
 {
     use HasFactory;
@@ -17,6 +18,8 @@ class OrderItems extends Model
         'final_amount',
         'quantity',
         'total_amount',
+        'status',
+        'deleted_at',
     ];
 
      public function order()
@@ -27,5 +30,19 @@ class OrderItems extends Model
     public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
+    }
+
+    public function scopeActive($query)
+    {
+        return $query->where('status', 1);
+    }
+
+    // Soft delete method
+    public function softDelete()
+    {
+        $this->update([
+            'status' => 0,
+            'deleted_at' => now(),
+        ]);
     }
 }

@@ -157,11 +157,10 @@ class OrderController extends Controller
         return view('backend.order.edit', compact('order'));
     }
 
-    public function update(Request $request, $id)
+     public function update(Request $request, $id)
 {
     $order = Order::findOrFail($id);
 
-    // Update order details
     $order->update([
         'tracking_id' => $request->tracking_id,
         'payment_status' => $request->payment_status,
@@ -170,34 +169,61 @@ class OrderController extends Controller
         'name' => $request->name,
         'email' => $request->email,
         'phone' => $request->phone,
-        'country' => $request->country,
-        'post_code' => $request->post_code,
         'address_1' => $request->address_1,
         'address_2' => $request->address_2,
+        'country' => $request->country,
+        'post_code' => $request->post_code,
         'remarks' => $request->remarks,
     ]);
 
-    //  Update order items
-    if ($request->has('items')) {
+    
+    //EXISTING ITEMS
+    if (!empty($request->items)) {
         foreach ($request->items as $itemId => $itemData) {
-            $orderItem = OrderItems::find($itemId);
-            if ($orderItem) {
-                $orderItem->update([
-                    'quantity' => $itemData['quantity'],
-                    'final_amount' => $itemData['final_amount'],
-                    'total_amount' => $itemData['quantity'] * $itemData['final_amount'],
+
+            $item = OrderItems::find($itemId);
+
+            if ($item) {
+                $qty = $itemData['quantity'];
+                $price = $itemData['final_amount'];
+                $item->update([
+                    'quantity' => $qty,
+                    'final_amount' => $price,
+                    'total_amount' => $qty * $price
                 ]);
             }
         }
-
-        //  Recalculate order total after item updates
-        $totalAmount = OrderItems::where('orders_id', $order->id)->sum('total_amount');
-        $order->update(['total_amount' => $totalAmount]);
     }
 
-    session()->flash('success', 'Order updated successfully.');
-    return redirect()->route('order.index');
+    //  INSERT NEW ITEMS
+    if (!empty($request->new_items)) {
+        foreach ($request->new_items as $productId => $newItem) {
+            OrderItems::create([
+                'orders_id' => $order->id,
+                'product_id' => $newItem['product_id'],
+                'quantity' => $newItem['quantity'],
+                'final_amount' => $newItem['final_amount'],
+                'total_amount' => $newItem['quantity'] * $newItem['final_amount'],
+                'net_amount' => $newItem['final_amount'],
+                'discount' => 0
+            ]);
+        }
+    }
+
+$items = OrderItems::where('orders_id', $order->id)->get();
+
+$order->items_count = $items->count();
+$order->total_quantity = $items->sum('quantity');
+$order->net_amount = $items->sum('total_amount');
+
+$order->total_amount = $order->net_amount ?? 0;  // FINAL TOTAL
+$order->save();
+
+    return back()->with('success', 'Order updated successfully!');
+
 }
+
+
 
 
     public function destroy($id)

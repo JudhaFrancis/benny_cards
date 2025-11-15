@@ -72,9 +72,9 @@ $(document).ready(function () {
   });
 
   loadFolders();
-  performLfmRequest('errors', {}, 'json')
-    .done(function (messages) { // already parsed
-      messages.forEach(function (message) {
+  performLfmRequest('errors')
+    .done(function (response) {
+      JSON.parse(response).forEach(function (message) {
         $('#alerts').append(
           $('<div>').addClass('alert alert-warning')
             .append($('<i>').addClass('fas fa-exclamation-circle'))
@@ -424,8 +424,8 @@ function createPagination(paginationSetting) {
 
 function loadItems(page) {
   loading(true);
-  performLfmRequest('jsonitems', { show_list: show_list, sort_type: sort_type, page: page || 1 }, 'json')
-    .done(function (response) {
+  performLfmRequest('jsonitems', { show_list: show_list, sort_type: sort_type, page: page || 1 }, 'html')
+    .done(function (data) {
       selected = [];
       var response = JSON.parse(data);
       var working_dir = response.working_dir;
