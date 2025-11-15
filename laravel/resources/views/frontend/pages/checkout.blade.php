@@ -212,7 +212,7 @@ li.shipping .input-group-icon {
 }
 
 .list li:hover {
-    background: #F7941D !important;
+    background: #ec1176 !important;
     color: white !important;
 }
 

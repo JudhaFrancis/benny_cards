@@ -37,7 +37,7 @@
         </div>
 
         <!-- Use the same swiper class -->
-        <div class="swiper latest-items-swiper">
+        <div class="swiper product-items-swiper">
             <div class="swiper-wrapper">
                 @php
                 $category_lists = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
@@ -191,7 +191,7 @@
         </div>
 
         <!-- Swiper Slider using same class as Trending Items -->
-        <div class="swiper latest-items-swiper">
+        <div class="swiper product-items-swiper">
             <div class="swiper-wrapper">
                 @php
                 $price_ranges = DB::table('price_ranges')->where('status','active')->get();
@@ -247,7 +247,7 @@ $trendingProducts = $product_lists->where('condition', 'trending');
         </div>
 
         <!-- Swiper Slider -->
-        <div class="swiper latest-items-swiper">
+        <div class="swiper product-items-swiper">
             <div class="swiper-wrapper">
                 @foreach($trendingProducts as $product)
                 @php
@@ -319,7 +319,7 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
         </div>
 
         <!-- Swiper Slider -->
-        <div class="swiper latest-items-swiper">
+        <div class="swiper product-items-swiper">
             <div class="swiper-wrapper">
                 @foreach($newProducts as $product)
                 @php
@@ -390,7 +390,7 @@ $hotProducts = $product_lists->where('condition', 'hot');
         </div>
 
         <!-- Swiper Slider -->
-        <div class="swiper latest-items-swiper">
+        <div class="swiper product-items-swiper">
             <div class="swiper-wrapper">
                 @foreach($hotProducts as $product)
                 @php
@@ -602,7 +602,7 @@ $hotProducts = $product_lists->where('condition', 'hot');
     };
 
     document.addEventListener('DOMContentLoaded', () => {
-        new Swiper('.latest-items-swiper', {
+        new Swiper('.product-items-swiper', {
             slidesPerView: 4,
             spaceBetween: 20,
             navigation: {

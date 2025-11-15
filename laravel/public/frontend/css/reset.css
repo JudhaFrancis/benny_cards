@@ -420,7 +420,7 @@ big {
 }
 
 .breadcrumbs ul li a:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 /*=============================
@@ -1295,7 +1295,7 @@ object {
 .modal-dialog .modal-content .modal-header .close:hover {
 	color: #fff;
 	border-color: transparent;
-	background: #F7941D;
+	background: #ec1176;
 }
 
 .modal-dialog .modal-content .modal-body {
@@ -1471,7 +1471,7 @@ object {
 }
 
 .quickview-content .nice-select .list li:hover {
-	background: #F7941D;
+	background: #ec1176;
 	color: #fff;
 }
 
@@ -1506,7 +1506,7 @@ object {
 	width: 5px;
 	height: 5px;
 	border-radius: 100%;
-	background-color: #F7941D;
+	background-color: #ec1176;
 	content: "";
 	left: 0;
 	top: 50%;
@@ -1584,7 +1584,7 @@ object {
 }
 
 .quickview-content .quickview-action-wrap .quickview-cart a:hover {
-	background-color: #F7941D;
+	background-color: #ec1176;
 	color: #333;
 }
 
@@ -1619,11 +1619,11 @@ object {
 }
 
 .quickview-content .quickview-action-wrap .quickview-wishlist a:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 .quickview-content .quickview-action-wrap .quickview-compare a:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 @media only screen and (max-width: 767px) {
@@ -1843,7 +1843,7 @@ object {
 
 .modal .owl-carousel .owl-nav div:hover {
 	color: #fff;
-	background: #F7941D;
+	background: #ec1176;
 }
 
 .modal .owl-carousel .owl-controls .owl-nav .owl-prev {
@@ -1893,7 +1893,7 @@ object {
 }
 
 .quickview-content .quantity .button .btn:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 .quickview-content .quantity .input-number {
@@ -1927,7 +1927,7 @@ object {
 
 .quickview-content .add-to-cart .btn:hover {
 	color: #fff;
-	background: #F7941D;
+	background: #ec1176;
 }
 
 .quickview-content .add-to-cart .btn.min {
@@ -1994,7 +1994,7 @@ object {
 .default-social ul li a i {}
 
 .default-social ul li a:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 /* End Modal Css */
@@ -2148,7 +2148,7 @@ object {
 	font-size: 50px;
 	font-weight: bold;
 	line-height: 100%;
-	color: #F7941D;
+	color: #ec1176;
 }
 
 #Gslider .carousel-inner .carousel-caption p {
@@ -2186,7 +2186,7 @@ object {
 }
 
 .category-card .btn {
-	background: #F7941D;
+	background: #ec1176;
 	border: none;
 	font-weight: 600;
 	font-size: 9px;
@@ -2431,12 +2431,12 @@ object {
 	/* creates gap between text and underline */
 	width: 0;
 	height: 1px;
-	background-color: #F7941D;
+	background-color: #ec1176;
 	transition: width 0.3s ease;
 }
 
 .clear_filter:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 .clear_filter:hover::after {
@@ -2460,7 +2460,7 @@ object {
 }
 
 .badge a:hover {
-	color: #F7941D;
+	color: #ec1176;
 }
 
 /* Container for navigation buttons */
@@ -2479,8 +2479,8 @@ object {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: 35px;
+	height: 35px;
 	background-color: #333;
 	color: #fff;
 	border-radius: 50%;
@@ -2491,7 +2491,7 @@ object {
 /* Properly center and size the default Swiper arrow icon */
 .swiper-navigation .swiper-button-prev::after,
 .swiper-navigation .swiper-button-next::after {
-	font-size: 16px;
+	font-size: 14px;
 	font-weight: bold;
 	line-height: 1;
 	color: #fff;

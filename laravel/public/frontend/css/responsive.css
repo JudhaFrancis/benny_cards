@@ -506,7 +506,7 @@ Version:1.0
 	}
 
 	.slicknav_nav li:hover a {
-		color: #F7941D;
+		color: #ec1176;
 		background: transparent;
 	}
 
@@ -524,7 +524,7 @@ Version:1.0
 	}
 
 	.slicknav_nav li .dropdown li a:hover {
-		color: #F7941D;
+		color: #ec1176;
 		background: transparent;
 	}
 
@@ -545,13 +545,13 @@ Version:1.0
 	}
 
 	.slicknav_menu .slicknav_icon-bar {
-		background-color: #F7941D;
+		background-color: #ec1176;
 		box-shadow: none;
 		text-shadow: none;
 	}
 
 	.slicknav_nav .slicknav_arrow {
-		color: #F7941D;
+		color: #ec1176;
 	}
 
 	.slicknav_menu .slicknav_icon-bar {
@@ -1099,7 +1099,7 @@ Version:1.0
 		width: 50%;
 		height: 100%;
 		border-bottom: 1px solid #e6ebee;
-		background: #F7941D;
+		background: #ec1176;
 		color: #fff;
 		border: none;
 	}
@@ -1387,7 +1387,7 @@ Version:1.0
 	}
 
 	.slicknav_nav li:hover a {
-		color: #F7941D;
+		color: #ec1176;
 		background: transparent;
 	}
 
@@ -1405,7 +1405,7 @@ Version:1.0
 	}
 
 	.slicknav_nav li .dropdown li a:hover {
-		color: #F7941D;
+		color: #ec1176;
 		background: transparent;
 	}
 
@@ -1426,13 +1426,13 @@ Version:1.0
 	}
 
 	.slicknav_menu .slicknav_icon-bar {
-		background-color: #F7941D;
+		background-color: #ec1176;
 		box-shadow: none;
 		text-shadow: none;
 	}
 
 	.slicknav_nav .slicknav_arrow {
-		color: #F7941D;
+		color: #ec1176;
 	}
 
 	.slicknav_menu .slicknav_icon-bar {

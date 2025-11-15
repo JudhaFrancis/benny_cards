@@ -43,14 +43,14 @@ class ProductReviewController extends Controller
         $this->validate($request,[
                     'reviewer_name' => 'required|string|max:255',
                     'title' => 'required|string|max:255',
-                    'description' => 'required|string',
-                    'rating' => 'required|numeric|min:1|max:5',
+                    'review' => 'required|string',
+                    'rate' => 'required|numeric|min:1|max:5',
                     'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
         $product_info=Product::getProductBySlug($request->slug);
         //  return $product_info;
         // return $request->all();
-        $data = $request->only(['reviewer_name', 'title', 'description', 'rating']);
+        $data = $request->only(['reviewer_name', 'title', 'review', 'rate']);
         $data['product_id']=$product_info->id;
         $data['user_id']=$request->user()->id;
         $data['status']='active';
@@ -122,8 +122,8 @@ class ProductReviewController extends Controller
         $this->validate($request, [
         'reviewer_name' => 'required|string|max:255',
         'title' => 'required|string|max:255',
-        'description' => 'required|string',
-        'rating' => 'required|numeric|min:1|max:5',
+        'review' => 'required|string',
+        'rate' => 'required|numeric|min:1|max:5',
         'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
     ]);
         $review=ProductReview::find($id);
@@ -132,7 +132,7 @@ class ProductReviewController extends Controller
         return redirect()->route('review.index');
         }
 
-            $data = $request->only(['reviewer_name', 'title', 'description', 'rating']);
+            $data = $request->only(['reviewer_name', 'title', 'review', 'rate']);
 
     if ($request->hasFile('image')) {
         $file = $request->file('image');
