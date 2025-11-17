@@ -26,7 +26,7 @@ class OrderItemController extends Controller
 
         // Calculate new totals
         $requestQuantitycount = $request->quantity;
-        $requestItemFinalAmount = $product->price - $product->discount;
+        $requestItemFinalAmount = $product->price - ($product->discount ?? 0);
         $itemsTotalAmount = $request->price;
 
         $order->items_count += 1;
@@ -40,7 +40,7 @@ class OrderItemController extends Controller
             'product_id'   => $product->id,
             'quantity'     => $request->quantity,
             'net_amount'   => $product->price,
-            'discount'     => $product->discount,
+            'discount'     => $product->discount ?? 0,
             'final_amount' => $requestItemFinalAmount,
             'total_amount' => $itemsTotalAmount,
             'status'       => 1

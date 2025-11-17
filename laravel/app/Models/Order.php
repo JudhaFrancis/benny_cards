@@ -60,8 +60,6 @@ public function items(){
     return $this->hasMany(OrderItems::class, 'orders_id', 'id')
                 ->where('status', 1);
 }
-
-
 // Order -> Tracking history
 public function trackingHistory(){
     return $this->hasMany(OrderTracking::class, 'orders_id', 'id');
