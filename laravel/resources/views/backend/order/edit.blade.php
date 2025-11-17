@@ -216,22 +216,14 @@
                     <!-- Amount -->
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="summary-label">Amount</span>
-                        <input
-                            type="text"
-                            name="net_amount"
-                            id="amountInput"
-                            class="summary-input"
-                            value="{{ $order->net_amount }}">
+                        <input type="text" name="net_amount" id="amountInput" class="summary-input"
+                            value="{{ $order->net_amount }}" readonly>
                     </div>
 
                     <!-- Discount -->
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="summary-label">Discount</span>
-                        <input
-                            type="text"
-                            name="discount"
-                            id="discountInput"
-                            class="summary-input"
+                        <input type="text" name="discount" id="discountInput" class="summary-input"
                             value="{{ $order->discount }}">
                     </div>
 
@@ -240,13 +232,8 @@
                     <!-- Total Amount -->
                     <div class="d-flex justify-content-between align-items-center">
                         <strong class="summary-label">Total Amount</strong>
-                        <input
-                            type="text"
-                            name="total_amount"
-                            id="totalAmountInput"
-                            class="summary-input total"
-                            value="{{ $order->total_amount }}"
-                            readonly>
+                        <input type="text" name="total_amount" id="totalAmountInput" class="summary-input total"
+                            value="{{ $order->total_amount }}" readonly>
                     </div>
                 </div>
 
@@ -264,232 +251,241 @@
 </div>
 
 <script>
-    document.querySelectorAll('.quantity, .price').forEach(function(input) {
-        input.addEventListener('input', function() {
-            let card = this.closest('.order-item');
-            let qty = parseFloat(card.querySelector('.quantity').value) || 0;
-            let price = parseFloat(card.querySelector('.price').value) || 0;
-            card.querySelector('.total').value = (qty * price).toFixed(2);
-        });
+document.querySelectorAll('.quantity, .price').forEach(function(input) {
+    input.addEventListener('input', function() {
+        let card = this.closest('.order-item');
+        let qty = parseFloat(card.querySelector('.quantity').value) || 0;
+        let price = parseFloat(card.querySelector('.price').value) || 0;
+        card.querySelector('.total').value = (qty * price).toFixed(2);
     });
+});
 
-    // Prevent Enter key from submitting the form
-    document.getElementById('editOrderForm').addEventListener('keydown', function(e) {
-        if (e.key === "Enter") {
-            e.preventDefault();
-        }
-    });
+// Prevent Enter key from submitting the form
+document.getElementById('editOrderForm').addEventListener('keydown', function(e) {
+    if (e.key === "Enter") {
+        e.preventDefault();
+    }
+});
 
-    // Submit only when clicking Update Order button
-    document.getElementById('updateOrderBtn').addEventListener('click', function() {
-        document.getElementById('editOrderForm').submit();
-    });
+// Submit only when clicking Update Order button
+document.getElementById('updateOrderBtn').addEventListener('click', function() {
+    document.getElementById('editOrderForm').submit();
+});
 </script>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        function updateTotals() {
-            let subtotal = 0;
+document.addEventListener("DOMContentLoaded", function() {
+    function updateTotals() {
+        let subtotal = 0;
 
-            // Loop through all items and calculate totals
-            document.querySelectorAll('.order-item').forEach(item => {
-                const qty = parseFloat(item.querySelector('.quantity').value) || 0;
-                const price = parseFloat(item.querySelector('.price').value) || 0;
-                const total = qty * price;
+        // Loop through all items and calculate totals
+        document.querySelectorAll('.order-item').forEach(item => {
+            const qty = parseFloat(item.querySelector('.quantity').value) || 0;
+            const price = parseFloat(item.querySelector('.price').value) || 0;
+            const total = qty * price;
 
-                // Update total field
-                item.querySelector('.total').value = total.toFixed(2);
+            // Update total field
+            item.querySelector('.total').value = total.toFixed(2);
 
-                // Add to subtotal
-                subtotal += total;
-            });
-
-            // Get shipping and tax values from Blade variables
-            const shipping = parseFloat("{{ $order->shipping ?? 0 }}");
-            const tax = parseFloat("{{ $order->tax ?? 0 }}");
-
-            // Final total
-            const totalAmount = subtotal + shipping + tax;
-
-            // Update subtotal and total
-            document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
-            document.getElementById('total').textContent = '$' + totalAmount.toFixed(2);
-        }
-
-        document.querySelectorAll('.quantity, .price').forEach(input => {
-            input.addEventListener('input', updateTotals);
+            // Add to subtotal
+            subtotal += total;
         });
 
-        // Run once on load
-        updateTotals();
+        // Get shipping and tax values from Blade variables
+        const shipping = parseFloat("{{ $order->shipping ?? 0 }}");
+        const tax = parseFloat("{{ $order->tax ?? 0 }}");
+
+        // Final total
+        const totalAmount = subtotal + shipping + tax;
+
+        // Update subtotal and total
+        document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
+        document.getElementById('total').textContent = '$' + totalAmount.toFixed(2);
+    }
+
+    document.querySelectorAll('.quantity, .price').forEach(input => {
+        input.addEventListener('input', updateTotals);
     });
+
+    // Run once on load
+    updateTotals();
+});
 </script>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const searchInput = document.querySelector(
-            '.add-modern-input[placeholder="Search by product name or SKU..."]'
-        );
-        const quantityInput = document.querySelector('.add-modern-input[type="number"]');
-        const priceInput = document.querySelector('.add-modern-input.text-end');
-        const searchWrapper = document.querySelector('.search-wrapper');
-        let unitPrice = 0; // store selected product price
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.querySelector(
+        '.add-modern-input[placeholder="Search by product name or SKU..."]'
+    );
+    const quantityInput = document.querySelector('.add-modern-input[type="number"]');
+    const priceInput = document.querySelector('.add-modern-input.text-end');
+    const searchWrapper = document.querySelector('.search-wrapper');
+    let unitPrice = 0; // store selected product price
 
-        // Dropdown container
-        const dropdown = document.createElement('div');
-        dropdown.classList.add('dropdown-results');
-        dropdown.style.position = 'absolute';
-        dropdown.style.background = '#fff';
-        dropdown.style.border = '1px solid #ddd';
-        dropdown.style.width = '100%';
-        dropdown.style.zIndex = '1000';
-        dropdown.style.maxHeight = '200px';
-        dropdown.style.overflowY = 'auto';
-        dropdown.style.borderRadius = '6px';
-        searchWrapper.appendChild(dropdown);
+    // Dropdown container
+    const dropdown = document.createElement('div');
+    dropdown.classList.add('dropdown-results');
+    dropdown.style.position = 'absolute';
+    dropdown.style.background = '#fff';
+    dropdown.style.border = '1px solid #ddd';
+    dropdown.style.width = '100%';
+    dropdown.style.zIndex = '1000';
+    dropdown.style.maxHeight = '200px';
+    dropdown.style.overflowY = 'auto';
+    dropdown.style.borderRadius = '6px';
+    searchWrapper.appendChild(dropdown);
 
-        // Search products
-        searchInput.addEventListener('keyup', function() {
-            const query = this.value.trim();
-            if (query.length < 2) {
-                dropdown.innerHTML = '';
-                return;
-            }
-
-            fetch(`/admin/products/search?query=${query}`)
-                .then(res => res.json())
-                .then(data => {
-                    dropdown.innerHTML = '';
-                    if (data.length === 0) {
-                        dropdown.innerHTML = '<div class="p-2 text-muted">No products found</div>';
-                        return;
-                    }
-
-                    data.forEach(product => {
-                        const item = document.createElement('div');
-                        item.classList.add('dropdown-item', 'p-2');
-                        item.style.cursor = 'pointer';
-                        item.innerHTML = `<strong>${product.title}</strong>`;
-
-                        item.addEventListener('click', function() {
-                            searchInput.value = product.title;
-                            searchInput.dataset.id = product.id;
-
-                            const price = parseFloat(product.price) || 0;
-                            const discount = parseFloat(product.discount) || 0;
-
-                            unitPrice = price - discount;
-
-                            const quantity = parseFloat(quantityInput.value) || 1;
-                            priceInput.value = (unitPrice * quantity).toFixed(2);
-
-                            dropdown.innerHTML = '';
-                        });
-
-
-                        dropdown.appendChild(item);
-                    });
-                })
-                .catch(err => console.error('Search error:', err));
-        });
-
-        // Quantity change updates price
-        quantityInput.addEventListener('input', function() {
-            const qty = parseInt(quantityInput.value) || 1;
-            priceInput.value = (unitPrice * qty).toFixed(2);
-        });
-    });
-</script>
-<!-- Add item button -->
-<script>
-    document.querySelector('.btn-add-item-modern').addEventListener('click', function() {
-
-        const row = this.closest('.row');
-
-        const productInput = row.querySelector('input[placeholder="Search by product name or SKU..."]');
-        const productId = productInput.dataset.id;
-
-        if (!productId) {
-            alert("Please select a product from the dropdown");
+    // Search products
+    searchInput.addEventListener('keyup', function() {
+        const query = this.value.trim();
+        if (query.length < 2) {
+            dropdown.innerHTML = '';
             return;
         }
 
-        const quantity = parseInt(row.querySelector('input[type="number"]').value);
-        const rawPrice = parseFloat(row.querySelector('input.text-end').value);
-        const price = rawPrice.toFixed(2);
-        const orderId = "{{ $order->id }}";
-
-        fetch('{{ route("order.item.add") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    orders_id: orderId,
-                    product_id: productId,
-                    quantity: quantity,
-                    price: price
-                })
-            })
+        fetch(`/admin/products/search?query=${query}`)
             .then(res => res.json())
             .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.message || "Failed to add item");
+                dropdown.innerHTML = '';
+                if (data.length === 0) {
+                    dropdown.innerHTML = '<div class="p-2 text-muted">No products found</div>';
+                    return;
                 }
+
+                data.forEach(product => {
+                    const item = document.createElement('div');
+                    item.classList.add('dropdown-item', 'p-2');
+                    item.style.cursor = 'pointer';
+                    item.innerHTML = `<strong>${product.title}</strong>`;
+
+                    item.addEventListener('click', function() {
+                        searchInput.value = product.title;
+                        searchInput.dataset.id = product.id;
+
+                        const price = parseFloat(product.price) || 0;
+                        const discount = parseFloat(product.discount) || 0;
+
+                        unitPrice = price - discount;
+
+                        const quantity = parseFloat(quantityInput.value) || 1;
+                        priceInput.value = (unitPrice * quantity).toFixed(2);
+
+                        dropdown.innerHTML = '';
+                    });
+
+
+                    dropdown.appendChild(item);
+                });
             })
-            .catch(err => console.error(err));
+            .catch(err => console.error('Search error:', err));
     });
+
+    // Quantity change updates price
+    quantityInput.addEventListener('input', function() {
+        const qty = parseInt(quantityInput.value) || 1;
+        priceInput.value = (unitPrice * qty).toFixed(2);
+    });
+});
+</script>
+<!-- Add item button -->
+<script>
+document.querySelector('.btn-add-item-modern').addEventListener('click', function() {
+
+    const row = this.closest('.row');
+
+    const productInput = row.querySelector('input[placeholder="Search by product name or SKU..."]');
+    const productId = productInput.dataset.id;
+
+    if (!productId) {
+        alert("Please select a product from the dropdown");
+        return;
+    }
+
+    const quantity = parseInt(row.querySelector('input[type="number"]').value);
+    const rawPrice = parseFloat(row.querySelector('input.text-end').value);
+    const price = rawPrice.toFixed(2);
+    const orderId = "{{ $order->id }}";
+
+    fetch('{{ route("order.item.add") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                orders_id: orderId,
+                product_id: productId,
+                quantity: quantity,
+                price: price
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.message || "Failed to add item");
+            }
+        })
+        .catch(err => console.error(err));
+});
 </script>
 
 <!-- Delete Button -->
 <script>
-    let deleteItemId = null; // store item id to delete
+let deleteItemId = null; // store item id to delete
 
-    const deleteModal = document.getElementById('deleteModal');
-    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
-    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+const deleteModal = document.getElementById('deleteModal');
+const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
 
-    // Trash icon click
-    document.querySelectorAll('.delete-item').forEach(button => {
-        button.addEventListener('click', function() {
-            deleteItemId = this.dataset.id;
-            deleteModal.style.display = 'flex'; // show modal
-        });
+// Trash icon click
+document.querySelectorAll('.delete-item').forEach(button => {
+    button.addEventListener('click', function() {
+        deleteItemId = this.dataset.id;
+        deleteModal.style.display = 'flex'; // show modal
     });
+});
 
-    // Cancel button
-    cancelDeleteBtn.addEventListener('click', () => {
-        deleteItemId = null;
-        deleteModal.style.display = 'none';
-    });
+// Cancel button
+cancelDeleteBtn.addEventListener('click', () => {
+    deleteItemId = null;
+    deleteModal.style.display = 'none';
+});
 
-    // Confirm Delete
-    confirmDeleteBtn.addEventListener('click', () => {
-        if (!deleteItemId) return;
+// Confirm Delete
+confirmDeleteBtn.addEventListener('click', () => {
+    if (!deleteItemId) return;
 
-        fetch('{{ route("order.item.delete") }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify({
-                    id: deleteItemId
-                })
+    fetch('{{ route("order.item.delete") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                id: deleteItemId
             })
-            .then(res => res.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert(data.error || 'Something went wrong');
-                }
-            })
-            .catch(err => console.error(err));
-    });
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert(data.error || 'Something went wrong');
+            }
+        })
+        .catch(err => console.error(err));
+});
+
+// update total when discount changes
+function updateSummaryTotal() {
+    let amount = parseFloat(amountInput.value) || 0;
+    let discount = parseFloat(discountInput.value) || 0;
+    let total = amount - discount;
+    totalAmountInput.value = total.toFixed(2);
+}
+discountInput.addEventListener("input", updateSummaryTotal);
 </script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 

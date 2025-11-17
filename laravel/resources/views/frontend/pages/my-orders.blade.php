@@ -78,12 +78,22 @@
             </div>
 
             {{-- Status badge --}}
-            <span class="badge mt-2 mt-md-0 
-            @if($order->status == 'delivered') bg-success 
-            @elseif($order->status == 'processing') bg-warning 
-            @elseif($order->status == 'pending')" style="background-color:#3cc0c2;color:#fff;" @else bg-info @endif">
+            @php
+            $statusClass = '';
+            switch(strtolower($order->status)) {
+            case 'pending': $statusClass = 'badge-pending'; break;
+            case 'active': $statusClass = 'badge-active'; break;
+            case 'completed': $statusClass = 'badge-completed'; break;
+            case 'returned': $statusClass = 'badge-returned'; break;
+            case 'cancelled': $statusClass = 'badge-cancelled'; break;
+            default: $statusClass = 'badge-secondary'; break;
+            }
+            @endphp
+
+            <span class="badge {{ $statusClass }} mt-2 mt-md-0">
                 {{ ucfirst($order->status) }}
             </span>
+
         </div>
 
         {{-- Price and link --}}
@@ -119,30 +129,63 @@
 
 </div>
 <style>
-    .package-icon-wrapper {
-        width: 60px;
-        height: 60px;
-        border-radius: 12px;
-        background-color: #f3f8ff;
-        box-shadow: 0 2px 6px rgba(60, 192, 194, 0.15);
-        transition: all 0.3s ease;
-        margin-top: 0;
-    }
+.badge-pending {
+    background-color: #fffdf0;
+    color: #f57c00;
+}
 
-    .custom-horizontal-line {
-        position: absolute;
-        left: 80px;
-        right: 0;
-        top: 0;
-        height: 1px;
-        background-color: hsl(214 32% 88%);
-        opacity: 0.8;
-    }
+.badge-active {
+    background-color: #e0f0ff;
+    color: #0d6efd;
+}
+
+.badge-completed {
+    background-color: #f0fff4;
+    color: #2e7d32;
+}
+
+.badge-returned {
+    background-color: #f3f0ff;
+    color: #6f42c1;
+}
+
+.badge-cancelled {
+    background-color: #fff0f0;
+    color: #d32f2f;
+}
+
+/* common style for all badges */
+.badge {
+    padding: 6px 12px;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 13px;
+}
+
+.package-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    background-color: #f3f8ff;
+    box-shadow: 0 2px 6px rgba(60, 192, 194, 0.15);
+    transition: all 0.3s ease;
+    margin-top: 0;
+}
+
+.custom-horizontal-line {
+    position: absolute;
+    left: 80px;
+    right: 0;
+    top: 0;
+    height: 1px;
+    background-color: hsl(214 32% 88%);
+    opacity: 0.8;
+}
 
 
-    .custom-horizontal-line {
-        top: -10px;
-        /* move up */
-    }
+.custom-horizontal-line {
+    top: -10px;
+    /* move up */
+}
 </style>
 @endsection

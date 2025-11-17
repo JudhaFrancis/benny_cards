@@ -181,6 +181,7 @@ class OrderController extends Controller
             'country' => $request->country,
             'post_code' => $request->post_code,
             'remarks' => $request->remarks,
+            'discount' => $request->discount,
         ]);
 
         //EXISTING ITEMS
