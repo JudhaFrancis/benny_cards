@@ -125,7 +125,7 @@ class OrderController extends Controller
                 'order_id' => $orderData['order_number'],
             ];
 
-            $whatsappSentRes = $this->whatsApp->send( $whatsAppData, true, 1);
+            $whatsappSentRes = $this->whatsApp->send($whatsAppData, true, 1);
 
             // Optionally log success or response
             Log::info('WhatsApp notification sent', $whatsappSentRes);
@@ -157,71 +157,56 @@ class OrderController extends Controller
         return view('backend.order.edit', compact('order'));
     }
 
-     public function update(Request $request, $id)
-{
-    $order = Order::findOrFail($id);
+    public function update(Request $request, $id)
+    {
+        $order = Order::findOrFail($id);
 
-    $order->update([
-        'tracking_id' => $request->tracking_id,
-        'payment_status' => $request->payment_status,
-        'status' => $request->status,
-        'order_date' => $request->order_date,
-        'name' => $request->name,
-        'email' => $request->email,
-        'phone' => $request->phone,
-        'address_1' => $request->address_1,
-        'address_2' => $request->address_2,
-        'country' => $request->country,
-        'post_code' => $request->post_code,
-        'remarks' => $request->remarks,
-    ]);
+        $order->update([
+            'tracking_id' => $request->tracking_id,
+            'payment_status' => $request->payment_status,
+            'status' => $request->status,
+            'order_date' => $request->order_date,
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'address_1' => $request->address_1,
+            'address_2' => $request->address_2,
+            'country' => $request->country,
+            'post_code' => $request->post_code,
+            'remarks' => $request->remarks,
+        ]);
 
-    
-    //EXISTING ITEMS
-    if (!empty($request->items)) {
-        foreach ($request->items as $itemId => $itemData) {
+        //EXISTING ITEMS
+        if (!empty($request->items)) {
+            foreach ($request->items as $itemId => $itemData) {
 
-            $item = OrderItems::find($itemId);
+                $item = OrderItems::find($itemId);
 
-            if ($item) {
-                $qty = $itemData['quantity'];
-                $price = $itemData['final_amount'];
-                $item->update([
-                    'quantity' => $qty,
-                    'final_amount' => $price,
-                    'total_amount' => $qty * $price
-                ]);
+                // Only update if item exists and status = 1
+                if ($item && $item->status == 1) {
+                    $qty = $itemData['quantity'];
+                    $price = $itemData['final_amount'];
+                    $item->update([
+                        'quantity' => $qty,
+                        'final_amount' => $price,
+                        'total_amount' => $qty * $price
+                    ]);
+                }
             }
         }
+
+        $items = OrderItems::where('orders_id', $order->id)
+            ->where('status', 1)
+            ->get();
+        $order->items_count = $items->count();
+        $order->total_quantity = $items->sum('quantity');
+        $order->net_amount = $items->sum('total_amount');
+        $order->total_amount = ($items->sum('total_amount') ?? 0) - ($order->discount ?? 0);
+
+        $order->save();
+
+        return back()->with('success', 'Order updated successfully!');
     }
-
-    //  INSERT NEW ITEMS
-    if (!empty($request->new_items)) {
-        foreach ($request->new_items as $productId => $newItem) {
-            OrderItems::create([
-                'orders_id' => $order->id,
-                'product_id' => $newItem['product_id'],
-                'quantity' => $newItem['quantity'],
-                'final_amount' => $newItem['final_amount'],
-                'total_amount' => $newItem['quantity'] * $newItem['final_amount'],
-                'net_amount' => $newItem['final_amount'],
-                'discount' => 0
-            ]);
-        }
-    }
-
-$items = OrderItems::where('orders_id', $order->id)->get();
-
-$order->items_count = $items->count();
-$order->total_quantity = $items->sum('quantity');
-$order->net_amount = $items->sum('total_amount');
-
-$order->total_amount = $order->net_amount ?? 0;  // FINAL TOTAL
-$order->save();
-
-    return back()->with('success', 'Order updated successfully!');
-
-}
 
 
 
@@ -238,10 +223,14 @@ $order->save();
         return redirect()->route('order.index');
     }
 
-    public function orderTrack()
+    public function orderTrack($id)
     {
-        return view('frontend.pages.order-track');
+        $order = Order::with('items.product')
+            ->findOrFail($id);
+
+        return view('frontend.pages.order-track', compact('order'));
     }
+
 
     public function productTrackOrder(Request $request)
     {
@@ -273,16 +262,14 @@ $order->save();
         return redirect()->route('home');
     }
 
-   public function myOrders()
-{
-    $userId = auth()->id();
+    public function myOrders()
+    {
+        $userId = auth()->id();
 
-    $orders = \App\Models\Order::where('user_id', $userId)
-        ->orderBy('created_at', 'desc')
-        ->get();
+        $orders = Order::where('user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-    return view('frontend.pages.my-orders', compact('orders'));
-}
-
-
+        return view('frontend.pages.my-orders', compact('orders'));
+    }
 }

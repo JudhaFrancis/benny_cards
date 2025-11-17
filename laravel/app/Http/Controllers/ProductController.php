@@ -198,19 +198,15 @@ class ProductController extends Controller
     }
 
     public function search(Request $request)
-{
-    $query = $request->get('query', '');
+    {
+        $query = $request->get('query', '');
 
-    $products = \App\Models\Product::where('title', 'like', "%{$query}%")
-        ->orWhere('slug', 'like', "%{$query}%")
-        ->where('status', 'active')
-        ->limit(10)
-        ->get(['id', 'title', 'price', 'photo']);
+        $products = \App\Models\Product::where('title', 'like', "%{$query}%")
+            ->orWhere('slug', 'like', "%{$query}%")
+            ->where('status', 'active')
+            ->limit(10)
+            ->get(['id', 'title', 'price', 'discount', 'photo']);
 
-    return response()->json($products);
-}
-
-
-
-    
+        return response()->json($products);
+    }
 }

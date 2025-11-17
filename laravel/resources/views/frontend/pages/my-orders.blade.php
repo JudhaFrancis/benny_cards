@@ -5,12 +5,15 @@
 @section('main-content')
 
 <div class="section-container py-5">
-    <h2 class="text-4xl font-bold mb-4" style="color:#3cc0c2;">
+    <h2 class="text-4xl font-semibold mb-2" style="color:#3cc0c2;">
         My Orders
     </h2>
+    <p>
+        Track and manage all your orders
+    </p>
 
     @forelse($orders as $order)
-    <div class="card mb-4 p-4 shadow-sm border rounded order-card">
+    <div class="card my-4 p-4 shadow-sm border order-card">
         <div class="d-flex justify-content-between align-items-center flex-wrap mb-3">
             {{-- Left section with icon + order info --}}
             <div class="d-flex align-items-center" style="gap: 20px; align-items: center;">
@@ -36,7 +39,7 @@
                     </h6>
 
                     @php
-                    $itemCount = \App\Models\OrderItems::where('orders_id', $order->id)->count();
+                    $itemCount = \App\Models\OrderItems::where('orders_id', $order->id)->where('status', 1)->count();
                     @endphp
                     <small class="text-sm text-muted-foreground d-block mb-2">
                         {{ $itemCount }} {{ Str::plural('item', $itemCount) }}
@@ -90,20 +93,20 @@
 
             <div class="d-flex justify-content-between align-items-center pt-2">
                 <div class="d-flex align-items-center" style="margin-left:80px;">
-                    <span class="fs-5 text-dark mb-0" style="font-weight:700; letter-spacing:0.3px;">
+                    <span class="fs-5 mb-0 order_details_amount">
                         ₹{{ number_format($order->total_amount, 2) }}
                     </span>
                 </div>
 
-                <a href="{{ route('order.show', $order->id) }}"
-   class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-semibold text-dark transition hover:text-primary hover:bg-gray-100">
-   <span class="font-semibold text-base">View Details</span>
-   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-       stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-       class="h-4 w-4 align-middle">
-       <path d="m9 18 6-6-6-6"></path>
-   </svg>
-</a>
+                <a href="{{ route('order.track', $order->id) }}"
+                    class="inline-flex items-center justify-center gap-2 px-3 py-2 rounded-md text-sm font-semibold text-dark transition hover:text-primary hover:bg-gray-100">
+                    <span class="font-semibold text-base">View Details</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                        class="h-4 w-4 align-middle">
+                        <path d="m9 18 6-6-6-6"></path>
+                    </svg>
+                </a>
 
 
             </div>
@@ -116,30 +119,30 @@
 
 </div>
 <style>
-.package-icon-wrapper {
-    width: 60px;
-    height: 60px;
-    border-radius: 12px;
-    background-color: #f3f8ff;
-    box-shadow: 0 2px 6px rgba(60, 192, 194, 0.15);
-    transition: all 0.3s ease;
-    margin-top: 0;
-}
+    .package-icon-wrapper {
+        width: 60px;
+        height: 60px;
+        border-radius: 12px;
+        background-color: #f3f8ff;
+        box-shadow: 0 2px 6px rgba(60, 192, 194, 0.15);
+        transition: all 0.3s ease;
+        margin-top: 0;
+    }
 
-.custom-horizontal-line {
-    position: absolute;
-    left: 80px;
-    right: 0;
-    top: 0;
-    height: 1px;
-    background-color: hsl(214 32% 88%);
-    opacity: 0.8;
-}
+    .custom-horizontal-line {
+        position: absolute;
+        left: 80px;
+        right: 0;
+        top: 0;
+        height: 1px;
+        background-color: hsl(214 32% 88%);
+        opacity: 0.8;
+    }
 
 
-.custom-horizontal-line {
-    top: -10px;
-    /* move up */
-}
+    .custom-horizontal-line {
+        top: -10px;
+        /* move up */
+    }
 </style>
 @endsection

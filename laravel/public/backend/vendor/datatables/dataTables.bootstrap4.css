@@ -43,7 +43,7 @@ div.dataTables_wrapper div.dataTables_filter input {
   width: auto;
 }
 div.dataTables_wrapper div.dataTables_info {
-  padding-top: 0.85em;
+  padding: 0.85em 0em;
   white-space: nowrap;
 }
 div.dataTables_wrapper div.dataTables_paginate {

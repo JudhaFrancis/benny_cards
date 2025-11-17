@@ -10,8 +10,6 @@
     </div>
     <div class="card-header">
         <h3 class="m-0 font-weight-bold text-primary float-left">Product Lists</h3>
-        <a href="{{route('product.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip"
-            data-placement="bottom" title="Add User"><i class="fas fa-plus"></i> Add Product</a>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -42,7 +40,9 @@
                     @endphp
                     <tr>
                         <td>{{$products->firstItem() + $index }}</td>
-                        <td>{{$product->title}}</td>
+                        <td>
+                            {{ Str::limit($product->title, 50) }}
+                        </td>
                         <td>{{$product->cat_info['title']}}
                             <sub>
                                 {{$product->sub_cat_info->title ?? ''}}
@@ -151,7 +151,8 @@
                                                 <p><strong>Price:</strong> Rs. {{$product->price}} /-</p>
                                                 <p><strong>Discount:</strong> {{$product->discount}}% OFF</p>
                                                 <p><strong>Featured:</strong>
-                                                    {{($product->is_featured == 1) ? 'Yes' : 'No'}}</p>
+                                                    {{($product->is_featured == 1) ? 'Yes' : 'No'}}
+                                                </p>
                                                 <p><strong>Stock:</strong>
                                                     @if($product->stock > 0)
                                                     <span class="badge badge-primary">{{$product->stock}}</span>
@@ -225,35 +226,35 @@
 <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 <style>
-div.dataTables_wrapper div.dataTables_paginate {
-    display: none;
-}
+    div.dataTables_wrapper div.dataTables_paginate {
+        display: none;
+    }
 
-.zoom {
-    transition: transform .2s;
-    /* Animation */
-}
+    .zoom {
+        transition: transform .2s;
+        /* Animation */
+    }
 
-.zoom:hover {
-    transform: scale(5);
-}
+    .zoom:hover {
+        transform: scale(5);
+    }
 
-.image-preview-modal .modal-dialog {
-    max-width: 80%;
-}
+    .image-preview-modal .modal-dialog {
+        max-width: 80%;
+    }
 
-.image-preview-modal .modal-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: transparent;
-    border: none;
-    box-shadow: none;
-}
+    .image-preview-modal .modal-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: transparent;
+        border: none;
+        box-shadow: none;
+    }
 
-.modal-backdrop.show {
-    opacity: 0.9;
-}
+    .modal-backdrop.show {
+        opacity: 0.9;
+    }
 </style>
 @endpush
 
@@ -265,73 +266,86 @@ div.dataTables_wrapper div.dataTables_paginate {
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 <!-- Page level custom scripts -->
-<script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script> 
-<script> $('#product-dataTable').DataTable({
-     "columnDefs": [{ "orderable": false, 
-        "targets": [3, 4, 5] 
-    }]
- });
-
-// Sweet alert
-
-function deleteData(id) {
-
-}
-</script>
+<script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
 <script>
 $(document).ready(function() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    // Initialize DataTable first
+    var table = $('#product-dataTable').DataTable({
+        "columnDefs": [{
+            "orderable": false,
+            "targets": [3, 4, 5]
+        }],
+        "language": {
+            "search": "", // remove "Search:" label
+            "searchPlaceholder": "Search products..." // optional placeholder text
         }
     });
-    $('.dltBtn').click(function(e) {
-        var form = $(this).closest('form');
-        var dataID = $(this).data('id');
-        // alert(dataID);
-        e.preventDefault();
-        swal({
-                title: "Are you sure?",
-                text: "Once deleted, you will not be able to recover this data!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-            .then((willDelete) => {
-                if (willDelete) {
-                    form.submit();
-                } else {
-                    swal("Your data is safe!");
-                }
-            });
+
+    // Add button next to search input
+    var addButton = `<a href="{{route('product.create')}}" class="btn btn-primary btn-sm ml-2" 
+                        data-toggle="tooltip" data-placement="bottom" title="Add Product">
+                        <i class="fas fa-plus"></i> Add Product
+                     </a>`;
+    
+    // Append the button inside the filter container, aligned with input
+    $('#product-dataTable_filter').append(addButton);
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        $('.dltBtn').click(function(e) {
+            var form = $(this).closest('form');
+            var dataID = $(this).data('id');
+            // alert(dataID);
+            e.preventDefault();
+            swal({
+                    title: "Are you sure?",
+                    text: "Once deleted, you will not be able to recover this data!",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                    } else {
+                        swal("Your data is safe!");
+                    }
+                });
+        })
+        $(document).on('click', '.preview-click', function() {
+            var src = $(this).attr('src');
+            var parentModal = $(this).closest('.modal'); // find current open modal
+
+            //Temporarily store which modal was open
+            $('#imagePreviewModal').data('parentModal', parentModal);
+
+            // Hide current modal (if open)
+            if (parentModal.length) {
+                parentModal.modal('hide');
+            }
+
+            // Show image preview
+            $('#previewImage').attr('src', src);
+            $('#imagePreviewModal').modal('show');
+        });
+
+        //  Use one global event
+        $('#imagePreviewModal').on('hidden.bs.modal', function() {
+            var parentModal = $(this).data('parentModal');
+            if (parentModal && parentModal.length) {
+                parentModal.modal('show');
+
+                $(this).removeData('parentModal');
+            }
+        });
+
     })
-    $(document).on('click', '.preview-click', function() {
-        var src = $(this).attr('src');
-        var parentModal = $(this).closest('.modal'); // find current open modal
-
-        //Temporarily store which modal was open
-        $('#imagePreviewModal').data('parentModal', parentModal);
-
-        // Hide current modal (if open)
-        if (parentModal.length) {
-            parentModal.modal('hide');
-        }
-
-        // Show image preview
-        $('#previewImage').attr('src', src);
-        $('#imagePreviewModal').modal('show');
-    });
-
-    //  Use one global event
-    $('#imagePreviewModal').on('hidden.bs.modal', function() {
-        var parentModal = $(this).data('parentModal');
-        if (parentModal && parentModal.length) {
-            parentModal.modal('show');
-
-            $(this).removeData('parentModal');
-        }
-    });
-
-})
 </script>
 @endpush

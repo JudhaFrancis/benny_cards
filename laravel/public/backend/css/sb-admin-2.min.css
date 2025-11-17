@@ -2132,8 +2132,8 @@ pre code {
     .table-responsive-xl {
         display: block;
         width: 100%;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
     }
 
     .table-responsive-xl>.table-bordered {
@@ -2144,12 +2144,31 @@ pre code {
 .table-responsive {
     display: block;
     width: 100%;
-    overflow-x: auto;
+    overflow-x: auto !important;
     -webkit-overflow-scrolling: touch;
 }
 
 .table-responsive>.table-bordered {
     border: none
+}
+
+/* Enable horizontal scroll */
+.table-responsive {
+    display: block;
+    width: 100%;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* Prevent text from wrapping */
+.table-custom th,
+.table-custom td {
+    white-space: nowrap;
+}
+
+/* Fix overflow inside DataTables container */
+.dataTables_wrapper {
+    overflow-x: auto !important;
 }
 
 .form-control {
@@ -12562,7 +12581,7 @@ body.sidebar-toggled footer.sticky-footer {
     border: none;
     padding: 12px;
     font-size: 14px;
-    text-align: center;
+    text-align: start;
 }
 
 .table-custom tbody tr {
@@ -12578,7 +12597,7 @@ body.sidebar-toggled footer.sticky-footer {
     vertical-align: middle;
     padding: 10px 12px;
     font-size: 14px;
-    text-align: center;
+    text-align: start;
     color: #333;
 }
 

@@ -104,7 +104,7 @@ Route::get('/product-grids', [FrontendController::class, 'productGrids'])->name(
 Route::get('/product-lists', [FrontendController::class, 'productLists'])->name('product-lists');
 Route::match(['get', 'post'], '/filter', [FrontendController::class, 'productFilter'])->name('shop.filter');
 // Order Track
-Route::get('/product/track', [OrderController::class, 'orderTrack'])->name('order.track');
+Route::get('/order/track/{id}', [OrderController::class, 'orderTrack'])->name('order.track');
 Route::post('product/track/order', [OrderController::class, 'productTrackOrder'])->name('product.track.order');
 // My Orders
 Route::get('/my-orders', [OrderController::class, 'myOrders'])->name('my.orders');
@@ -174,7 +174,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::get('/products/search', [App\Http\Controllers\ProductController::class, 'search'])->name('admin.products.search');
 
     //OrderItem
-    Route::post('/order/item/delete', [OrderItemController::class, 'destroy'])->name('order.item.delete');
+    Route::post('/order/item/delete', [OrderItemController::class, 'inActiveItems'])->name('order.item.delete');
     Route::post('/order-item/add', [OrderItemController::class, 'store'])->name('order.item.add');
 
     // Shipping
