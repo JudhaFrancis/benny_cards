@@ -11,9 +11,9 @@ class ProductReview extends Model
         'product_id',
         'reviewer_name',
         'title',
-        'review',
+        'description',  
         'image',
-        'rate',
+        'rating',       
         'status'
     ];
 

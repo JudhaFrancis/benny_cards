@@ -29,7 +29,8 @@ class ProductReviewController extends Controller
      */
     public function create()
     {
-        
+         $products = Product::all(); // fetch all products
+    return view('backend.review.create', compact('products'));
     }
 
     /**
@@ -38,52 +39,31 @@ class ProductReviewController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
-        $this->validate($request,[
-                    'reviewer_name' => 'required|string|max:255',
-                    'title' => 'required|string|max:255',
-                    'review' => 'required|string',
-                    'rate' => 'required|numeric|min:1|max:5',
-                    'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-        ]);
-        $product_info=Product::getProductBySlug($request->slug);
-        //  return $product_info;
-        // return $request->all();
-        $data = $request->only(['reviewer_name', 'title', 'review', 'rate']);
-        $data['product_id']=$product_info->id;
-        $data['user_id']=$request->user()->id;
-        $data['status']='active';
-        // dd($data);
+   public function store(Request $request)
+{
+    $this->validate($request, [
+        'product_id' => 'required',
+        'reviewer_name' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'rating' => 'required|numeric|min:1|max:5',
+        'image' => 'nullable|string',
+    ]);
 
-         if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('images/reviews'), $fileName);
-        $data['image'] = 'images/reviews/' . $fileName;
-    }
+    $data = [
+        'product_id' => $request->product_id,
+        'reviewer_name' => $request->reviewer_name,
+        'title' => $request->title,
+        'description' => $request->description,
+        'rating' => $request->rating,
+        'image' => $request->image,   
+        'user_id' => auth()->id(),   
+    ];
 
-        $status=ProductReview::create($data);
+    ProductReview::create($data);
 
-        
-
-        $user=User::where('role','admin')->get();
-        $details=[
-            'title'=>'New Product Rating!',
-            'actionURL'=>route('product-detail',$product_info->slug),
-            'fas'=>'fa-star'
-        ];
-        // Notification::send($user,new StatusNotification($details));
-        if($status){
-            request()->session()->flash('success','Thank you for your feedback');
-        }
-        else{
-            request()->session()->flash('error','Something went wrong! Please try again!!');
-        }
-        return redirect()->back();
-
-        
-    }
+    return redirect()->route('review.index')->with('success', 'Review added successfully!');
+}
 
     /**
      * Display the specified resource.
@@ -106,7 +86,14 @@ class ProductReviewController extends Controller
     {
         $review=ProductReview::find($id);
         // return $review;
-        return view('backend.review.edit')->with('review',$review);
+
+        if(!$review){
+        return redirect()->route('review.index')->with('error', 'Review not found!');
+    }
+
+    $products = Product::all(); // fetch all products for select dropdown
+
+    return view('backend.review.edit', compact('review', 'products'));
     }
 
     /**
@@ -117,57 +104,33 @@ class ProductReviewController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-
-        $this->validate($request, [
+{
+    $this->validate($request, [
+        'product_id' => 'required',
         'reviewer_name' => 'required|string|max:255',
         'title' => 'required|string|max:255',
-        'review' => 'required|string',
-        'rate' => 'required|numeric|min:1|max:5',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        'description' => 'nullable|string',
+        'rating' => 'required|numeric|min:1|max:5',
+        'image' => 'nullable|string',
     ]);
-        $review=ProductReview::find($id);
-        if(!$review) {
-        request()->session()->flash('error', 'Review not found!');
-        return redirect()->route('review.index');
-        }
 
-            $data = $request->only(['reviewer_name', 'title', 'review', 'rate']);
-
-    if ($request->hasFile('image')) {
-        $file = $request->file('image');
-        $fileName = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('images/reviews'), $fileName);
-        $data['image'] = 'images/reviews/' . $fileName;
+    $review = ProductReview::find($id);
+    if(!$review) {
+        return redirect()->route('review.index')->with('error', 'Review not found!');
     }
 
-            // $product_info=Product::getProductBySlug($request->slug);
-            //  return $product_info;
-            // return $request->all();
-            // $data=$request->all();
-            // $status=$review->fill($data)->update();
+    $data = $request->only([
+        'product_id',
+        'reviewer_name',
+        'title',
+        'rating',
+        'image'
+    ]);
 
-            // $user=User::where('role','admin')->get();
-            // return $user;
-            // $details=[
-            //     'title'=>'Update Product Rating!',
-            //     'actionURL'=>route('product-detail',$product_info->id),
-            //     'fas'=>'fa-star'
-            // ];
-            // Notification::send($user,new StatusNotification($details));
+    $review->update($data);
 
-    $status = $review->update($data);
-
-            if($status){
-                request()->session()->flash('success','Review Successfully updated');
-            }
-            else{
-                request()->session()->flash('error','Something went wrong! Please try again!!');
-            }
-        
-
-        return redirect()->route('review.index');
-    }
+    return redirect()->route('review.index')->with('success', 'Review updated successfully!');
+}
 
     /**
      * Remove the specified resource from storage.
