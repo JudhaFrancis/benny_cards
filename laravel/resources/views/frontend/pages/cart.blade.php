@@ -57,7 +57,7 @@
 							</button>
 
 							<!-- Quantity Input -->
-							<input type="text" name="quant[{{$key}}]" class="input-number text-center" data-min="50" data-max="100000" value="50">
+							<input type="text" name="quant[{{$key}}]" class="input-number text-center" data-min="1" data-max="100000" value="{{$cart->quantity}}">
 
 							<!-- Plus Button -->
 							<button type="button" class="btn btn-outline-primary btn-number plus" data-type="plus" data-field="quant[{{$key}}]">

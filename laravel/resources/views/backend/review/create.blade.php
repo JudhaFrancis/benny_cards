@@ -5,7 +5,7 @@
 <div class="card">
     <h5 class="card-header">Add Review</h5>
     <div class="card-body">
-        <form method="post" action="{{ route('review.store') }}">
+        <form method="post" action="{{ route('review.store') }}" enctype="multipart/form-data">
             @csrf
 
             <!-- Product -->

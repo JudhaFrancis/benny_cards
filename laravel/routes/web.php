@@ -121,7 +121,10 @@ Route::get('blog-tag/{slug}', [FrontendController::class, 'blogByTag'])->name('b
 Route::post('/subscribe', [FrontendController::class, 'subscribe'])->name('subscribe');
 
 // Product Review
-Route::resource('/review', 'ProductReviewController');
+Route::resource('/review', ProductReviewController::class);
+Route::post('/product-review/{product}', [ProductReviewController::class, 'store'])->name('product-review.store')->middleware('auth');
+Route::post('/product-review', [FrontendController::class, 'submitReview'])->name('product.review.submit');
+
 
 // Post Comment
 Route::post('post/{slug}/comment', [PostCommentController::class, 'store'])->name('post-comment.store');

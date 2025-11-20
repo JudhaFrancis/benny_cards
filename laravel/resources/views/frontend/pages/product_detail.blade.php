@@ -161,14 +161,14 @@
 
             <div id="reviews" class="tab-content-clean">
                 <div class="reviews-container">
-                    <p class="reviews-subtitle">See what others are saying about <span style="font-weight:600">'{{ $product_detail->title }}'</span> card.</p>
+                    <p class="reviews-subtitle">See what others are saying about <span
+                            style="font-weight:600">'{{ $product_detail->title }}'</span> card.</p>
 
                     <div class="reviews-summary">
                         <div class="rating-left">
-                            <h1>{{ number_format($product_detail->getReviews->avg('rate'), 1) }}</h1>
-                            @php $rate = ceil($product_detail->getReviews->avg('rate')); @endphp
-                            @for($i=1;$i<=5;$i++)
-                                <i class="fa {{ $rate >= $i ? 'fa-star' : 'fa-star-o' }}"
+                            <h1>{{ number_format($product_detail->getReviews->avg('rating'), 1) }}</h1>
+                            @php $rate = ceil($product_detail->getReviews->avg('rating')); @endphp
+                            @for($i=1;$i<=5;$i++) <i class="fa {{ $rate >= $i ? 'fa-star' : 'fa-star-o' }}"
                                 style="color: {{ $rate >= $i ? '#ec1176' : '#ec1176' }}"></i>
                                 @endfor
                                 <p>Based on {{ $product_detail->getReviews->count() }} reviews</p>
@@ -178,11 +178,11 @@
                         $reviews = $product_detail->getReviews;
                         $totalReviews = $reviews->count();
                         $ratingCounts = [
-                        5 => $reviews->where('rate', 5)->count(),
-                        4 => $reviews->where('rate', 4)->count(),
-                        3 => $reviews->where('rate', 3)->count(),
-                        2 => $reviews->where('rate', 2)->count(),
-                        1 => $reviews->where('rate', 1)->count(),
+                        5 => $reviews->where('rating', 5)->count(),
+                        4 => $reviews->where('rating', 4)->count(),
+                        3 => $reviews->where('rating', 3)->count(),
+                        2 => $reviews->where('rating', 2)->count(),
+                        1 => $reviews->where('rating', 1)->count(),
                         ];
                         $minFill = 2;
                         @endphp
@@ -214,8 +214,7 @@
                             <div class="review-user">
                                 <div class="review-avatar rounded-full w-10 h-10 flex items-center justify-center"
                                     style="background-color: #ec1176a1;">
-                                    <img src="https://img.icons8.com/3d-fluency/94/000000/businessman.png"
-                                        alt="User"
+                                    <img src="https://img.icons8.com/3d-fluency/94/000000/businessman.png" alt="User"
                                         class="w-8 h-8">
                                 </div>
                                 <div>
@@ -225,54 +224,91 @@
                             </div>
                             <h4 class="review-title">{{ $review->title }}</h4>
                             <p class="review-text">
-                                {{ $review->review }}
+                                {!! $review->description !!}
                             </p>
                         </div>
                         <div class="review-right">
-                            <div class="review-rating">@for ($i = 1; $i <= 5; $i++)
-                                    @if ($i <=$review->rate)
+                            <div class="review-rating">@for ($i = 1; $i <= 5; $i++) @if ($i <=$review->rating)
                                     ★
                                     @else
                                     ☆
                                     @endif
                                     @endfor</div>
-                            <img src="https://images.unsplash.com/photo-1511988617509-a57c8a288659?w=600"
-                                alt="Review Image" class="review-image">
+                            <img src="{{ $review->image ? asset($review->image) : $product_detail->photo }}"
+                                class="review-image" style="max-width:150px; margin-top:10px;" alt="Review Image">
+
                         </div>
                     </div>
                     @endforeach
                 </div>
                 <div id="review_form" class="hidden">
-                    <p class="reviews-subtitle">Share Your thoughts on the <span style="font-weight:600">'{{ $product_detail->title }}'</span> card.</p>
-                    <form class="form" method="post" action="{{route('login.submit')}}">
+                    <form action="{{ route('product.review.submit') }}" method="POST" enctype="multipart/form-data">
+
                         @csrf
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label>Your Email<span>*</span></label>
-                                    <input type="email" name="email" placeholder="" required="required"
-                                        value="{{old('email')}}">
-                                    @error('email')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                        <input type="hidden" name="product_id" value="{{ $product_detail->id }}">
+
+                        <p class="reviews-subtitle">Share Your thoughts on the <span
+                                style="font-weight:600">'{{ $product_detail->title }}'</span> card.</p>
+                        <div class="review-wrapper">
+                            <h2 class="review-title-main">Write a Review</h2>
+                            <p class="review-subtitle">Share your thoughts on the "{{ $product_detail->title }}"
+                                greeting
+                                card.</p>
+
+                            <div class="review-card">
+
+                                <!-- Rating -->
+                                <label class="form-label">Your Rating*</label>
+                                <div class="rating-stars">
+                                    <i class="fa fa-star-o" data-value="1"></i>
+                                    <i class="fa fa-star-o" data-value="2"></i>
+                                    <i class="fa fa-star-o" data-value="3"></i>
+                                    <i class="fa fa-star-o" data-value="4"></i>
+                                    <i class="fa fa-star-o" data-value="5"></i>
+                                </div>
+                                <input type="hidden" name="rating" id="rating_value">
+
+                                <!-- Title -->
+
+                                <label class="form-label">Review Title*</label>
+                                <input type="text" name="title" class="form-control"
+                                    placeholder="e.g., Beautiful Card!">
+
+                                <!-- Review -->
+                                <label class="form-label">Your Review*</label>
+                                <textarea name="description" class="form-control textarea"
+                                    placeholder="Tell us more about your experience..."></textarea>
+
+                                <!-- Upload -->
+                                <label class="form-label">Upload a Photo (Optional)</label>
+
+                                <div class="upload-box" onclick="document.getElementById('review_image').click()">
+                                    <i class="fa fa-cloud-upload upload-icon"></i>
+                                    <p>
+                                        Click to upload or drag and drop<br>
+                                        <span>PNG, JPG or GIF (MAX. 5MB)</span>
+                                    </p>
+                                </div>
+
+                                <input type="file" name="image" id="review_image" class="hidden" accept="image/*">
+                                <p id="image_name" style="font-size:13px; margin-top:6px; color:#555;"></p>
+
+
+                                <!-- Name -->
+                                <label class="form-label">Your Name</label>
+                                <input type="text" name="reviewer_name" class="form-control"
+                                    placeholder="Enter your name or leave blank to remain anonymous">
+
+                                <!-- Buttons -->
+                                <div class="btn-row">
+                                    <button type="button" class="btn-cancel cancel-btn-review">Cancel</button>
+                                    <button type="submit" class="btn-submit"><i class="fa fa-check"></i> Submit
+                                        Review</button>
                                 </div>
                             </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label>Your Password<span>*</span></label>
-                                    <input type="password" name="password" placeholder="" required="required"
-                                        value="{{old('password')}}">
-                                    @error('password')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                            </div>
+
                         </div>
                     </form>
-                    <div>
-                        <button class="cancel-btn-review"><i class="fa fa-times"></i> Cancel</button>
-                        <button class="btn-review"><i class="fa fa-check"></i> Submit Review</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -308,8 +344,7 @@
                                 <img src="{{ $photo[0] }}" alt="{{ $data->title }}">
                             </a>
 
-                            @if($data->stock <= 0)
-                                <span class="badge out-of-stock">Sold Out</span>
+                            @if($data->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                                 @elseif($data->condition == 'trending')
                                 <span class="badge trending">Trending</span>
                                 @elseif($data->condition == 'new')
@@ -352,98 +387,272 @@
     </div>
 </div>
 <!-- End Most Popular Area -->
+<style>
+<style>.review-wrapper {
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 40px 0;
+    text-align: center;
+}
 
+.review-title-main {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.review-subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 35px;
+}
+
+.review-card {
+    background: #fff;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+    text-align: left;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    display: block;
+    color: #333;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    margin-bottom: 18px;
+    font-size: 14px;
+    background: #fafafa;
+    box-sizing: border-box;
+    /* important for proper spacing */
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #ec1176;
+    background: #fff;
+}
+
+
+.textarea {
+    height: 120px;
+    resize: none;
+}
+
+/* Rating */
+.rating-stars i {
+    font-size: 22px;
+    margin-right: 3px;
+    margin-bottom: 12px !important;
+    /* You can increase to 20, 24 etc */
+
+    color: #999;
+    cursor: pointer;
+    transition: color 0.2s;
+
+}
+
+
+.rating-stars i.active,
+.rating-stars i:hover {
+    color: #ec1176;
+}
+
+/* Upload Box */
+.upload-box {
+    border: 2px dashed #dedede;
+    border-radius: 10px;
+    padding: 25px;
+    text-align: center;
+    color: #666;
+    cursor: pointer;
+    margin-bottom: 22px;
+}
+
+.upload-icon {
+    font-size: 30px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.upload-box span {
+    font-size: 12px;
+    color: #999;
+}
+
+/* Buttons */
+.btn-row {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+
+.btn-submit {
+    flex: unset;
+    padding: 12px 25px;
+    background: #ec1176;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background: #d80f6b;
+}
+
+/* Same spacing for ALL placeholders */
+input::placeholder,
+textarea::placeholder {
+    color: #999;
+    margin: 0;
+    padding: 0;
+}
+
+input.form-control,
+textarea.form-control,
+.textarea {
+    padding: 14px 16px !important;
+    box-sizing: border-box;
+}
+
+textarea.form-control,
+.textarea {
+    padding-top: 16px !important;
+}
+</style>
+
+</style>
 @endsection
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    function changeQty(direction) {
-        const qtyInput = document.getElementById('quantity');
-        const hiddenInput = document.getElementById('quant_value');
-        let currentVal = parseInt(qtyInput.value) || 0;
-        const min = parseInt(qtyInput.getAttribute('min')) || 50;
-        const max = 10000;
-        const step = 50;
+function changeQty(direction) {
+    const qtyInput = document.getElementById('quantity');
+    const hiddenInput = document.getElementById('quant_value');
+    let currentVal = parseInt(qtyInput.value) || 0;
+    const min = parseInt(qtyInput.getAttribute('min')) || 50;
+    const max = 10000;
+    const step = 50;
 
-        if (direction === 1) currentVal = Math.min(max, currentVal + step);
-        else currentVal = Math.max(min, currentVal - step);
+    if (direction === 1) currentVal = Math.min(max, currentVal + step);
+    else currentVal = Math.max(min, currentVal - step);
 
-        qtyInput.value = currentVal;
-        hiddenInput.value = currentVal;
+    qtyInput.value = currentVal;
+    hiddenInput.value = currentVal;
+}
+
+function openTabClean(e, tabName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tab-content-clean");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
     }
-
-    function openTabClean(e, tabName) {
-        var i, tabcontent, tablinks;
-        tabcontent = document.getElementsByClassName("tab-content-clean");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].classList.remove("active");
-        }
-        tablinks = document.getElementsByClassName("tab-link-clean");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active");
-        }
-        document.getElementById(tabName).classList.add("active");
-        e.currentTarget.classList.add("active");
+    tablinks = document.getElementsByClassName("tab-link-clean");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
     }
+    document.getElementById(tabName).classList.add("active");
+    e.currentTarget.classList.add("active");
+}
 
-    document.addEventListener('DOMContentLoaded', function() {
-        const writeBtn = document.querySelector('.reviews-summary .btn-review'); // Write Review button
-        const cancelBtn = document.querySelector('#review_form .cancel-btn-review'); // Cancel button
-        const reviewsContainer = document.querySelector('.reviews-container'); // Reviews list
-        const reviewForm = document.getElementById('review_form'); // Review form
+document.addEventListener('DOMContentLoaded', function() {
+    const writeBtn = document.querySelector('.reviews-summary .btn-review'); // Write Review button
+    const cancelBtn = document.querySelector('#review_form .cancel-btn-review'); // Cancel button
+    const reviewsContainer = document.querySelector('.reviews-container'); // Reviews list
+    const reviewForm = document.getElementById('review_form'); // Review form
 
-        // Show form, hide reviews
-        writeBtn.addEventListener('click', function() {
-            reviewsContainer.classList.add('hidden');
-            reviewForm.classList.remove('hidden');
-        });
-
-        // Hide form, show reviews
-        cancelBtn.addEventListener('click', function() {
-            reviewForm.classList.add('hidden');
-            reviewsContainer.classList.remove('hidden');
-        });
+    // Show form, hide reviews
+    writeBtn.addEventListener('click', function() {
+        reviewsContainer.classList.add('hidden');
+        reviewForm.classList.remove('hidden');
     });
 
-    // cart height
-    function setEqualHeight() {
-        var maxHeight = 0;
-        $('.product-card-modern').css('height', 'auto'); // reset
+    // Hide form, show reviews
+    cancelBtn.addEventListener('click', function() {
+        reviewForm.classList.add('hidden');
+        reviewsContainer.classList.remove('hidden');
+    });
+});
 
-        $('.product-card-modern').each(function() {
-            var cardHeight = $(this).outerHeight();
-            if (cardHeight > maxHeight) {
-                maxHeight = cardHeight;
-            }
-        });
+// cart height
+function setEqualHeight() {
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
 
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
-    // Swiper
-    document.addEventListener('DOMContentLoaded', () => {
-        new Swiper('.product-items-swiper', {
-            slidesPerView: 4,
-            spaceBetween: 20,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
+        }
+    });
+
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
+// Swiper
+document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.product-items-swiper', {
+        slidesPerView: 4,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 2
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 2
-                },
-                576: {
-                    slidesPerView: 2.1
-                },
-                768: {
-                    slidesPerView: 3.1
-                },
-                992: {
-                    slidesPerView: 4.1
-                },
+            576: {
+                slidesPerView: 2.1
+            },
+            768: {
+                slidesPerView: 3.1
+            },
+            992: {
+                slidesPerView: 4.1
+            },
+        }
+    });
+});
+
+// image preview
+document.getElementById("review_image").addEventListener("change", function() {
+    document.getElementById("image_name").innerText = "";
+});
+
+
+const stars = document.querySelectorAll('.rating-stars i');
+const ratingInput = document.getElementById('rating_value');
+
+stars.forEach((star, index) => {
+    star.addEventListener('click', () => {
+        const rating = index + 1;
+        ratingInput.value = rating;
+
+        stars.forEach((s, i) => {
+            if (i < rating) {
+                s.classList.remove('fa-star-o');
+                s.classList.add('fa-star', 'active');
+            } else {
+                s.classList.remove('fa-star', 'active');
+                s.classList.add('fa-star-o');
             }
         });
     });
+});
 </script>
 
 @endpush

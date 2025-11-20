@@ -19,6 +19,8 @@ use DB;
 use Hash;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\ProductReview; 
+
 
 class FrontendController extends Controller
 {
@@ -460,4 +462,43 @@ class FrontendController extends Controller
             return view('frontend.pages.product-lists', compact('products', 'recent_products', 'priceRange', 'category_name', 'allCategories'));
         }
     }
+
+    public function submitReview(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'reviewer_name' => 'required|string|max:255',
+        'title' => 'required|string|max:255',
+        'description' => 'required|string',
+        'rating' => 'required|numeric|min:1|max:5',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120',
+
+    ]);
+
+    $product = Product::find($request->product_id); 
+    $imageName = null;
+
+    if ($request->hasFile('image')) {
+    $file = $request->file('image');
+    $imageName = time().'_'.$file->getClientOriginalName();
+    $file->storeAs('public/review_images', $imageName);
+
+    $imageName = 'storage/review_images/'.$imageName;  
+} else {
+    $imageName = null;
+}
+    ProductReview::create([
+        'product_id' => $request->product_id,
+        'reviewer_name' => $request->reviewer_name,
+        'title' => $request->title,
+        'description' => $request->description,
+        'rating' => $request->rating,
+        'user_id' => Auth::id() ?? null,
+        'status' => 'active', 
+        'image' => $imageName,
+
+    ]);
+
+    return back()->with('success', 'Review submitted successfully');
+}
 }
