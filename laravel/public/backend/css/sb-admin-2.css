@@ -10444,7 +10444,7 @@ a:focus {
 
 .sidebar .sidebar-heading {
   text-align: center;
-  padding: 0 1rem;
+  padding: 1rem;
   font-weight: 800;
   font-size: 0.65rem;
 }
@@ -10477,7 +10477,7 @@ a:focus {
     display: block;
     width: 100%;
     text-align: left;
-    padding: 1rem;
+    padding: 0 1rem 1rem 1rem;
     width: 14rem;
   }
   .sidebar .nav-item .nav-link i {

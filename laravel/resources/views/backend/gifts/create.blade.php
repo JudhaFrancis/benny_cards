@@ -3,9 +3,9 @@
 @section('main-content')
 
   <div class="card">
-    <h5 class="card-header">Add Product</h5>
+    <h5 class="card-header">Add Gifts</h5>
     <div class="card-body">
-      <form method="post" action="{{route('product.store')}}" enctype="multipart/form-data">
+      <form method="post" action="{{route('gifts.store')}}" enctype="multipart/form-data">
         {{csrf_field()}}
         <div class="form-group">
           <label for="inputTitle" class="col-form-label">Title <span class="text-danger">*</span></label>

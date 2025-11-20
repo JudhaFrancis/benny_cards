@@ -95,9 +95,9 @@
                             </button>
 
                             <a href="{{route('category.edit', $category->id)}}"
-                                class="btn btn-primary btn-sm mr-1"
+                                class="btn btn-edit btn-sm mr-1"
                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-                                data-placement="bottom"><i class="fas fa-edit"></i>
+                                data-placement="bottom"><i class="fas fa-pen"></i>
                             </a>
 
                             <form method="POST" action="{{route('category.destroy', [$category->id])}}" style="display:inline-block;">

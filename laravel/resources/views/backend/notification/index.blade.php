@@ -43,6 +43,7 @@
                     <tr>
                         <td>{{ $loop->iteration }}</td>
                         <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            data-toggle="tooltip" data-placement="top"
                             title="{{ $notification->message }}">
                             {{ $notification->message ?? 'No message' }}
                         </td>
@@ -104,9 +105,11 @@
                                 <div class="modal-body">
                                     <div class="row mb-2">
                                         <div class="col-md-6"><strong>From :</strong>
-                                            {{ $notification->sender_mobile_no ?? '-' }}</div>
+                                            {{ $notification->sender_mobile_no ?? '-' }}
+                                        </div>
                                         <div class="col-md-6"><strong>To :</strong>
-                                            {{ $notification->recipient_mobile_no ?? '-' }}</div>
+                                            {{ $notification->recipient_mobile_no ?? '-' }}
+                                        </div>
                                     </div>
 
                                     <div class="row mb-2">
@@ -187,62 +190,68 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 
 <script>
-$('#notification-dataTable').DataTable({
-    "order": [[0, "desc"]],
-    "columnDefs": [{
-        "orderable": false,
-        "targets": [8]
-    }]
-});
+    $('#notification-dataTable').DataTable({
+        "order": [
+            [0, "desc"]
+        ],
+        "columnDefs": [{
+            "orderable": false,
+            "targets": [8]
+        }]
+    });
 </script>
 
 <script>
-$(document).ready(function() {
-    $('.resendBtn').on('click', function() {
-        let id = $(this).data('id');
-        let button = $(this);
+    $(document).ready(function() {
+        $('.resendBtn').on('click', function() {
+            let id = $(this).data('id');
+            let button = $(this);
 
-        button.prop('disabled', true);
-        button.html('<i class="fas fa-spinner fa-spin"></i>');
+            button.prop('disabled', true);
+            button.html('<i class="fas fa-spinner fa-spin"></i>');
 
-        $.ajax({
-            url: `/api/whatsappResent/${id}`,
-            type: 'POST',
-            success: function(response) {
-                if (response.result && response.result.status === true) {
+            $.ajax({
+                url: `/api/whatsappResent/${id}`,
+                type: 'POST',
+                success: function(response) {
+                    if (response.result && response.result.status === true) {
+                        swal({
+                            title: "Success!",
+                            text: response.message || "WhatsApp message sent successfully.",
+                            icon: "success",
+                            timer: 1500,
+                            buttons: false,
+                        });
+                    } else {
+                        swal({
+                            title: "Failed!",
+                            text: response.message || "WhatsApp message failed to send.",
+                            icon: "error",
+                            timer: 2000,
+                            buttons: false,
+                        });
+                    }
+                },
+                error: function(xhr) {
                     swal({
-                        title: "Success!",
-                        text: response.message || "WhatsApp message sent successfully.",
-                        icon: "success",
-                        timer: 1500,
-                        buttons: false,
-                    });
-                } else {
-                    swal({
-                        title: "Failed!",
-                        text: response.message || "WhatsApp message failed to send.",
+                        title: "Error!",
+                        text: xhr.responseJSON?.message || "Something went wrong. Try again later.",
                         icon: "error",
                         timer: 2000,
                         buttons: false,
                     });
+                },
+                complete: function() {
+                    button.prop('disabled', false);
+                    button.html('<i class="fas fa-paper-plane"></i>');
+                    setTimeout(() => location.reload(), 2500);
                 }
-            },
-            error: function(xhr) {
-                swal({
-                    title: "Error!",
-                    text: xhr.responseJSON?.message || "Something went wrong. Try again later.",
-                    icon: "error",
-                    timer: 2000,
-                    buttons: false,
-                });
-            },
-            complete: function() {
-                button.prop('disabled', false);
-                button.html('<i class="fas fa-paper-plane"></i>');
-                setTimeout(() => location.reload(), 2500);
-            }
+            });
         });
     });
-});
+    
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
 </script>
 @endpush

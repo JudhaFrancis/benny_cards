@@ -91,9 +91,9 @@
 
                             <!-- Edit -->
                             <a href="{{ route('price-range.edit', $priceRange->id) }}"
-                                class="btn btn-primary btn-sm mr-1" style="height:30px; width:30px;border-radius:50%"
+                                class="btn btn-edit btn-sm mr-1" style="height:30px; width:30px;border-radius:50%"
                                 title="Edit">
-                                <i class="fas fa-edit"></i>
+                                <i class="fas fa-pen"></i>
                             </a>
 
                             <!-- Delete -->

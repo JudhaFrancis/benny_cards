@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="card-header">
-        <h3 class="m-0 font-weight-bold text-primary float-left">Product Lists</h3>
+        <h3 class="m-0 font-weight-bold text-primary float-left">Gifts Lists</h3>
     </div>
     <div class="card-body">
         <div class="table-responsive">
@@ -40,8 +40,8 @@
                     @endphp
                     <tr>
                         <td>{{$products->firstItem() + $index }}</td>
-                        <td>
-                            {{ Str::limit($product->title, 50) }}
+                        <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" data-toggle="tooltip" data-placement="top" title="{{ $product->title }}">
+                            {{ Str::limit($product->title, 30) }}
                         </td>
                         <td>{{$product->cat_info['title']}}
                             <sub>
@@ -109,11 +109,11 @@
                                 <i class="fas fa-eye"></i>
                             </button>
 
-                            <a href="{{route('product.edit', $product->id)}}"
-                                class="btn btn-primary btn-sm mr-1"
+                            <a href="{{route('gifts.edit', $product->id)}}"
+                                class="btn btn-edit btn-sm mr-1"
                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-                                data-placement="bottom"><i class="fas fa-edit"></i></a>
-                            <form method="POST" action="{{route('product.destroy', [$product->id])}}" style="display:inline-block;">
+                                data-placement="bottom"><i class="fas fa-pen"></i></a>
+                            <form method="POST" action="{{route('gifts.destroy', [$product->id])}}" style="display:inline-block;">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{$product->id}}
@@ -268,28 +268,28 @@
 <!-- Page level custom scripts -->
 <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
 <script>
-$(document).ready(function() {
-    // Initialize DataTable first
-    var table = $('#product-dataTable').DataTable({
-        "columnDefs": [{
-            "orderable": false,
-            "targets": [3, 4, 5]
-        }],
-        "language": {
-            "search": "", // remove "Search:" label
-            "searchPlaceholder": "Search products..." // optional placeholder text
-        }
-    });
+    $(document).ready(function() {
+        // Initialize DataTable first
+        var table = $('#product-dataTable').DataTable({
+            "columnDefs": [{
+                "orderable": false,
+                "targets": [3, 4, 5]
+            }],
+            "language": {
+                "search": "", // remove "Search:" label
+                "searchPlaceholder": "Search products..." // optional placeholder text
+            }
+        });
 
-    // Add button next to search input
-    var addButton = `<a href="{{route('product.create')}}" class="btn btn-primary btn-sm ml-2" 
+        // Add button next to search input
+        var addButton = `<a href="{{route('gifts.create')}}" class="btn btn-primary btn-sm ml-2" 
                         data-toggle="tooltip" data-placement="bottom" title="Add Product">
                         <i class="fas fa-plus"></i> Add Product
                      </a>`;
-    
-    // Append the button inside the filter container, aligned with input
-    $('#product-dataTable_filter').append(addButton);
-});
+
+        // Append the button inside the filter container, aligned with input
+        $('#product-dataTable_filter').append(addButton);
+    });
 </script>
 
 <script>
@@ -345,7 +345,10 @@ $(document).ready(function() {
                 $(this).removeData('parentModal');
             }
         });
+    })
 
+    $(function() {
+        $('[data-toggle="tooltip"]').tooltip()
     })
 </script>
 @endpush

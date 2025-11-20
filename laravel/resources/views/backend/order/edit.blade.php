@@ -274,45 +274,6 @@ document.getElementById('updateOrderBtn').addEventListener('click', function() {
 </script>
 
 <script>
-document.addEventListener("DOMContentLoaded", function() {
-    function updateTotals() {
-        let subtotal = 0;
-
-        // Loop through all items and calculate totals
-        document.querySelectorAll('.order-item').forEach(item => {
-            const qty = parseFloat(item.querySelector('.quantity').value) || 0;
-            const price = parseFloat(item.querySelector('.price').value) || 0;
-            const total = qty * price;
-
-            // Update total field
-            item.querySelector('.total').value = total.toFixed(2);
-
-            // Add to subtotal
-            subtotal += total;
-        });
-
-        // Get shipping and tax values from Blade variables
-        const shipping = parseFloat("{{ $order->shipping ?? 0 }}");
-        const tax = parseFloat("{{ $order->tax ?? 0 }}");
-
-        // Final total
-        const totalAmount = subtotal + shipping + tax;
-
-        // Update subtotal and total
-        document.getElementById('subtotal').textContent = '$' + subtotal.toFixed(2);
-        document.getElementById('total').textContent = '$' + totalAmount.toFixed(2);
-    }
-
-    document.querySelectorAll('.quantity, .price').forEach(input => {
-        input.addEventListener('input', updateTotals);
-    });
-
-    // Run once on load
-    updateTotals();
-});
-</script>
-
-<script>
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.querySelector(
         '.add-modern-input[placeholder="Search by product name or SKU..."]'

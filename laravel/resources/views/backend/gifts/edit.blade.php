@@ -3,9 +3,9 @@
 @section('main-content')
 
 <div class="card">
-    <h5 class="card-header">Edit Product</h5>
+    <h5 class="card-header">Edit Gifts</h5>
     <div class="card-body">
-<form method="post" action="{{route('product.update',$product->id)}}" enctype="multipart/form-data">
+<form method="post" action="{{route('gifts.update',$product->id)}}" enctype="multipart/form-data">
         @csrf 
         @method('PATCH')
         <div class="form-group">
