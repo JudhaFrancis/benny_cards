@@ -3,42 +3,37 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 
 use Illuminate\Support\Str;
 
-class ProductController extends Controller
+class GiftController extends Controller
 {
     /**
      * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         $products = Product::getAllProduct();
-        return view('backend.product.index', compact('products'));
+        return view('backend.gifts.index', compact('products'));
     }
 
     /**
      * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
      */
     public function create()
     {
         $brands = Brand::get();
         $categories = Category::where('is_parent', 1)->get();
-        return view('backend.product.create', compact('categories', 'brands'));
+        return view('backend.gifts.create', compact('categories', 'brands'));
     }
 
     /**
      * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
@@ -85,7 +80,7 @@ class ProductController extends Controller
             ? 'Product Successfully added'
             : 'Please try again!!';
 
-        return redirect()->route('product.index')->with(
+        return redirect()->route('gifts.index')->with(
             $product ? 'success' : 'error',
             $message
         );
@@ -93,9 +88,6 @@ class ProductController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
@@ -104,9 +96,6 @@ class ProductController extends Controller
 
     /**
      * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -115,15 +104,11 @@ class ProductController extends Controller
         $categories = Category::where('is_parent', 1)->get();
         $items = Product::where('id', $id)->get();
 
-        return view('backend.product.edit', compact('product', 'brands', 'categories', 'items'));
+        return view('backend.gifts.edit', compact('product', 'brands', 'categories', 'items'));
     }
 
     /**
      * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
@@ -170,43 +155,47 @@ class ProductController extends Controller
             ? 'Product Successfully updated'
             : 'Please try again!!';
 
-        return redirect()->route('product.index')->with(
+        return redirect()->route('gifts.index')->with(
             $status ? 'success' : 'error',
             $message
         );
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  Mark the product as inactive instead of deleting it.
      */
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
-        $status = $product->delete();
+
+        // Update status instead of deleting
+        $status = $product->update([
+            'status' => 'inactive'
+        ]);
 
         $message = $status
-            ? 'Product successfully deleted'
-            : 'Error while deleting product';
+            ? 'Product successfully marked as inactive'
+            : 'Error while updating product status';
 
-        return redirect()->route('product.index')->with(
+        return redirect()->route('gifts.index')->with(
             $status ? 'success' : 'error',
             $message
         );
     }
 
+    /**
+     * Perform live search for active products by title or slug.
+     */
     public function search(Request $request)
     {
         $query = $request->get('query', '');
 
-        $products = \App\Models\Product::where('title', 'like', "%{$query}%")
+        $products = Product::where('title', 'like', "%{$query}%")
             ->orWhere('slug', 'like', "%{$query}%")
             ->where('status', 'active')
             ->limit(10)
             ->get(['id', 'title', 'price', 'discount', 'photo']);
 
-        return response()->json($products);
+        return $products;
     }
 }

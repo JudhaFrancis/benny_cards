@@ -44,13 +44,19 @@
     <hr class="sidebar-divider">
     <!-- Heading -->
     <div class="sidebar-heading">
-        Shop Management
+        Product Management
     </div>
-    <!-- Products -->
+    <!-- Cards -->
     <li class="nav-item">
-        <a class="nav-link" href="{{route('product.index')}}">
-            <i class="fas fa-cubes"></i>
-            <span>Products</span>
+        <a class="nav-link" href="{{route('invitation_cards.index')}}">
+            <i class="fas fa-envelope-open-text"></i>
+            <span>Invitation Cards</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{{route('gifts.index')}}">
+            <i class="fas fa-gift"></i>
+            <span>Gifts</span>
         </a>
     </li>
 
@@ -118,11 +124,11 @@
     </li>
 
     <li class="nav-item">
-    <a class="nav-link" href="{{route('all.notification')}}">
-        <i class="fas fa-envelope"></i>
-        <span>Message Log</span>
-    </a>
-</li>
+        <a class="nav-link" href="{{route('all.notification')}}">
+            <i class="fas fa-envelope"></i>
+            <span>Message Log</span>
+        </a>
+    </li>
 
 
     <!-- Divider -->

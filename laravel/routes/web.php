@@ -11,6 +11,8 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OrderItemController;
+use App\Http\Controllers\InvitationCardController;
+use App\Http\Controllers\GiftController;
 use App\Http\Controllers\ProductReviewController;
 use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\CouponController;
@@ -154,8 +156,10 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('profile-update');
     // Category
     Route::resource('/category', 'CategoryController');
-    // Product
-    Route::resource('/product', 'ProductController');
+    // Invitation Cards
+    Route::resource('/invitation_cards', 'InvitationCardController');
+    // Gifts
+    Route::resource('/gifts', 'GiftController');
     // Ajax for sub category
     Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
     // POST category
@@ -170,7 +174,7 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
 
     // Order
     Route::resource('/order', 'OrderController');
-    Route::get('/products/search', [App\Http\Controllers\ProductController::class, 'search'])->name('admin.products.search');
+    Route::get('/products/search', [InvitationCardController::class, 'search'])->name('admin.products.search');
 
     //OrderItem
     Route::post('/order/item/delete', [OrderItemController::class, 'inActiveItems'])->name('order.item.delete');

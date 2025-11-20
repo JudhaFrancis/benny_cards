@@ -76,19 +76,19 @@
                             <button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal"
                                 data-target="#viewModal{{$banner->id}}"
                                 style="height:30px; width:30px;border-radius:50%" title="View">
-                                <i class="fas fa-eye"></i>
+                                <i class="far fa-eye"></i>
                             </button>
 
                             <a href="{{route('banner.edit', $banner->id)}}"
-                                class="btn btn-primary btn-sm mr-1"
+                                class="btn btn-edit btn-sm mr-1"
                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-                                data-placement="bottom"><i class="fas fa-edit"></i></a>
+                                data-placement="bottom"><i class="fas fa-pen"></i></a>
                             <form method="POST" action="{{route('banner.destroy', [$banner->id])}}" style="display:inline-block;">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{$banner->id}}
                                     style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip"
-                                    data-placement="bottom" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                                    data-placement="bottom" title="Delete"><i class="far fa-trash-alt"></i></button>
                             </form>
                         </td>
                         <!-- View Modal -->

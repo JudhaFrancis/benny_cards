@@ -60,9 +60,9 @@
                             <a href="{{route('order.show', $order->id)}}" class="btn btn-warning btn-sm mr-1"
                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="view"
                                 data-placement="bottom"><i class="fas fa-eye"></i></a>
-                            <a href="{{route('order.edit', $order->id)}}" class="btn btn-primary btn-sm mr-1"
+                            <a href="{{route('order.edit', $order->id)}}" class="btn btn-edit btn-sm mr-1"
                                 style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-                                data-placement="bottom"><i class="fas fa-edit"></i></a>
+                                data-placement="bottom"><i class="fas fa-pen"></i></a>
                             <form method="POST" action="{{route('order.destroy', [$order->id])}}"
                                 style="display:inline-block;">
                                 @csrf

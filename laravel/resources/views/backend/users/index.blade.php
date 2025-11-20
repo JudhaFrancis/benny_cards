@@ -54,9 +54,9 @@
       @endif
       </td>
       <td>
-        <a href="{{route('users.edit', $user->id)}}" class="btn btn-primary btn-sm mr-1"
+        <a href="{{route('users.edit', $user->id)}}" class="btn btn-edit btn-sm mr-1"
         style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-        data-placement="bottom"><i class="fas fa-edit"></i></a>
+        data-placement="bottom"><i class="fas fa-pen"></i></a>
         <form method="POST" action="{{route('users.destroy', [$user->id])}}">
         @csrf
         @method('delete')
