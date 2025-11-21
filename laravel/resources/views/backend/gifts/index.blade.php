@@ -128,7 +128,7 @@
                                 <div class="modal-content">
 
                                     <div class="modal-header">
-                                        <h5 class="modal-title">Product Details</h5>
+                                        <h5 class="modal-title">Gift Details</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -283,8 +283,8 @@
 
         // Add button next to search input
         var addButton = `<a href="{{route('gifts.create')}}" class="btn btn-primary btn-sm ml-2" 
-                        data-toggle="tooltip" data-placement="bottom" title="Add Product">
-                        <i class="fas fa-plus"></i> Add Product
+                        data-toggle="tooltip" data-placement="bottom" title="Add Gift">
+                        <i class="fas fa-plus"></i> Add Gift
                      </a>`;
 
         // Append the button inside the filter container, aligned with input

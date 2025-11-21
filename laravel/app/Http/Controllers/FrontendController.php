@@ -36,7 +36,7 @@ class FrontendController extends Controller
         $posts = Post::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         $banners = Banner::where('status', 'active')->orderBy('id', 'DESC')->limit(3)->get();
         // return $banner;
-        $products = Product::where('status', 'active')->orderBy('id', 'DESC')->get();
+        $products = Product::where('status', 'active')->where('type', 'card')->orderBy('id', 'DESC')->get();
         $category = Category::where('status', 'active')->where('is_parent', 1)->orderBy('title', 'ASC')->get();
         // return $category;
         return view('frontend.index')
@@ -55,7 +55,11 @@ class FrontendController extends Controller
 
     public function gifts()
     {
-        return view('frontend.pages.gifts');
+         $products = Product::where('status', 'active')
+        ->where('type', 'gift')
+        ->orderBy('id', 'DESC')
+        ->paginate(12);
+        return view('frontend.pages.gifts', compact('products'));
     }
 
     public function corporate()

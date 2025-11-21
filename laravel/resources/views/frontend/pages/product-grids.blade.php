@@ -399,5 +399,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function setEqualHeight() {
+        var maxHeight = 0;
+        $('.product-card-modern').css('height', 'auto'); // reset
+
+        $('.product-card-modern').each(function() {
+            var cardHeight = $(this).outerHeight();
+            if (cardHeight > maxHeight) {
+                maxHeight = cardHeight;
+            }
+        });
+
+        $('.product-card-modern').css('height', maxHeight + 'px');
+    }
+
+    // Run on page load and window resize
+    $(document).ready(setEqualHeight);
+    $(window).resize(setEqualHeight);
+
 </script>
 @endpush

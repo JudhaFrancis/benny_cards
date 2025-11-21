@@ -18,7 +18,7 @@ class GiftController extends Controller
      */
     public function index()
     {
-        $products = Product::getAllProduct();
+    $products = Product::where('type', 'gift')->paginate(10);
         return view('backend.gifts.index', compact('products'));
     }
 
@@ -57,6 +57,7 @@ class GiftController extends Controller
         $slug = generateUniqueSlug($request->title, Product::class);
         $validatedData['slug'] = $slug;
         $validatedData['is_featured'] = $request->input('is_featured', 0);
+        $validatedData['type'] = 'gift';
 
         if ($request->has('size')) {
             $validatedData['size'] = implode(',', $request->input('size'));
@@ -132,6 +133,7 @@ class GiftController extends Controller
         ]);
 
         $validatedData['is_featured'] = $request->input('is_featured', 0);
+        $validatedData['type'] = 'gift';
 
         if ($request->has('size')) {
             $validatedData['size'] = implode(',', $request->input('size'));
@@ -190,8 +192,11 @@ class GiftController extends Controller
     {
         $query = $request->get('query', '');
 
-        $products = Product::where('title', 'like', "%{$query}%")
-            ->orWhere('slug', 'like', "%{$query}%")
+    $products = Product::where('type', 'gift')
+                ->where(function($q) use ($query) {
+                $q->where('title', 'like', "%{$query}%")
+            ->orWhere('slug', 'like', "%{$query}%");
+            })
             ->where('status', 'active')
             ->limit(10)
             ->get(['id', 'title', 'price', 'discount', 'photo']);

@@ -174,10 +174,10 @@ Route::group(['prefix' => '/admin', 'middleware' => ['auth', 'admin']], function
     // Message
     Route::resource('/message', 'MessageController');
     Route::get('/message/five', [MessageController::class, 'messageFive'])->name('messages.five');
+ Route::get('/products/search', [InvitationCardController::class, 'search'])->name('admin.products.search');
 
     // Order
     Route::resource('/order', 'OrderController');
-    Route::get('/products/search', [InvitationCardController::class, 'search'])->name('admin.products.search');
 
     //OrderItem
     Route::post('/order/item/delete', [OrderItemController::class, 'inActiveItems'])->name('order.item.delete');

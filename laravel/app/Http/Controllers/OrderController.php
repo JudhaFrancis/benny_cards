@@ -142,7 +142,7 @@ class OrderController extends Controller
             return redirect()->route('payment')->with(['id' => $order->id]);
         }
 
-        return redirect()->route('home');
+return redirect()->away("https://wa.me/".$request->phone."?text=Your order ".$orderData['order_number']." has been placed");
     }
 
     public function show($id)
@@ -222,13 +222,19 @@ class OrderController extends Controller
     public function destroy($id)
     {
         $order = Order::find($id);
-        if ($order) {
-            $order->delete();
-            session()->flash('success', 'Order deleted successfully.');
-        } else {
-            session()->flash('error', 'Order not found.');
-        }
-        return redirect()->route('order.index');
+
+        // Update status instead of deleting
+        $status = $order->update([
+        'status' => 'cancelled'
+        ]);
+        $message = $status
+           ? 'Order successfully marked as cancelled'
+           : 'Error while updating order status';
+
+        return redirect()->route('order.index')->with(
+            $status ? 'success' : 'error',
+        $message
+        );
     }
 
     public function orderTrack($id)
