@@ -142,8 +142,11 @@ class OrderController extends Controller
             return redirect()->route('payment')->with(['id' => $order->id]);
         }
 
-return redirect()->away("https://wa.me/".$request->phone."?text=Your order ".$orderData['order_number']." has been placed");
-    }
+$whatsappNumber = '919003701265'; // Replace with the number you want to redirect to (in international format, no '+' or dashes)
+
+$whatsappUrl = "https://wa.me/{$whatsappNumber}";
+
+return redirect()->away($whatsappUrl);    }
 
     public function show($id)
     {
