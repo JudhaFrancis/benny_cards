@@ -28,6 +28,13 @@
                         <a href="{{ route('product-detail', $product->slug) }}">
                             <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                         </a>
+
+                        <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top">
+                            <i class="ti-heart"></i>
+                        </a>
+                        <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">
+                            Add to Cart
+                        </a>
                     </div>
 
                     <div class="product-info-modern text-center">
@@ -56,23 +63,21 @@
 @push('scripts')
 <script>
 function setEqualHeight() {
-        var maxHeight = 0;
-        $('.product-card-modern').css('height', 'auto'); // reset
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
 
-        $('.product-card-modern').each(function() {
-            var cardHeight = $(this).outerHeight();
-            if (cardHeight > maxHeight) {
-                maxHeight = cardHeight;
-            }
-        });
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
+        }
+    });
 
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
 
-    // Run on page load and window resize
-    $(document).ready(setEqualHeight);
-    $(window).resize(setEqualHeight);
-
+// Run on page load and window resize
+$(document).ready(setEqualHeight);
+$(window).resize(setEqualHeight);
 </script>
 @endpush
-
