@@ -330,7 +330,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                     </div>
                     @endforeach
                     @else
-                    <h4 class="text-warning text-center my-5">There are no products.</h4>
+                    <h4 class="text-center my-5" style="color:#222" ;>There are no products.</h4>
                     @endif
 
                 </div>
@@ -401,22 +401,21 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function setEqualHeight() {
-        var maxHeight = 0;
-        $('.product-card-modern').css('height', 'auto'); // reset
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
 
-        $('.product-card-modern').each(function() {
-            var cardHeight = $(this).outerHeight();
-            if (cardHeight > maxHeight) {
-                maxHeight = cardHeight;
-            }
-        });
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
+        }
+    });
 
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
 
-    // Run on page load and window resize
-    $(document).ready(setEqualHeight);
-    $(window).resize(setEqualHeight);
-
+// Run on page load and window resize
+$(document).ready(setEqualHeight);
+$(window).resize(setEqualHeight);
 </script>
 @endpush

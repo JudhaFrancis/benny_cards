@@ -155,7 +155,7 @@ class InvitationCardController extends Controller
             ? 'Product Successfully updated'
             : 'Please try again!!';
 
-        return redirect()->route('invitation_cards.index')->with(
+        return redirect()->route('invitation_cards.index',['page' => $request->page])->with(
             $status ? 'success' : 'error',
             $message
         );

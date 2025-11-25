@@ -58,8 +58,7 @@
         <div class="product-left">
             <div class="product-thumbnails">
                 @foreach($product_detail->images as $img)
-                <img src="{{ $img->image_path }}" alt="thumb"
-                    onclick="document.getElementById('mainImage').src='{{ $img->image_path }}'">
+                <img src="{{ $img->image_path }}" class="thumb-img" data-image="{{ $img->image_path }}">
                 @endforeach
             </div>
             <div class="product-main-image">
@@ -497,7 +496,6 @@
     flex-wrap: wrap;
 }
 
-
 .btn-submit {
     flex: unset;
     padding: 12px 25px;
@@ -652,6 +650,33 @@ stars.forEach((star, index) => {
             }
         });
     });
+});
+
+// Auto Change Image Every 3 Seconds
+document.addEventListener('DOMContentLoaded', function() {
+
+    const thumbs = document.querySelectorAll('.thumb-img');
+    const mainImage = document.getElementById('mainImage');
+
+    // FIRST slide → main image
+    let images = [mainImage.src];
+
+    // ADD thumbnails also to the array
+    thumbs.forEach(img => images.push(img.dataset.image));
+
+    if (images.length === 0) return;
+
+    let index = 0;
+
+    setInterval(() => {
+        mainImage.src = images[index];
+
+        index++;
+        if (index >= images.length) {
+            index = 0;
+        }
+    }, 3000); // 3 seconds
+
 });
 </script>
 

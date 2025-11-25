@@ -40,7 +40,8 @@
                     @endphp
                     <tr>
                         <td>{{ $cards->firstItem() + $index }}</td>
-                        <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" data-toggle="tooltip" data-placement="top" title="{{ $card->title }}">
+                        <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                            data-toggle="tooltip" data-placement="top" title="{{ $card->title }}">
                             {{ Str::limit($card->title, 30) }}
                         </td>
                         <td>{{$card->cat_info['title']}}
@@ -104,16 +105,17 @@
                         <td>
                             <!-- View Button -->
                             <button type="button" class="btn btn-info btn-sm mr-1" data-toggle="modal"
-                                data-target="#viewModal{{$card->id}}"
-                                style="height:30px; width:30px;border-radius:50%" title="View">
+                                data-target="#viewModal{{$card->id}}" style="height:30px; width:30px;border-radius:50%"
+                                title="View">
                                 <i class="fas fa-eye"></i>
                             </button>
 
-                            <a href="{{route('invitation_cards.edit', $card->id)}}"
-                                class="btn btn-edit btn-sm mr-1"
-                                style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit"
-                                data-placement="bottom"><i class="fas fa-pen"></i></a>
-                            <form method="POST" action="{{route('invitation_cards.destroy', [$card->id])}}" style="display:inline-block;">
+                            <a href="{{route('invitation_cards.edit', ['invitation_card' => $card->id,'page' => request()->get('page')])}}"
+                                class="btn btn-edit btn-sm mr-1" style="height:30px; width:30px;border-radius:50%"
+                                data-toggle="tooltip" title="edit" data-placement="bottom"><i
+                                    class="fas fa-pen"></i></a>
+                            <form method="POST" action="{{route('invitation_cards.destroy', [$card->id])}}"
+                                style="display:inline-block;">
                                 @csrf
                                 @method('delete')
                                 <button class="btn btn-danger btn-sm dltBtn" data-id={{$card->id}}
@@ -226,35 +228,35 @@
 <link href="{{asset('backend/vendor/datatables/dataTables.bootstrap4.min.css')}}" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 <style>
-    div.dataTables_wrapper div.dataTables_paginate {
-        display: none;
-    }
+div.dataTables_wrapper div.dataTables_paginate {
+    display: none;
+}
 
-    .zoom {
-        transition: transform .2s;
-        /* Animation */
-    }
+.zoom {
+    transition: transform .2s;
+    /* Animation */
+}
 
-    .zoom:hover {
-        transform: scale(5);
-    }
+.zoom:hover {
+    transform: scale(5);
+}
 
-    .image-preview-modal .modal-dialog {
-        max-width: 80%;
-    }
+.image-preview-modal .modal-dialog {
+    max-width: 80%;
+}
 
-    .image-preview-modal .modal-content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: transparent;
-        border: none;
-        box-shadow: none;
-    }
+.image-preview-modal .modal-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
 
-    .modal-backdrop.show {
-        opacity: 0.9;
-    }
+.modal-backdrop.show {
+    opacity: 0.9;
+}
 </style>
 @endpush
 
@@ -268,87 +270,87 @@
 <!-- Page level custom scripts -->
 <script src="{{asset('backend/js/demo/datatables-demo.js')}}"></script>
 <script>
-    $(document).ready(function() {
-        // Initialize DataTable first
-        var table = $('#card-dataTable').DataTable({
-            "columnDefs": [{
-                "orderable": false,
-                "targets": [3, 4, 5]
-            }],
-            "language": {
-                "search": "", // remove "Search:" label
-                "searchPlaceholder": "Search cards..." // optional placeholder text
-            }
-        });
+$(document).ready(function() {
+    // Initialize DataTable first
+    var table = $('#card-dataTable').DataTable({
+        "columnDefs": [{
+            "orderable": false,
+            "targets": [3, 4, 5]
+        }],
+        "language": {
+            "search": "", // remove "Search:" label
+            "searchPlaceholder": "Search cards..." // optional placeholder text
+        }
+    });
 
-        // Add button next to search input
-        var addButton = `<a href="{{route('invitation_cards.create')}}" class="btn btn-primary btn-sm ml-2" 
+    // Add button next to search input
+    var addButton = `<a href="{{route('invitation_cards.create')}}" class="btn btn-primary btn-sm ml-2" 
                         data-toggle="tooltip" data-placement="bottom" title="Add card">
                         <i class="fas fa-plus"></i> Add card
                      </a>`;
 
-        // Append the button inside the filter container, aligned with input
-        $('#card-dataTable_filter').append(addButton);
-    });
+    // Append the button inside the filter container, aligned with input
+    $('#card-dataTable_filter').append(addButton);
+});
 </script>
 
 <script>
-    $(document).ready(function() {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            }
-        });
-        $('.dltBtn').click(function(e) {
-            var form = $(this).closest('form');
-            var dataID = $(this).data('id');
-            // alert(dataID);
-            e.preventDefault();
-            swal({
-                    title: "Are you sure?",
-                    text: "Once deleted, you will not be able to recover this data!",
-                    icon: "warning",
-                    buttons: true,
-                    dangerMode: true,
-                })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                    } else {
-                        swal("Your data is safe!");
-                    }
-                });
-        })
-        $(document).on('click', '.preview-click', function() {
-            var src = $(this).attr('src');
-            var parentModal = $(this).closest('.modal'); // find current open modal
-
-            //Temporarily store which modal was open
-            $('#imagePreviewModal').data('parentModal', parentModal);
-
-            // Hide current modal (if open)
-            if (parentModal.length) {
-                parentModal.modal('hide');
-            }
-
-            // Show image preview
-            $('#previewImage').attr('src', src);
-            $('#imagePreviewModal').modal('show');
-        });
-
-        //  Use one global event
-        $('#imagePreviewModal').on('hidden.bs.modal', function() {
-            var parentModal = $(this).data('parentModal');
-            if (parentModal && parentModal.length) {
-                parentModal.modal('show');
-
-                $(this).removeData('parentModal');
-            }
-        });
+$(document).ready(function() {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $('.dltBtn').click(function(e) {
+        var form = $(this).closest('form');
+        var dataID = $(this).data('id');
+        // alert(dataID);
+        e.preventDefault();
+        swal({
+                title: "Are you sure?",
+                text: "Once deleted, you will not be able to recover this data!",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    form.submit();
+                } else {
+                    swal("Your data is safe!");
+                }
+            });
     })
+    $(document).on('click', '.preview-click', function() {
+        var src = $(this).attr('src');
+        var parentModal = $(this).closest('.modal'); // find current open modal
 
-    $(function() {
-        $('[data-toggle="tooltip"]').tooltip()
-    })
+        //Temporarily store which modal was open
+        $('#imagePreviewModal').data('parentModal', parentModal);
+
+        // Hide current modal (if open)
+        if (parentModal.length) {
+            parentModal.modal('hide');
+        }
+
+        // Show image preview
+        $('#previewImage').attr('src', src);
+        $('#imagePreviewModal').modal('show');
+    });
+
+    //  Use one global event
+    $('#imagePreviewModal').on('hidden.bs.modal', function() {
+        var parentModal = $(this).data('parentModal');
+        if (parentModal && parentModal.length) {
+            parentModal.modal('show');
+
+            $(this).removeData('parentModal');
+        }
+    });
+})
+
+$(function() {
+    $('[data-toggle="tooltip"]').tooltip()
+})
 </script>
 @endpush

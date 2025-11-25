@@ -19,6 +19,8 @@
         @csrf
         @method('PATCH')
 
+        <input type="hidden" name="page" value="{{ request('page') }}">
+
         <div class="row g-4">
 
             <!-- LEFT COLUMN -->

@@ -72,8 +72,9 @@
                                 <i class="fas fa-eye"></i>
                             </button>
 
-                            <a href="{{ route('review.edit', $review->id) }}" class="btn btn-primary btn-sm mb-1"
-                                style="width:30px; height:30px;border-radius:50%" title="Edit">
+                            <a href="{{ route('review.edit', ['review' => $review->id, 'page' => request()->get('page')]) }}"
+                                class="btn btn-primary btn-sm mb-1" style="width:30px; height:30px;border-radius:50%"
+                                title="Edit">
                                 <i class="fas fa-pen"></i>
                             </a>
 

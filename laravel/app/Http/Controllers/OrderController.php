@@ -7,6 +7,7 @@ use App\Models\Cart;
 use App\Models\Order;
 use App\Models\Shipping;
 use App\Models\OrderItems;
+use App\Models\Product;
 use App\User;
 use PDF;
 use Notification;
@@ -98,7 +99,7 @@ class OrderController extends Controller
 
         // Save each cart item into order_items table
         foreach ($cartItems as $cart) {
-            $product = \App\Models\Product::find($cart->product_id);
+            $product = Product::find($cart->product_id);
 
 
             OrderItems::create([
@@ -110,6 +111,9 @@ class OrderController extends Controller
                 'quantity'     => $cart->quantity,
                 'total_amount' => ($product->price - ($product->discount ?? 0)) * $cart->quantity,
             ]);
+            // if(!empty($product->quantity)){
+            //  $product->quantity -= $cart->quantity;
+            // }
         }
 
         // Assign cart items to this order
@@ -216,10 +220,9 @@ return redirect()->away($whatsappUrl);    }
 
         $order->save();
 
-        return back()->with('success', 'Order updated successfully!');
+        return redirect()->route('order.index', ['page' => $request->page])
+                 ->with('success', 'Order updated successfully!');
     }
-
-
 
 
     public function destroy($id)

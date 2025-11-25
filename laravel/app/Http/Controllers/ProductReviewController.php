@@ -129,7 +129,7 @@ class ProductReviewController extends Controller
 
     $review->update($data);
 
-    return redirect()->route('review.index')->with('success', 'Review updated successfully!');
+    return redirect()->route('review.index',['page' => $request->page])->with('success', 'Review updated successfully!');
 }
 
     /**
