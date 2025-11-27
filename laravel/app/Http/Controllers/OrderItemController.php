@@ -24,6 +24,13 @@ class OrderItemController extends Controller
         $product = Product::findOrFail($request->product_id);
         $order = Order::findOrFail($request->orders_id);
 
+        // Reduce stock
+        if ($product->stock < $request->quantity) {
+            return response()->json(['error' => $product->title . ' stock not enough']);
+        }
+        $product->stock -= $request->quantity;
+        $product->save();
+        
         // Calculate new totals
         $requestQuantitycount = $request->quantity;
         $requestItemFinalAmount = $product->price - ($product->discount ?? 0);
@@ -36,14 +43,14 @@ class OrderItemController extends Controller
 
 
         $orderItem = OrderItems::create([
-            'orders_id'    => $request->orders_id,
-            'product_id'   => $product->id,
-            'quantity'     => $request->quantity,
-            'net_amount'   => $product->price,
-            'discount'     => $product->discount ?? 0,
+            'orders_id' => $request->orders_id,
+            'product_id' => $product->id,
+            'quantity' => $request->quantity,
+            'net_amount' => $product->price,
+            'discount' => $product->discount ?? 0,
             'final_amount' => $requestItemFinalAmount,
             'total_amount' => $itemsTotalAmount,
-            'status'       => 1
+            'status' => 1
         ]);
 
         // Save updated order

@@ -35,8 +35,8 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'name'     => 'required|string',
-            'phone'    => 'required|numeric',
+            'name' => 'required|string',
+            'phone' => 'required|numeric',
             'address_1' => 'required|string',
 
         ]);
@@ -103,19 +103,21 @@ class OrderController extends Controller
 
 
             OrderItems::create([
-                'orders_id'    => $order->id,
-                'product_id'   => $product->id,
-                'net_amount'   => $product->price,
-                'discount'     => $product->discount ?? 0,
+                'orders_id' => $order->id,
+                'product_id' => $product->id,
+                'net_amount' => $product->price,
+                'discount' => $product->discount ?? 0,
                 'final_amount' => $product->price - ($product->discount ?? 0),
-                'quantity'     => $cart->quantity,
+                'quantity' => $cart->quantity,
                 'total_amount' => ($product->price - ($product->discount ?? 0)) * $cart->quantity,
             ]);
-            // if(!empty($product->quantity)){
-            //  $product->quantity -= $cart->quantity;
-            // }
+            if ($product->stock >= $cart->quantity) {
+                $product->stock -= $cart->quantity;
+                $product->save();
+            } else {
+                return back()->with('error', $product->title . ' stock is not enough');
+            }
         }
-
         // Assign cart items to this order
         Cart::where('user_id', auth()->user()->id)
             ->where('order_id', null)
@@ -146,11 +148,12 @@ class OrderController extends Controller
             return redirect()->route('payment')->with(['id' => $order->id]);
         }
 
-$whatsappNumber = '919003701265'; // Replace with the number you want to redirect to (in international format, no '+' or dashes)
+        $whatsappNumber = '919003701265'; // Replace with the number you want to redirect to (in international format, no '+' or dashes)
 
-$whatsappUrl = "https://wa.me/{$whatsappNumber}";
+        $whatsappUrl = "https://wa.me/{$whatsappNumber}";
 
-return redirect()->away($whatsappUrl);    }
+        return redirect()->away($whatsappUrl);
+    }
 
     public function show($id)
     {
@@ -165,7 +168,7 @@ return redirect()->away($whatsappUrl);    }
         $orderItems = OrderItems::where('orders_id', $order->id)
             ->where('status', 1)
             ->get();
-        return view('backend.order.edit',  [
+        return view('backend.order.edit', [
             'order' => $order,
             'orderItems' => $orderItems
         ]);
@@ -197,16 +200,41 @@ return redirect()->away($whatsappUrl);    }
 
                 $item = OrderItems::find($itemId);
 
-                // Only update if item exists and status = 1
                 if ($item && $item->status == 1) {
-                    $qty = $itemData['quantity'];
-                    $price = $itemData['final_amount'];
+
+                    $product = Product::find($item->product_id);
+
+                    $oldQty = $item->quantity;
+                    $newQty = $itemData['quantity'];
+
+                    // IF NEW QTY > OLD QTY → STOCK REDUCE
+                    if ($newQty > $oldQty) {
+                        $diff = $newQty - $oldQty;
+
+                        if ($product->stock >= $diff) 
+                        {
+                            $product->stock -= $diff;
+                        } else {
+                            return back()->with('error', $product->title . ' stock is not enough');
+                        }
+                    }
+
+                    // IF NEW QTY < OLD QTY → STOCK ADD BACK
+                    if ($newQty < $oldQty) {
+                        $diff = $oldQty - $newQty;
+                        $product->stock += $diff;
+                    }
+
+                    $product->save();
+
+                    // Update item
                     $item->update([
-                        'quantity' => $qty,
-                        'final_amount' => $price,
-                        'total_amount' => $qty * $price
+                        'quantity' => $newQty,
+                        'final_amount' => $itemData['final_amount'],
+                        'total_amount' => $newQty * $itemData['final_amount'],
                     ]);
                 }
+
             }
         }
 
@@ -221,7 +249,7 @@ return redirect()->away($whatsappUrl);    }
         $order->save();
 
         return redirect()->route('order.index', ['page' => $request->page])
-                 ->with('success', 'Order updated successfully!');
+            ->with('success', 'Order updated successfully!');
     }
 
 
@@ -231,15 +259,15 @@ return redirect()->away($whatsappUrl);    }
 
         // Update status instead of deleting
         $status = $order->update([
-        'status' => 'cancelled'
+            'status' => 'cancelled'
         ]);
         $message = $status
-           ? 'Order successfully marked as cancelled'
-           : 'Error while updating order status';
+            ? 'Order successfully marked as cancelled'
+            : 'Error while updating order status';
 
         return redirect()->route('order.index')->with(
             $status ? 'success' : 'error',
-        $message
+            $message
         );
     }
 
