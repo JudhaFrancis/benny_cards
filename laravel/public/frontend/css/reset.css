@@ -2210,6 +2210,25 @@ object {
 	font-weight: 600;
 	text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
+.all-cat-title {
+    display: inline-block;
+    padding-bottom: 6px;
+    border-bottom: 3px solid #e91e63;
+}
+
+#filterBtn {
+    position: absolute;
+    right: 20px; 
+    top: 25%;
+    transform: translateY(-50%);
+    white-space: nowrap;
+    z-index: 2;
+
+    padding: 11px 15px;
+    font-size: 14px;
+    line-height: 1;
+}
+
 
 .price-card {
 	border: none;
@@ -2444,7 +2463,7 @@ object {
 }
 
 .badge {
-	background-color: #3cc0c2;
+	background-color: #212529;
 	color: #fff;
 	font-size: 12px;
 	padding: 8px 12px;

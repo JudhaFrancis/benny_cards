@@ -60,130 +60,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                 <div class="filter-bar d-flex flex-wrap justify-content-between align-items-center my-3">
                     <!-- Left Filters -->
                     <div class="filter-group d-flex flex-wrap gap-2">
-                        <!-- Ratings Filter -->
-                        <div class="dropdown filter-item">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown">
-                                Ratings
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 5]) }}">5
-                                        Stars</a></li>
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 4]) }}">4
-                                        Stars & Up</a></li>
-                                <li><a class="dropdown-item" href="{{ request()->fullUrlWithQuery(['rating' => 3]) }}">3
-                                        Stars & Up</a></li>
-                            </ul>
-                        </div>
-
-                        <!-- Categories Filter -->
-                        <div class="dropdown filter-item">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown">
-                                Categories
-                            </button>
-                            <ul class="dropdown-menu">
-                                @foreach($categories as $cat)
-                                <li>
-                                <li>
-                                    <a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['category' => $cat->slug]) }}">
-                                        {{ $cat->title }}
-                                    </a>
-                                </li>
-
-                                </li>
-                                @if($cat->child_cat->count())
-                                @foreach($cat->child_cat as $sub)
-                                <li><a class="dropdown-item ps-4"
-                                        href="{{ request()->fullUrlWithQuery(['category' => $sub->slug]) }}">—
-                                        {{ $sub->title }}</a></li>
-                                @endforeach
-                                @endif
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <!-- Brands Filter -->
-                        <div class="dropdown filter-item">
-
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown">
-                                Brands
-                            </button>
-                            <ul class="dropdown-menu">
-                                @foreach($brands as $brand)
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['brand' => $brand->slug]) }}">
-                                        {{ $brand->title }}
-                                    </a>
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-
-                        <!-- Price Filter -->
-                        <div class="dropdown filter-item">
-                            <button class="btn btn-outline-dark dropdown-toggle" type="button"
-                                data-bs-toggle="dropdown">
-                                Price
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => '0-10']) }}">₹0 - ₹10</a>
-                                </li>
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => '10-20']) }}">₹10 -
-                                        ₹20</a></li>
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => '20-30']) }}">₹20 -
-                                        ₹30</a></li>
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => '30-40']) }}">₹30 -
-                                        ₹40</a></li>
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => '40-50']) }}">₹40 -
-                                        ₹50</a></li>
-                                <li><a class="dropdown-item"
-                                        href="{{ request()->fullUrlWithQuery(['price_range' => '50-above']) }}">₹50
-                                        and above</a></li>
-
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Right: Sort by -->
-                    <div class="dropdown sort-item">
-
-                        <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                            Sort by
-                        </button>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sort' => 'default']) }}">
-                                    Default sorting
-                                </a>
-                            </li>
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'price_asc']) }}">
-                                    Price: Low to High
-                                </a></li>
-
-                            <li><a class="dropdown-item"
-                                    href="{{ route('product-grids', ['sortBy' => 'price_desc']) }}">
-                                    Price: High to Low
-                                </a></li>
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'latest']) }}">
-                                    Newest
-                                </a></li>
-                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'trending']) }}">
-                                    Trending
-                                </a></li>
-                        </ul>
-                        <button id="open-filter-desktop" class="btn btn-dark d-none d-md-inline-block">
-                            <i class="fa fa-filter"></i>
-                        </button>
-
-                    </div>
-                    @php
+                         @php
                     // Flatten categories + child categories to find titles by slug
                     $allCategories = collect();
                     foreach ($categories as $cat) {
@@ -286,6 +163,40 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                         @endforeach
                     </div>
                     @endif
+                    </div>
+
+                    <!-- Right: Sort by -->
+                    <div class="dropdown sort-item">
+
+                        <button class="btn btn-outline-dark dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                            Sort by
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sort' => 'default']) }}">
+                                    Default sorting
+                                </a>
+                            </li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'price_asc']) }}">
+                                    Price: Low to High
+                                </a></li>
+
+                            <li><a class="dropdown-item"
+                                    href="{{ route('product-grids', ['sortBy' => 'price_desc']) }}">
+                                    Price: High to Low
+                                </a></li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'latest']) }}">
+                                    Newest
+                                </a></li>
+                            <li><a class="dropdown-item" href="{{ route('product-grids', ['sortBy' => 'trending']) }}">
+                                    Trending
+                                </a></li>
+                        </ul>
+                        <button id="open-filter-desktop" class="btn btn-dark d-none d-md-inline-block">
+                            <i class="fa fa-filter"></i>
+                        </button>
+
+                    </div>
+                   
 
                 </div>
             </div>

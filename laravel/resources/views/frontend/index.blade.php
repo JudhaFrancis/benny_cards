@@ -78,11 +78,15 @@
 <section class="trending-products-section section" style="padding-top: 0px;">
     <div class="section-container">
         <!-- Section Title -->
-        <div class="row">
+        <div class="row position-relative mb-3">
             <div class="col-12">
                 <div class="section-title">
                     <h2>All Categories</h2>
                 </div>
+
+                <button class="btn btn-dark filter-btn" id="filterBtn">
+                    Filters <i class="ti-filter"></i>
+                </button>
             </div>
         </div>
 
@@ -119,16 +123,17 @@
                         <a href="{{ route('product-detail', $product->slug) }}">
                             <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                         </a>
-                            @if($product->condition == 'trending')
-                            <span class="badge trending">Trending</span>
-                            @elseif(in_array($product->id, $newProductIds))
-                            <span class="badge new">New</span>
-                            @elseif($product->condition == 'hot')
-                            <span class="badge hot">Hot</span>
-                            @endif
+                        @if($product->condition == 'trending')
+                        <span class="badge trending">Trending</span>
+                        @elseif(in_array($product->id, $newProductIds))
+                        <span class="badge new">New</span>
+                        @elseif($product->condition == 'hot')
+                        <span class="badge hot">Hot</span>
+                        @endif
 
-                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                        <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
+                                class="ti-heart"></i></a>
+                        <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
                     </div>
 
                     <div class="product-info-modern text-center">
@@ -199,12 +204,14 @@
                     <div class="product-card-modern">
                         <div class="price-card-new">
                             <div class="price-image-new">
-                                <img src="{{ $price->photo ?? 'https://via.placeholder.com/400x400' }}" alt="{{ $price->title }}">
+                                <img src="{{ $price->photo ?? 'https://via.placeholder.com/400x400' }}"
+                                    alt="{{ $price->title }}">
                                 <div class="ribbon">Starting at ₹{{ $price->min_price }}</div>
                             </div>
                             <div class="price-content-new text-center">
                                 <h4 class="price-title-new">{{ $price->title }}</h4>
-                                <a href="{{ route('price-range.products', $price->slug) }}" class="price-btn-new">Shop Now</a>
+                                <a href="{{ route('price-range.products', $price->slug) }}" class="price-btn-new">Shop
+                                    Now</a>
                             </div>
                         </div>
                     </div>
@@ -260,12 +267,14 @@ $trendingProducts = $product_lists->where('condition', 'trending');
                                 <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                                @if($product->condition == 'trending')
-                                <span class="badge trending">Trending</span>
-                                @endif
+                            @if($product->condition == 'trending')
+                            <span class="badge trending">Trending</span>
+                            @endif
 
-                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                            <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
+                                    class="ti-heart"></i></a>
+                            <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
+                                Cart</a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -273,7 +282,8 @@ $trendingProducts = $product_lists->where('condition', 'trending');
                                 <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                <span
+                                    class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
                                 @if($product->discount > 0)
                                 <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
                                 <span class="badge discount-badge">{{ $product->discount }}% Off</span>
@@ -346,7 +356,8 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
                                 <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                <span
+                                    class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
                                 @if($product->discount > 0)
                                 <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
                                 <span class="badge discount-badge">{{ $product->discount }}% Off</span>
@@ -401,14 +412,15 @@ $hotProducts = $product_lists->where('condition', 'hot');
                                 <img src="{{ $photo[0] }}" alt="{{ $product->title }}">
                             </a>
 
-                            @if($product->stock <= 0)
-                                <span class="badge out-of-stock">Sold Out</span>
+                            @if($product->stock <= 0) <span class="badge out-of-stock">Sold Out</span>
                                 @elseif($product->condition == 'hot')
                                 <span class="badge hot">Hot</span>
                                 @endif
 
-                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i class="ti-heart"></i></a>
-                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to Cart</a>
+                                <a href="{{ route('add-to-wishlist', $product->slug) }}" class="btn-wishlist-top"><i
+                                        class="ti-heart"></i></a>
+                                <a href="{{ route('add-to-cart', $product->slug) }}" class="btn-add-cart-bottom">Add to
+                                    Cart</a>
                         </div>
 
                         <div class="product-info-modern text-center">
@@ -416,7 +428,8 @@ $hotProducts = $product_lists->where('condition', 'hot');
                                 <a href="{{ route('product-detail', $product->slug) }}">{{ $product->title }}</a>
                             </h3>
                             <div class="product-price d-flex justify-content-center align-items-center gap-2">
-                                <span class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
+                                <span
+                                    class="current-price fw-bold text-dark">₹{{ number_format($after_discount, 2) }}</span>
                                 @if($product->discount > 0)
                                 <del class="text-muted small">₹{{ number_format($product->price, 2) }}</del>
                                 <span class="badge discount-badge">{{ $product->discount }}% Off</span>
@@ -441,186 +454,190 @@ $hotProducts = $product_lists->where('condition', 'hot');
 @endif
 
 <!-- End Shop Home List  -->
-
 @endsection
 
 @push('scripts')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const scrollContainer = document.querySelector('.filter-tope-group');
-        const btnLeft = document.getElementById('scrollLeft');
-        const btnRight = document.getElementById('scrollRight');
+document.addEventListener('DOMContentLoaded', () => {
+    const scrollContainer = document.querySelector('.filter-tope-group');
+    const btnLeft = document.getElementById('scrollLeft');
+    const btnRight = document.getElementById('scrollRight');
 
-        const scrollAmount = 150; // adjust scroll distance per click
+    const scrollAmount = 150; // adjust scroll distance per click
 
-        btnLeft.addEventListener('click', () => {
-            scrollContainer.scrollBy({
-                left: -scrollAmount,
-                behavior: 'smooth'
-            });
+    btnLeft.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: -scrollAmount,
+            behavior: 'smooth'
         });
-
-        btnRight.addEventListener('click', () => {
-            scrollContainer.scrollBy({
-                left: scrollAmount,
-                behavior: 'smooth'
-            });
-        });
-
-        // hide/show arrows dynamically
-        function toggleArrows() {
-            btnLeft.style.display = scrollContainer.scrollLeft > 10 ? 'block' : 'none';
-            btnRight.style.display =
-                scrollContainer.scrollWidth - scrollContainer.scrollLeft >
-                scrollContainer.clientWidth + 10 ? 'block' : 'none';
-        }
-
-        scrollContainer.addEventListener('scroll', toggleArrows);
-        toggleArrows();
     });
 
-    $(document).ready(function() {
-        var $topeContainer = $('.isotope-grid');
+    btnRight.addEventListener('click', () => {
+        scrollContainer.scrollBy({
+            left: scrollAmount,
+            behavior: 'smooth'
+        });
+    });
 
-        // Initialize Isotope and keep the instance in $grid
-        var $grid = $topeContainer.isotope({
-            itemSelector: '.isotope-item',
-            layoutMode: 'fitRows',
-            percentPosition: true,
-            animationEngine: 'best-available',
-            masonry: {
-                columnWidth: '.isotope-item'
+    // hide/show arrows dynamically
+    function toggleArrows() {
+        btnLeft.style.display = scrollContainer.scrollLeft > 10 ? 'block' : 'none';
+        btnRight.style.display =
+            scrollContainer.scrollWidth - scrollContainer.scrollLeft >
+            scrollContainer.clientWidth + 10 ? 'block' : 'none';
+    }
+
+    scrollContainer.addEventListener('scroll', toggleArrows);
+    toggleArrows();
+});
+
+$(document).ready(function() {
+    var $topeContainer = $('.isotope-grid');
+
+    // Initialize Isotope and keep the instance in $grid
+    var $grid = $topeContainer.isotope({
+        itemSelector: '.isotope-item',
+        layoutMode: 'fitRows',
+        percentPosition: true,
+        animationEngine: 'best-available',
+        masonry: {
+            columnWidth: '.isotope-item'
+        }
+    });
+
+    // Function to limit visible items to maxItems (e.g., 8)
+    function limitVisibleItems(maxItems) {
+        var visibleItems = $grid.data('isotope').filteredItems;
+
+        visibleItems.forEach(function(item, index) {
+            if (index < maxItems) {
+                $(item.element).show();
+            } else {
+                $(item.element).hide();
             }
         });
 
-        // Function to limit visible items to maxItems (e.g., 8)
-        function limitVisibleItems(maxItems) {
-            var visibleItems = $grid.data('isotope').filteredItems;
+        $grid.isotope('layout');
 
-            visibleItems.forEach(function(item, index) {
-                if (index < maxItems) {
-                    $(item.element).show();
-                } else {
-                    $(item.element).hide();
-                }
-            });
-
-            $grid.isotope('layout');
-
-            // Handle "no products" message
-            if (visibleItems.length === 0) {
-                if ($('.no-products-message').length === 0) {
-                    $topeContainer.append(`
+        // Handle "no products" message
+        if (visibleItems.length === 0) {
+            if ($('.no-products-message').length === 0) {
+                $topeContainer.append(`
                     <div class="col-12 text-center no-products-message mt-2">
                         <p class="text-muted fs-5">No products available in this category right now.</p>
                     </div>
                 `);
-                }
-            } else {
-                $('.no-products-message').remove();
             }
+        } else {
+            $('.no-products-message').remove();
         }
+    }
 
-        // On filter button click
-        $('.filter-tope-group').on('click', 'button', function() {
-            var filterValue = $(this).attr('data-filter');
+    // On filter button click
+    $('.filter-tope-group').on('click', 'button', function() {
+        var filterValue = $(this).attr('data-filter');
 
-            // Filter with Isotope
-            $grid.isotope({
-                filter: filterValue
-            });
-
-            // After filtering, limit visible items to 8
-            $grid.one('arrangeComplete', function() {
-                limitVisibleItems(8);
-            });
-
-            // Toggle active classes
-            $('.filter-tope-group button').removeClass('how-active1 active');
-            $(this).addClass('how-active1 active');
-        });
-
-        // Default filter on page load: show all and limit to 8
+        // Filter with Isotope
         $grid.isotope({
-            filter: '*'
+            filter: filterValue
         });
 
+        // After filtering, limit visible items to 8
         $grid.one('arrangeComplete', function() {
             limitVisibleItems(8);
-            $('.filter-tope-group button[data-filter="*"]').addClass('how-active1 active');
         });
+
+        // Toggle active classes
+        $('.filter-tope-group button').removeClass('how-active1 active');
+        $(this).addClass('how-active1 active');
     });
 
-    function setEqualHeight() {
-        var maxHeight = 0;
-        $('.product-card-modern').css('height', 'auto'); // reset
+    // Default filter on page load: show all and limit to 8
+    $grid.isotope({
+        filter: '*'
+    });
 
-        $('.product-card-modern').each(function() {
-            var cardHeight = $(this).outerHeight();
-            if (cardHeight > maxHeight) {
-                maxHeight = cardHeight;
-            }
-        });
+    $grid.one('arrangeComplete', function() {
+        limitVisibleItems(8);
+        $('.filter-tope-group button[data-filter="*"]').addClass('how-active1 active');
+    });
+});
 
-        $('.product-card-modern').css('height', maxHeight + 'px');
-    }
+function setEqualHeight() {
+    var maxHeight = 0;
+    $('.product-card-modern').css('height', 'auto'); // reset
 
-    // Run on page load and window resize
-    $(document).ready(setEqualHeight);
-    $(window).resize(setEqualHeight);
+    $('.product-card-modern').each(function() {
+        var cardHeight = $(this).outerHeight();
+        if (cardHeight > maxHeight) {
+            maxHeight = cardHeight;
+        }
+    });
 
-    function cancelFullScreen(el) {
-        var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
-        if (requestMethod) { // cancel full screen.
-            requestMethod.call(el);
-        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
-            }
+    $('.product-card-modern').css('height', maxHeight + 'px');
+}
+
+// Run on page load and window resize
+$(document).ready(setEqualHeight);
+$(window).resize(setEqualHeight);
+
+function cancelFullScreen(el) {
+    var requestMethod = el.cancelFullScreen || el.webkitCancelFullScreen || el.mozCancelFullScreen || el.exitFullscreen;
+    if (requestMethod) { // cancel full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
         }
     }
+}
 
-    function requestFullScreen(el) {
-        // Supports most browsers and their versions.
-        var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
-            .msRequestFullscreen;
+function requestFullScreen(el) {
+    // Supports most browsers and their versions.
+    var requestMethod = el.requestFullScreen || el.webkitRequestFullScreen || el.mozRequestFullScreen || el
+        .msRequestFullscreen;
 
-        if (requestMethod) { // Native full screen.
-            requestMethod.call(el);
-        } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
-            var wscript = new ActiveXObject("WScript.Shell");
-            if (wscript !== null) {
-                wscript.SendKeys("{F11}");
-            }
+    if (requestMethod) { // Native full screen.
+        requestMethod.call(el);
+    } else if (typeof window.ActiveXObject !== "undefined") { // Older IE.
+        var wscript = new ActiveXObject("WScript.Shell");
+        if (wscript !== null) {
+            wscript.SendKeys("{F11}");
         }
-    };
+    }
+};
 
-    document.addEventListener('DOMContentLoaded', () => {
-        new Swiper('.product-items-swiper', {
-            slidesPerView: 4,
-            spaceBetween: 20,
-            navigation: {
-                nextEl: '.swiper-button-next',
-                prevEl: '.swiper-button-prev',
+document.addEventListener('DOMContentLoaded', () => {
+    new Swiper('.product-items-swiper', {
+        slidesPerView: 4,
+        spaceBetween: 20,
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        breakpoints: {
+            0: {
+                slidesPerView: 2
             },
-            breakpoints: {
-                0: {
-                    slidesPerView: 2
-                },
-                576: {
-                    slidesPerView: 2.1
-                },
-                768: {
-                    slidesPerView: 3.1
-                },
-                992: {
-                    slidesPerView: 4.1
-                },
-            }
-        });
+            576: {
+                slidesPerView: 2.1
+            },
+            768: {
+                slidesPerView: 3.1
+            },
+            992: {
+                slidesPerView: 4.1
+            },
+        }
     });
+});
+
+document.getElementById("filterBtn").addEventListener("click", function () {
+    window.location.href = "{{ route('product-grids') }}";
+});
+
 </script>
 
 @endpush
