@@ -2532,3 +2532,132 @@ Version:1.0
         opacity: 1 !important;
     }
 }
+/*  MOBILE VIEW — Image Center + Thumbnails Below */
+@media (max-width: 768px) {
+    .product-page-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .product-left {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    /* Main image center */
+    .product-main-image {
+        width: 100%;
+        text-align: center;
+    }
+    .product-main-image img {
+        width: 85%;
+        max-width: 350px;
+        height: auto;
+        margin: 0 auto;
+        display: block;
+    }
+
+    /* Thumbnails below image */
+    .product-thumbnails {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        order: 2; /* force thumbnails below */
+        margin-top: 15px;
+        flex-wrap: wrap;
+    }
+
+    .product-thumbnails img {
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    /* Right side full width */
+    .product-right {
+        width: 100%;
+        padding: 0 15px;
+    }
+}
+/* Fix Description & Review content spacing in mobile */
+@media (max-width: 768px) {
+
+    .tab-content-clean {
+        padding: 18px 18px !important;   /* spacing on all sides */
+        margin-top: 10px;
+        line-height: 1.65;              /* good readability */
+        font-size: 14.5px;              /* same as "Prices are quoted…" text */
+        background: #fff;
+        border-radius: 10px;
+    }
+
+    .tab-header-clean {
+        padding-left: 15px;
+        padding-right: 15px;
+        margin-top: 15px;
+        margin-bottom: 5px;
+    }
+
+    /* Remove the tight look */
+    .product-tabs-clean {
+        padding: 0 10px !important;
+    }
+}
+/* Fix Customer Review alignment in mobile */
+@media (max-width: 768px) {
+
+    .reviews-summary {
+        display: flex !important;
+        flex-direction: column;
+        align-items: flex-start;   /* 👈 Bar & rating perfectly align */
+        width: 100%;
+        padding: 15px;
+    }
+
+    .rating-left {
+        width: 100% !important;
+        text-align: left;
+        margin-bottom: 15px;
+    }
+
+    .rating-bars {
+        width: 100% !important;
+    }
+
+    .bar-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    .bar {
+        flex: 1;
+        height: 6px;
+        border-radius: 4px;
+        background: #e0e0e0;
+        overflow: hidden;
+    }
+
+    .bar .fill {
+        height: 100%;
+        background: #ec1176;
+    }
+
+    .reviews-container p,
+    .review-text,
+    .review-title {
+        line-height: 1.6;
+        font-size: 14px;
+    }
+}
+
+
+
