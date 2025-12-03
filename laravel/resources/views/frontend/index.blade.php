@@ -635,8 +635,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 document.getElementById("filterBtn").addEventListener("click", function () {
+    sessionStorage.setItem("openFilterDrawer", "1");
     window.location.href = "{{ route('product-grids') }}";
 });
+
 
 </script>
 

@@ -60,109 +60,110 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                 <div class="filter-bar d-flex flex-wrap justify-content-between align-items-center my-3">
                     <!-- Left Filters -->
                     <div class="filter-group d-flex flex-wrap gap-2">
-                         @php
-                    // Flatten categories + child categories to find titles by slug
-                    $allCategories = collect();
-                    foreach ($categories as $cat) {
-                    $allCategories->push($cat);
-                    if ($cat->child_cat->count()) {
-                    $allCategories = $allCategories->merge($cat->child_cat);
-                    }
-                    }
-
-                    $selectedFilters = [];
-
-                    // Get selected category title
-                    if ($categorySlug = request('category')) {
-                    $cat = $allCategories->firstWhere('slug', $categorySlug);
-                    if ($cat) {
-                    $selectedFilters['category'] = [
-                    'slug' => $categorySlug,
-                    'title' => $cat->title,
-                    ];
-                    }
-                    }
-
-                    // Get selected brand title
-                    if ($brandSlug = request('brand')) {
-                    $brand = $brands->firstWhere('slug', $brandSlug);
-                    if ($brand) {
-                    $selectedFilters['brand'] = [
-                    'slug' => $brandSlug,
-                    'title' => $brand->title,
-                    ];
-                    }
-                    }
-
-                    // Get selected price range title
-                    if ($priceSlug = request('price_range')) {
-                    $price = $price_ranges->firstWhere('slug', $priceSlug);
-                    if ($price) {
-                    $selectedFilters['price_range'] = [
-                    'slug' => $priceSlug,
-                    'title' => $price->title,
-                    ];
-                    } else {
-                    if ($priceSlug == '50-above') {
-                    $title = '₹50 and above';
-                    } else {
-                    $parts = explode('-', $priceSlug);
-                    $min = $parts[0] ?? 0;
-                    $max = $parts[1] ?? 0;
-                    $title = "₹$min - ₹$max";
-                    }
-                    $selectedFilters['price_range'] = [
-                    'slug' => $priceSlug,
-                    'title' => $title,
-                    ];
-                    }
-                    }
-
-
-                    // Get rating (just display the number, you can customize text)
-                    if ($rating = request('rating')) {
-                    $selectedFilters['rating'] = [
-                    'slug' => $rating,
-                    'title' => "{$rating} Stars & Up",
-                    ];
-                    }
-
-                    // Sort filter (optional, show name)
-                    if ($sort = request('sort')) {
-                    $sortTitles = [
-                    'default' => 'Default sorting',
-                    'price_asc' => 'Price: Low to High',
-                    'price_desc' => 'Price: High to Low',
-                    'latest' => 'Newest',
-                    ];
-                    $selectedFilters['sort'] = [
-                    'slug' => $sort,
-                    'title' => $sortTitles[$sort] ?? $sort,
-                    ];
-                    }
-                    @endphp
-
-                    @if(count($selectedFilters) > 0)
-                    <div class="w-100 mt-2 d-flex align-items-center gap-2 flex-wrap">
-                        <a href="{{ route('product-grids') }}" class="clear_filter small">
-                            ✕ Clear All Filters
-                        </a>
-
-                        @foreach($selectedFilters as $filterKey => $filter)
                         @php
-                        // Prepare URL that removes only this filter
-                        $query = request()->query();
-                        unset($query[$filterKey]);
-                        $urlWithoutFilter = url()->current() . (count($query) ? '?' . http_build_query($query) : '');
+                        // Flatten categories + child categories to find titles by slug
+                        $allCategories = collect();
+                        foreach ($categories as $cat) {
+                        $allCategories->push($cat);
+                        if ($cat->child_cat->count()) {
+                        $allCategories = $allCategories->merge($cat->child_cat);
+                        }
+                        }
+
+                        $selectedFilters = [];
+
+                        // Get selected category title
+                        if ($categorySlug = request('category')) {
+                        $cat = $allCategories->firstWhere('slug', $categorySlug);
+                        if ($cat) {
+                        $selectedFilters['category'] = [
+                        'slug' => $categorySlug,
+                        'title' => $cat->title,
+                        ];
+                        }
+                        }
+
+                        // Get selected brand title
+                        if ($brandSlug = request('brand')) {
+                        $brand = $brands->firstWhere('slug', $brandSlug);
+                        if ($brand) {
+                        $selectedFilters['brand'] = [
+                        'slug' => $brandSlug,
+                        'title' => $brand->title,
+                        ];
+                        }
+                        }
+
+                        // Get selected price range title
+                        if ($priceSlug = request('price_range')) {
+                        $price = $price_ranges->firstWhere('slug', $priceSlug);
+                        if ($price) {
+                        $selectedFilters['price_range'] = [
+                        'slug' => $priceSlug,
+                        'title' => $price->title,
+                        ];
+                        } else {
+                        if ($priceSlug == '50-above') {
+                        $title = '₹50 and above';
+                        } else {
+                        $parts = explode('-', $priceSlug);
+                        $min = $parts[0] ?? 0;
+                        $max = $parts[1] ?? 0;
+                        $title = "₹$min - ₹$max";
+                        }
+                        $selectedFilters['price_range'] = [
+                        'slug' => $priceSlug,
+                        'title' => $title,
+                        ];
+                        }
+                        }
+
+
+                        // Get rating (just display the number, you can customize text)
+                        if ($rating = request('rating')) {
+                        $selectedFilters['rating'] = [
+                        'slug' => $rating,
+                        'title' => "{$rating} Stars & Up",
+                        ];
+                        }
+
+                        // Sort filter (optional, show name)
+                        if ($sort = request('sort')) {
+                        $sortTitles = [
+                        'default' => 'Default sorting',
+                        'price_asc' => 'Price: Low to High',
+                        'price_desc' => 'Price: High to Low',
+                        'latest' => 'Newest',
+                        ];
+                        $selectedFilters['sort'] = [
+                        'slug' => $sort,
+                        'title' => $sortTitles[$sort] ?? $sort,
+                        ];
+                        }
                         @endphp
-                        <span class="badge small d-flex align-items-center gap-1">
-                            {{ $filter['title'] }}
-                            <a href="{{ $urlWithoutFilter }}" class="text-decoration-none fw-bold"
-                                style="line-height:1;">&times;</a>
-                        </span>
-                        @endforeach
-                    </div>
-                    @endif
+
+                        @if(count($selectedFilters) > 0)
+                        <div class="w-100 mt-2 d-flex align-items-center gap-2 flex-wrap">
+                            <a href="{{ route('product-grids') }}" class="clear_filter small">
+                                ✕ Clear All Filters
+                            </a>
+
+                            @foreach($selectedFilters as $filterKey => $filter)
+                            @php
+                            // Prepare URL that removes only this filter
+                            $query = request()->query();
+                            unset($query[$filterKey]);
+                            $urlWithoutFilter = url()->current() . (count($query) ? '?' . http_build_query($query) :
+                            '');
+                            @endphp
+                            <span class="badge small d-flex align-items-center gap-1">
+                                {{ $filter['title'] }}
+                                <a href="{{ $urlWithoutFilter }}" class="text-decoration-none fw-bold"
+                                    style="line-height:1;">&times;</a>
+                            </span>
+                            @endforeach
+                        </div>
+                        @endif
                     </div>
 
                     <!-- Right: Sort by -->
@@ -196,7 +197,7 @@ $brands = DB::table('brands')->where('status', 'active')->orderBy('title', 'ASC'
                         </button>
 
                     </div>
-                   
+
 
                 </div>
             </div>
@@ -460,6 +461,16 @@ function applyFilter(key, value) {
     url.searchParams.delete('page');
     window.location.href = url.toString();
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (sessionStorage.getItem("openFilterDrawer") === "1") {
+        document.getElementById("mobileFilterSheet").classList.add("active");
+
+        // clear after open 
+        sessionStorage.removeItem("openFilterDrawer");
+    }
+});
+
 </script>
 
 @endpush

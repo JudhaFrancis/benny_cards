@@ -2512,3 +2512,23 @@ Version:1.0
         transform: translateX(0);
     }
 }
+
+@media (min-width: 577px) {
+    #mobileSortSheet,
+    .mobileSortOptions, 
+    .mobile-sort-list {
+        display: none !important;
+        visibility: hidden !important;
+        opacity: 0 !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #mobileSortSheet,
+    .mobileSortOptions,
+    .mobile-sort-list {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+}
