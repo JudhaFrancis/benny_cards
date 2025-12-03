@@ -471,6 +471,49 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+// /*  MOBILE / DESKTOP FILTER DRAWER OPEN/CLOSE
+
+document.getElementById("open-filter").addEventListener("click", function () {
+    document.getElementById("mobileFilterSheet").classList.add("active");
+    document.body.style.overflow = "hidden"; // stop scroll
+});
+
+document.getElementById("open-filter-desktop").addEventListener("click", function () {
+    document.getElementById("mobileFilterSheet").classList.add("active");
+    document.body.style.overflow = "hidden"; // stop scroll
+});
+
+document.addEventListener("DOMContentLoaded", function () {
+    if (sessionStorage.getItem("openFilterDrawer") === "1") {
+        document.getElementById("mobileFilterSheet").classList.add("active");
+        document.body.style.overflow = "hidden"; // stop scroll
+        sessionStorage.removeItem("openFilterDrawer");
+    }
+});
+
+document.addEventListener("click", function (e) {
+    const drawer = document.getElementById("mobileFilterSheet");
+
+    // drawer open check
+    if (!drawer.classList.contains("active")) return;
+
+    const insideDrawer = drawer.querySelector(".drawer-right");
+
+    // click inside drawer-right
+    if (insideDrawer.contains(e.target)) return;
+
+    // click on drawer-left
+    const leftDrawer = drawer.querySelector(".drawer-left");
+    if (leftDrawer.contains(e.target)) return;
+
+    // click on open buttons
+    if (e.target.closest("#open-filter") || e.target.closest("#open-filter-desktop")) return;
+
+    // otherwise → close drawer
+    drawer.classList.remove("active");
+    document.body.style.overflow = "auto"; // enable scroll
+});
+
 </script>
 
 @endpush
