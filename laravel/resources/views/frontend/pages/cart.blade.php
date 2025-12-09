@@ -44,12 +44,12 @@
                                     {{$cart->product['title']}}
                                 </a>
                             </h6>
-							<p class="stock-info">
-    Stock: {{$cart->product['stock']}}
-</p>
+                            <p class="stock-info">
+                                Stock: {{$cart->product['stock']}}
+                            </p>
 
                             <!-- <p class="small text-muted mb-1">{!! $cart->product['summary'] !!}</p> -->
-                           
+
                         </div>
 
                         <!-- Quantity Selector -->
@@ -92,8 +92,8 @@
 
                     <!-- Update Cart Button -->
                     <div class="d-flex justify-content-end mt-3 update-cart-container">
-    <button type="submit" class="btn checkout-btn px-4">Update Cart</button>
-</div>
+                        <button type="submit" class="btn checkout-btn px-4">Update Cart</button>
+                    </div>
 
                 </form>
             </div>

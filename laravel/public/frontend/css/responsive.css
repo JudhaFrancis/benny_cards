@@ -2682,6 +2682,9 @@ Version:1.0
         z-index: 20 !important;
     }
 
+	.cart-remove i {
+    font-size: 13px !important;
+}
     .cart-img img {
         width: 90px !important;
         height: 90px !important;
@@ -2699,11 +2702,18 @@ Version:1.0
         margin: 0 !important;
     }
 
-    .cart-details h6 a {
-        font-size: 15px !important;
-        font-weight: 700 !important;
-        line-height: 18px !important;
-    }
+   .cart-details h6 a {
+	font-size: 15px !important; 
+	font-weight: 700 !important; 
+	line-height: 18px !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 1 !important;  /* limit to 2 lines */
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: normal !important;
+}
+
 
     .stock-info {
         font-size: 12px !important;
@@ -2726,23 +2736,22 @@ Version:1.0
 
     /* --- ROUND BUTTONS LIKE THE SECOND IMAGE --- */
     .quantity-wrapper button {
-        width: 32px !important;
-        height: 32px !important;
+        width: 28px !important;
+        height: 28px !important;
         background: #f3f3f3 !important;
         border-radius: 50% !important;   /* FULL CIRCLE */
         border: none !important;
         display: flex !important;
         align-items: center !important;
         justify-content: center !important;
-        font-size: 11px !important;
+        font-size: 7px !important;
         font-weight: bold !important;
         color: #333 !important;
     }
 
     /* --- SMALL NUMBER INPUT LIKE SECOND IMAGE --- */
     .quantity-wrapper input {
-        width: 30px !important;
-        height: 30px !important;
+        height: 20px !important;
         border: none !important;
         background: transparent !important;
         text-align: center !important;
@@ -2760,7 +2769,7 @@ Version:1.0
    .cart-price {
     position: absolute !important;
     right: 2px !important;      /* Keep it on the right side */
-    top: 75px !important;     /* Positioned at the bottom */
+    top: 72px !important;     /* Positioned at the bottom */
     white-space: nowrap !important;
 }
 	 .update-cart-container {
@@ -2768,4 +2777,3 @@ Version:1.0
         padding-top: 10px !important;
     } 
 }
-

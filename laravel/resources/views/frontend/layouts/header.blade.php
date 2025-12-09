@@ -24,9 +24,9 @@
                         <ul class="list-main">
                             <li><i class="ti-package"></i><a href="{{route('my.orders')}}">My Orders</a></li>
                             @auth
-                                <!-- @if(Auth::user()->role == 'admin')
+                                @if(Auth::user()->role == 'admin')
                                     <li><i class="ti-user"></i><a href="{{route('admin')}}" target="_blank">Dashboard</a></li>
-                                @endif -->
+                                @endif
                                 <li><i class="ti-power-off"></i><a href="{{route('user.logout')}}">Logout</a></li>
                             @else
                                 <li><i class="ti-power-off"></i>
