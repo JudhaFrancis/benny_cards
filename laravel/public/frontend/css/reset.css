@@ -2336,7 +2336,7 @@ object {
 	border: none;
 	background: #f8f9fa;
 	color: #212529;
-	width: 36px;
+	width: 50px;
 	height: 36px;
 	display: flex;
 	justify-content: center;
@@ -2463,9 +2463,8 @@ object {
 }
 
 .badge {
-	background-color: #212529;
-	color: #fff;
-	font-size: 12px;
+	background-color: rgb(195, 255, 195);
+	color: green;
 	padding: 8px 12px;
 	margin-left: 10px;
 	cursor: default;

@@ -4632,6 +4632,7 @@ tbody.collapse.show {
     margin-bottom: 15px
 }
 
+
 @media (min-width:576px) {
     .card-deck {
         -ms-flex-flow: row wrap;
@@ -6254,7 +6255,7 @@ a.bg-warning:hover {
 }
 
 .bg-danger {
-    background-color: #dc3545 !important
+    background-color: rgb(195, 255, 195)
 }
 
 a.bg-danger:focus,

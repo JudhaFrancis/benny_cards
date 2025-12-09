@@ -2242,8 +2242,6 @@ Version:1.0
         align-items: center;
         padding: 12px 0;
         background: #fff;
-        border-bottom: 1px solid #ddd;
-        position: sticky;
         top: 60px;
         z-index: 1000;
     }
@@ -2256,7 +2254,6 @@ Version:1.0
         font-weight: 600;
         padding: 7px 15px;
         border-radius: 6px;
-        border: 1px solid #eee;
         background: #fafafa;
     }
 
@@ -2538,14 +2535,14 @@ Version:1.0
         display: flex;
         flex-direction: column;
         align-items: center;
+		gap: 50px;
     }
 
     .product-left {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
+        display: flex !important;
+        flex-direction: column-reverse !important;  /* 👈 main image top, thumbnails bottom */
         align-items: center;
-        margin-bottom: 20px;
+        width: 100%;
     }
 
     /* Main image center */
@@ -2562,11 +2559,12 @@ Version:1.0
     }
 
     /* Thumbnails below image */
-    .product-thumbnails {
+     .product-thumbnails {
         display: flex;
+        flex-direction: row;
         justify-content: center;
         gap: 10px;
-        order: 2; /* force thumbnails below */
+        width: 100%;
         margin-top: 15px;
         flex-wrap: wrap;
     }
@@ -2584,15 +2582,18 @@ Version:1.0
         width: 100%;
         padding: 0 15px;
     }
+	.product-heading {
+        font-size: 20px;
+    }
 }
 /* Fix Description & Review content spacing in mobile */
 @media (max-width: 768px) {
 
     .tab-content-clean {
-        padding: 18px 18px !important;   /* spacing on all sides */
+        padding: 18px 18px !important;  
         margin-top: 10px;
-        line-height: 1.65;              /* good readability */
-        font-size: 14.5px;              /* same as "Prices are quoted…" text */
+        line-height: 1.65;              
+        font-size: 14.5px;              
         background: #fff;
         border-radius: 10px;
     }
@@ -2604,18 +2605,18 @@ Version:1.0
         margin-bottom: 5px;
     }
 
-    /* Remove the tight look */
     .product-tabs-clean {
         padding: 0 10px !important;
     }
 }
+
 /* Fix Customer Review alignment in mobile */
 @media (max-width: 768px) {
 
     .reviews-summary {
         display: flex !important;
         flex-direction: column;
-        align-items: flex-start;   /* 👈 Bar & rating perfectly align */
+        align-items: flex-start;   
         width: 100%;
         padding: 15px;
     }
@@ -2623,11 +2624,11 @@ Version:1.0
     .rating-left {
         width: 100% !important;
         text-align: left;
-        margin-bottom: 15px;
     }
 
     .rating-bars {
-        width: 100% !important;
+        width: 90% !important;
+		margin-left: 0;
     }
 
     .bar-row {
@@ -2659,5 +2660,112 @@ Version:1.0
     }
 }
 
+@media (max-width: 768px) {
 
+    .cart-card-sm {
+        display: block !important;
+        position: relative !important;
+        padding: 15px !important;
+        
+    }
+.cart-divider {
+        display: block !important;
+        width: 100%;
+        height: 1px;
+        background: #e5e5e5;
+        margin: 10px 0;
+    }
+    .cart-remove {
+        position: absolute !important;
+        top: 20px !important;
+        right: 15px !important;
+        z-index: 20 !important;
+    }
+
+    .cart-img img {
+        width: 90px !important;
+        height: 90px !important;
+        object-fit: cover !important;
+        border-radius: 10px !important;
+    }
+
+    /* Product details FULL WIDTH */
+    .cart-details {
+        position: absolute !important;
+        left: 110px !important;
+        top: 15px !important;
+        display: flex !important;
+        flex-direction: column !important;
+        margin: 0 !important;
+    }
+
+    .cart-details h6 a {
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        line-height: 18px !important;
+    }
+
+    .stock-info {
+        font-size: 12px !important;
+        line-height: 14px !important;
+        margin-top: 5px;
+    }
+
+    /* Quantity below stock, full width */
+    .quantity-wrapper {
+        position: absolute !important;
+        left: 120px !important;
+        top: 70px !important;
+        display: flex !important;
+        align-items: center !important;
+		 border: none !important;
+        border-radius: 0 !important;
+        overflow: visible !important;
+        width: auto !important;
+    }
+
+    /* --- ROUND BUTTONS LIKE THE SECOND IMAGE --- */
+    .quantity-wrapper button {
+        width: 32px !important;
+        height: 32px !important;
+        background: #f3f3f3 !important;
+        border-radius: 50% !important;   /* FULL CIRCLE */
+        border: none !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 11px !important;
+        font-weight: bold !important;
+        color: #333 !important;
+    }
+
+    /* --- SMALL NUMBER INPUT LIKE SECOND IMAGE --- */
+    .quantity-wrapper input {
+        width: 30px !important;
+        height: 30px !important;
+        border: none !important;
+        background: transparent !important;
+        text-align: center !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+    }
+
+    /* Remove default input border highlight */
+    .quantity-wrapper input:focus {
+        outline: none !important;
+        box-shadow: none !important;
+    }
+    /* PRICE right bottom like screenshot */
+    
+   .cart-price {
+    position: absolute !important;
+    right: 2px !important;      /* Keep it on the right side */
+    top: 75px !important;     /* Positioned at the bottom */
+    white-space: nowrap !important;
+}
+	 .update-cart-container {
+        margin-bottom: 30px !important;   /* increase gap */
+        padding-top: 10px !important;
+    } 
+}
 
