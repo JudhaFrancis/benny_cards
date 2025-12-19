@@ -11,7 +11,7 @@ class TrackingStatus extends Model
 
      protected $table = 'tracking_status';
 
-     protected $fillable = ['name'];
+     protected $fillable = ['title'];
 
       public function orders()
     {

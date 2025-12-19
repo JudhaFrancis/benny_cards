@@ -13,15 +13,23 @@ class TrackingStatusSeeder extends Seeder
      */
     public function run(): void
     {
-         DB::table('tracking_status')->insert([
-            ['name' => 'Confirmed'],
-            ['name' => 'Processing'],
-            ['name' => 'Packed'],
-            ['name' => 'Out for Delivery'],
-            ['name' => 'Delivered'],
-            ['name' => 'Cancelled'],
-            ['name' => 'Return Requested'],
-            ['name' => 'Return'],
+
+        DB::table('tracking_status')->truncate();
+        // Insert new 12 records
+
+        DB::table('tracking_status')->insert([
+            ['title' => 'Order Details'],
+            ['title' => 'Client Information'],
+            ['title' => 'Card Specifications'],
+            ['title' => 'Work Assign Process'],
+            ['title' => 'Design – Checked & Given to Print'],
+            ['title' => 'Order & Printing Status'],
+            ['title' => 'Packaging & Logistics'],
+            ['title' => 'Packaging Status'],
+            ['title' => 'Delivery Location'],
+            ['title' => 'Mode of Dispatch'],
+            ['title' => 'Dispatch Details'],
+            ['title' => 'Payment'],
         ]);
     }
 }

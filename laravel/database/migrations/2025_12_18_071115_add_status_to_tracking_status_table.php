@@ -11,22 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('tracking_status', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        Schema::table('tracking_status', function (Blueprint $table) {
+    $table->tinyInteger('status')->nullable()->after('title'); // NULL allowed, no default
 
-        // Default statuses
-    
+        });
     }
-    
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('tracking_status');
+        Schema::table('tracking_status', function (Blueprint $table) {
+            //
+        });
     }
 };
