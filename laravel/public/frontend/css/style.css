@@ -276,6 +276,23 @@ Version:1.0
 	border-bottom: 1px solid #e2e2e2;
 	padding: 15px 0;
 }
+ /* Topbar right menu horizontal */
+.topbar-menu .list-main {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.topbar-menu .list-main li {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.topbar-menu .list-main li i {
+    margin-right: 6px;
+}
+
 
 /* Logo */
 .header .logo {

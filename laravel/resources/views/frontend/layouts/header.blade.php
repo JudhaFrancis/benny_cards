@@ -20,13 +20,16 @@
 
                 <!-- Right Section -->
                 <div class="right-bar-1 col-lg-4 col-md-8 col-8">
-                    <div class="right-content">
+                    <div class="right-content topbar-menu">
                         <ul class="list-main">
                             <li><i class="ti-package"></i><a href="{{route('my.orders')}}">My Orders</a></li>
                             @auth
-                                <!-- @if(Auth::user()->role == 'admin')
-                                    <li><i class="ti-user"></i><a href="{{route('admin')}}" target="_blank">Dashboard</a></li>
-                                @endif -->
+                                @if(Auth::user()->role == 'admin')
+<li class="d-none d-md-flex">
+    <i class="ti-user"></i>
+    <a href="{{route('admin')}}" target="_blank">Dashboard</a>
+</li>
+                                @endif
                                 <li><i class="ti-power-off"></i><a href="{{route('user.logout')}}">Logout</a></li>
                             @else
                                 <li><i class="ti-power-off"></i>
