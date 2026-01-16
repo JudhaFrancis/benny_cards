@@ -33,8 +33,7 @@
                         <th>To</th>
                         <th>Message Type</th>
                         <th>Status</th>
-                        <th>Created On</th>
-                        <th>Updated On</th>
+                        <th>Send On</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -69,7 +68,7 @@
                             <span class="badge badge-secondary">Unknown</span>
                             @endif
                         </td>
-                        <td>{{ $notification->created_at ? $notification->created_at->format('d-M-Y') : '-' }}</td>
+                        <!-- <td>{{ $notification->created_at ? $notification->created_at->format('d-M-Y') : '-' }}</td> -->
                         <td>{{ $notification->updated_at ? $notification->updated_at->format('d-M-Y') : '-' }}</td>
                         <td>
                             <!-- 👁️ View Button -->
@@ -147,10 +146,7 @@
                                     </div>
 
                                     <div class="row mt-3">
-                                        <div class="col-md-6"><strong>Created On :</strong>
-                                            {{ $notification->created_at ? $notification->created_at->format('d-M-Y') : '-' }}
-                                        </div>
-                                        <div class="col-md-6"><strong>Updated On :</strong>
+                                        <div class="col-md-6"><strong>Send On :</strong>
                                             {{ $notification->updated_at ? $notification->updated_at->format('d-M-Y') : '-' }}
                                         </div>
                                     </div>

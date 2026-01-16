@@ -48,6 +48,7 @@ return [
         'appkey' => env('WHATSAPP_APPKEY'),
         'authkey' => env('WHATSAPP_AUTHKEY'),
         'api_url' => env('WHATSAPP_API_URL'),
+        'test_number' => env('WHATSAPP_TEST_NUMBER'),
     ],
 
 

@@ -228,6 +228,15 @@ Route::group(['prefix' => '/user', 'middleware' => ['user']], function () {
     // Password Change
     Route::get('change-password', [HomeController::class, 'changePassword'])->name('user.change.password.form');
     // Route::post('change-password', [HomeController::class, 'changPasswordStore'])->name('change.password');
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/account-info', [App\Http\Controllers\UsersController::class, 'accountInfo'])
+        ->name('user.account');
+
+    Route::post('/account-info', [App\Http\Controllers\UsersController::class, 'accountUpdate'])
+        ->name('user.account.update');
+
+});
 
 });
 Route::group(['prefix' => 'laravel-filemanager', 'middleware' => ['web', 'auth']], function () {

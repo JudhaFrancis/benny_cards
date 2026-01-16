@@ -99,10 +99,11 @@
                 $categories = DB::table('categories')->where('status','active')->where('is_parent',1)->get();
                 @endphp
                 @foreach($categories as $cat)
-                <button class="btn" data-filter=".{{$cat->id}}">
+                <button class="btn category-filter-btn" data-filter=".{{$cat->id}}" data-slug="{{$cat->slug}}">
                     {{$cat->title}}
                 </button>
                 @endforeach
+
             </ul>
 
             <button class="scroll-arrow right" id="scrollRight">›</button>
@@ -152,6 +153,16 @@
             </div>
             @endforeach
         </div>
+        <div class="row">
+            <div class="col-12 d-flex justify-content-end mt-4">
+                <a href="javascript:void(0)" id="allCategoryViewMore" class="view-more-text">
+                    View More
+                    <span id="selectedCategoryName" style="font-weight:600; margin-left:6px;"></span>
+                    <span class="arrow">→</span>
+                </a>
+            </div>
+        </div>
+
     </div>
 </section>
 
@@ -242,11 +253,6 @@ $trendingProducts = $product_lists->where('condition', 'trending');
             <div class="col-12">
                 <div class="section-title">
                     <h2>Trending Items</h2>
-
-                    <div class="hot-slider-nav text-center mt-3">
-                        <button class="hot-prev mx-2">&lt;</button>
-                        <button class="hot-next mx-2">&gt;</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -379,7 +385,6 @@ $newProducts = $product_lists->sortByDesc('created_at')->take(20);
 </section>
 @endif
 
-
 <!-- Start Hot Items -->
 @php
 $hotProducts = $product_lists->where('condition', 'hot');
@@ -446,10 +451,8 @@ $hotProducts = $product_lists->where('condition', 'hot');
                 <div class="swiper-button-prev d-inline-block me-2"></div>
                 <div class="swiper-button-next d-inline-block"></div>
             </div>
-
         </div>
     </div>
-
 </section>
 @endif
 
@@ -493,6 +496,26 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 $(document).ready(function() {
+
+    let selectedCategorySlug = null;
+
+    $('.filter-tope-group').on('click', '.category-filter-btn', function() {
+        selectedCategorySlug = $(this).data('slug');
+
+        let categoryName = $(this).text().trim();
+
+        $('#selectedCategoryName').text('(' + categoryName + ')');
+    });
+
+    // View More click
+    $('#allCategoryViewMore').on('click', function() {
+        if (selectedCategorySlug) {
+            window.location.href = "{{ url('/product-cat') }}/" + selectedCategorySlug;
+        } else {
+            window.location.href = "{{ route('product-grids') }}";
+        }
+    });
+
     var $topeContainer = $('.isotope-grid');
 
     // Initialize Isotope and keep the instance in $grid
@@ -634,12 +657,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-document.getElementById("filterBtn").addEventListener("click", function () {
+document.getElementById("filterBtn").addEventListener("click", function() {
     sessionStorage.setItem("openFilterDrawer", "1");
     window.location.href = "{{ route('product-grids') }}";
 });
-
-
 </script>
 
 @endpush

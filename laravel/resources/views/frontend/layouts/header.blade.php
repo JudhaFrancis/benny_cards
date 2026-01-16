@@ -22,20 +22,92 @@
                 <div class="right-bar-1 col-lg-4 col-md-8 col-8">
                     <div class="right-content topbar-menu">
                         <ul class="list-main">
-                            <li><i class="ti-package"></i><a href="{{route('my.orders')}}">My Orders</a></li>
-                            @auth
-                                @if(Auth::user()->role == 'admin')
-<li class="d-none d-md-flex">
-    <i class="ti-user"></i>
-    <a href="{{route('admin')}}" target="_blank">Dashboard</a>
-</li>
-                                @endif
-                                <li><i class="ti-power-off"></i><a href="{{route('user.logout')}}">Logout</a></li>
-                            @else
-                                <li><i class="ti-power-off"></i>
-                                    <a href="{{route('login.form')}}">Login</a>
-                                </li>
-                            @endauth
+                            <li class="profile-wrapper">
+                                <a href="javascript:void(0)" class="profile-toggle">
+                                    <i class="ti-user"></i>
+                                </a>
+
+                                <div class="profile-dropdown">
+                                    @auth
+                                        <div class="profile-header profile-header-flex">
+
+                                            {{-- AVATAR --}}
+                                            <div class="profile-avatar-small">
+                                                @if(Auth::user()->photo)
+                                                    <img src="{{ Auth::user()->photo }}" alt="User Avatar">
+                                                @else
+                                                    <img src="https://bennycards.com/storage/photos/1/Benny%20Round%20Logo.png"
+                                                        alt="Default Avatar">
+                                                @endif
+                                            </div>
+
+                                            {{-- NAME + PHONE --}}
+                                            <div class="profile-user-text">
+                                                <strong>{{ Auth::user()->name }}</strong><br>
+                                                <small>
+                                                    {{ Auth::user()->phone ?? Auth::user()->mobile ?? Auth::user()->phone_no }}
+                                                </small>
+                                            </div>
+
+                                        </div>
+
+                                        <ul class="profile-menu">
+                                            <li>
+                                                <a href="{{ route('admin') }}">
+                                                    <i class="ti-dashboard"></i> Dashboard
+                                                </a>
+                                            </li>
+
+                                            <li>
+                                                <a href="{{ route('my.orders') }}">
+                                                    <i class="ti-package"></i> Order History
+                                                </a>
+                                            </li>
+
+
+
+                                            <li>
+                                                <a href="{{ route('user.account') }}">
+                                                    <i class="ti-user"></i> Account Info
+                                                </a>
+                                            </li>
+
+
+                                            <li>
+                                                <a href="{{ route('register.form') }}">
+                                                    <i class="ti-lock"></i> Change Password
+                                                </a>
+                                            </li>
+
+
+
+
+                                            <li class="divider"></li>
+
+                                            <li>
+                                                <a href="{{ route('user.logout') }}">
+                                                    <i class="ti-power-off"></i> Logout
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    @else
+                                        <div class="guest-auth-box">
+                                            <a href="{{ route('register.form') }}" class="btn-register">
+                                                Register your account
+                                            </a>
+
+                                            <div class="or-text">OR</div>
+
+                                            <a href="{{ route('login.form') }}" class="btn-login">
+                                                Login to your account
+                                            </a>
+                                        </div>
+                                    @endauth
+
+                                </div>
+
+                            </li>
+
                         </ul>
                     </div>
                 </div>
@@ -72,7 +144,8 @@
                                 <div class="bottom">
                                     <div class="total">
                                         <span>Total</span>
-                                        <span class="total-amount">${{number_format(Helper::totalWishlistPrice(), 2)}}</span>
+                                        <span
+                                            class="total-amount">${{number_format(Helper::totalWishlistPrice(), 2)}}</span>
                                     </div>
                                     <a href="{{route('cart')}}" class="btn animate">Cart</a>
                                 </div>
@@ -232,6 +305,295 @@
         </div>
     </div>
 </header>
+<style>
+    /* PROFILE HEADER FLEX */
+    .profile-header-flex {
+        display: flex;
+        align-items: center;
+        /* avatar center */
+        gap: 12px;
+        padding: 14px 16px;
+    }
+
+    /* AVATAR – SIZE CHANGE PANNA KUDADHU */
+    .profile-avatar-small {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+    }
+
+    /* ADMIN AVATAR – PERFECT ROUND FIX */
+    .profile-avatar-small img {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        /* FULL ROUND */
+        object-fit: cover;
+        /* IMAGE STRETCH AAGADHU */
+        display: block;
+    }
+
+    /* TEXT CONTAINER – CENTER FIX */
+    .profile-user-text {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 42px;
+    }
+
+
+
+    /* NAME */
+    .profile-user-text strong {
+        font-size: 14px;
+        line-height: 1.1;
+        margin: 0;
+    }
+
+    /* PHONE */
+    .profile-user-text small {
+        font-size: 12px;
+        line-height: 1.1;
+        margin: 0;
+        color: #666;
+    }
+
+    .profile-wrapper {
+        display: flex;
+        align-items: center;
+        height: 100%;
+            position: relative; /* 🔥 ADD THIS LINE */
+
+    }
+
+
+.profile-dropdown.show {
+    display: block;
+}
+
+    .profile-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 8px;
+    }
+
+    .profile-toggle i {
+        font-size: 20px;
+        /* wishlist/cart size */
+        line-height: 1;
+        color: #333;
+    }
+
+
+   .profile-dropdown {
+    position: absolute;
+    right: 0;
+    top: 40px;
+    width: 240px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, .15);
+    display: none;
+    z-index: 9999;
+}
+
+.profile-dropdown.show {
+    display: block;
+}
+
+
+    .profile-header {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .profile-dropdown ul,
+    .profile-dropdown .profile-menu {
+        display: block !important;
+    }
+
+    .profile-dropdown ul li {
+        display: block !important;
+        width: 100%;
+    }
+
+    .profile-dropdown ul li a {
+        display: flex !important;
+        flex-direction: row;
+        align-items: center;
+        width: 100%;
+        white-space: nowrap;
+    }
+
+    .profile-dropdown ul li a:hover {
+        background: #f5f5f5;
+    }
+
+    .profile-header {
+        padding: 16px 18px;
+    }
+
+    .profile-dropdown ul {
+        padding: 10px 0;
+    }
+
+    .profile-dropdown ul li {
+        margin-bottom: 6px;
+    }
+
+    .profile-dropdown ul li:last-child {
+        margin-bottom: 0;
+    }
+
+    .profile-dropdown ul li a {
+        padding: 10px 14px;
+        border-radius: 8px;
+        gap: 10px;
+        font-size: 14px;
+    }
+
+    .profile-dropdown .divider {
+        height: 1px;
+        background: #eee;
+        margin: 8px 0;
+    }
+
+    .guest-auth-box {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .btn-register {
+        display: block;
+        background: rgba(236, 17, 118, 0.15);
+        color: #ec1176;
+        padding: 12px;
+        border-radius: 30px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-register:hover {
+        background: rgba(236, 17, 118, 0.25);
+        color: #ec1176;
+    }
+
+    .btn-login {
+        display: block;
+        background: #ec1176;
+        color: #fff;
+        padding: 12px;
+        border-radius: 30px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-login:hover {
+        background: #c60f62;
+        color: #fff;
+    }
+
+    .or-text {
+        font-size: 13px;
+        margin: 8px 0 12px;
+        color: #ec1176;
+        font-weight: 500;
+    }
+
+    .guest-auth-box .btn-login,
+    .guest-auth-box .btn-login:visited,
+    .guest-auth-box .btn-login:hover,
+    .guest-auth-box .btn-login:focus {
+        color: #ffffff !important;
+        text-decoration: none;
+    }
+
+    .or-text {
+        color: #000000 !important;
+        font-weight: 500;
+    }
+
+    .btn-register,
+    .btn-register:visited,
+    .btn-register:hover,
+    .btn-register:focus {
+        color: #ec1176 !important;
+        text-decoration: none;
+    }
+
+
+   /* =========================
+   MOBILE TOPBAR FIX
+========================= */
+@media (max-width: 576px) {
+
+    .topbar .row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .topbar .aligncenter {
+        display: none !important;
+    }
+
+    .right-bar-1,
+    .right-bar {
+        flex: 0 0 auto;
+        width: auto !important;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .right-bar-1 {
+        margin-left: auto;
+    }
+
+    .profile-wrapper,
+    .sinlge-bar {
+        margin-left: 10px;
+    }
+
+    .profile-wrapper {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-toggle {
+        width: 36px;
+        height: 40px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .profile-dropdown {
+        position: fixed;        
+        top: 60px;              
+        right: 8px;
+        left: auto;
+
+        width: calc(100vw - 16px);
+        max-width: 340px;
+
+        z-index: 99999;
+    }
+}
+
+
+    
+
+
+    
+</style>
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -298,4 +660,24 @@
             if (!e.target.closest(".search-bar")) list.style.display = "none";
         });
     });
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const profileToggle = document.querySelector(".profile-toggle");
+    const profileDropdown = document.querySelector(".profile-dropdown");
+
+    if (!profileToggle || !profileDropdown) return;
+
+    profileToggle.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        profileDropdown.classList.toggle("show");
+    });
+
+    document.addEventListener("click", function (e) {
+        if (!e.target.closest(".profile-wrapper")) {
+            profileDropdown.classList.remove("show");
+        }
+    });
+});
 </script>

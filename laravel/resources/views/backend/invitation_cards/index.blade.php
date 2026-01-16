@@ -32,19 +32,19 @@
                 <tbody>
 
                     @foreach($cards as $index => $card)
-                    @php
+                    <!-- @php
                     $sub_cat_info = DB::table('categories')->select('title')->where('id',
                     $card->child_cat_id)->get();
                     // dd($sub_cat_info);
                     $brands = DB::table('brands')->select('title')->where('id', $card->brand_id)->get();
-                    @endphp
+                    @endphp -->
                     <tr>
                         <td>{{ $cards->firstItem() + $index }}</td>
                         <td style="max-width: 200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
                             data-toggle="tooltip" data-placement="top" title="{{ $card->title }}">
                             {{ Str::limit($card->title, 30) }}
                         </td>
-                        <td>{{$card->cat_info['title']}}
+                        <td>{{ $card->cat_info?->title ?? 'N/A' }}
                             <sub>
                                 {{$card->sub_cat_info->title ?? ''}}
                             </sub>
@@ -141,7 +141,7 @@
                                             <div class="col-md-6">
                                                 <p><strong>ID:</strong> {{$card->id}}</p>
                                                 <p><strong>Title:</strong> {{$card->title}}</p>
-                                                <p><strong>Category:</strong> {{$card->cat_info['title']}}
+                                                <p><strong>Category:</strong> {{ $card->cat_info?->title ?? 'N/A' }}
                                                     <sub>{{$card->sub_cat_info->title ?? ''}}</sub>
                                                 </p>
                                                 <p><strong>Brand:</strong> {{ucfirst($card->brand->title ?? 'N/A')}}

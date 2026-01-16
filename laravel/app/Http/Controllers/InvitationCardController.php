@@ -18,8 +18,9 @@ class InvitationCardController extends Controller
      */
     public function index()
     {
-        $cards = Product::where('type', 'card')->paginate(10);
-        return view('backend.invitation_cards.index', compact('cards'));
+ $cards = Product::with(['cat_info','sub_cat_info','brand'])
+        ->where('type', 'card')
+        ->paginate(10);        return view('backend.invitation_cards.index', compact('cards'));
     }
 
     /**

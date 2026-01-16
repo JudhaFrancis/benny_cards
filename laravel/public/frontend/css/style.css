@@ -3436,6 +3436,7 @@ Version:1.0
 	color: #333 !important;
 	border: none;
 	background: #F6F7FB;
+	font-size: 16px;
 }
 
 .shop.login .form .form-group label {

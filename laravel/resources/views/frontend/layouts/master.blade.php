@@ -2,7 +2,7 @@
 <html lang="zxx">
 <head>
 	@include('frontend.layouts.head')	
-
+ <link rel="icon" type="image/png" href="https://bennycards.com/storage/photos/1/Benny%20Round%20Logo.png">
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
 

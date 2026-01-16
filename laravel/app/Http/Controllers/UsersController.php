@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\User;
+use Illuminate\Support\Facades\Auth;
+
 class UsersController extends Controller
 {
     /**
@@ -135,4 +137,38 @@ class UsersController extends Controller
         }
         return redirect()->route('users.index');
     }
+
+    public function accountInfo()
+{
+    $user = Auth::user();
+return view('frontend.pages.account-info', compact('user'));
+}
+
+public function accountUpdate(Request $request)
+{
+    $user = Auth::user();
+
+    $this->validate($request, [
+        'name'  => 'required|string|max:30',
+        'email' => 'required|email|unique:users,email,' . $user->id,
+        'phone' => 'required',
+        'photo' => 'nullable|image|max:2048',
+    ]);
+
+    $user->name  = $request->name;
+    $user->email = $request->email;
+    $user->phone = $request->phone;
+
+    if ($request->hasFile('photo')) {
+        $file = $request->file('photo');
+        $fileName = time().'.'.$file->getClientOriginalExtension();
+        $file->move(public_path('uploads/users'), $fileName);
+        $user->photo = 'uploads/users/'.$fileName;
+    }
+
+    $user->save();
+
+    return back()->with('success', 'Account Information Updated Successfully');
+}
+
 }
