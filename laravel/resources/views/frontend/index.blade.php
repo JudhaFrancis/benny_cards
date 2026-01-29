@@ -242,11 +242,6 @@ $trendingProducts = $product_lists->where('condition', 'trending');
             <div class="col-12">
                 <div class="section-title">
                     <h2>Trending Items</h2>
-
-                    <div class="hot-slider-nav text-center mt-3">
-                        <button class="hot-prev mx-2">&lt;</button>
-                        <button class="hot-next mx-2">&gt;</button>
-                    </div>
                 </div>
             </div>
         </div>

@@ -18,7 +18,10 @@ class InvitationCardController extends Controller
      */
     public function index()
     {
-        $cards = Product::where('type', 'card')->paginate(10);
+        $cards = Product::with(['cat_info', 'sub_cat_info', 'brand'])
+            ->where('type', 'card')
+            ->where('status', 'active')
+            ->paginate(10);
         return view('backend.invitation_cards.index', compact('cards'));
     }
 
@@ -28,7 +31,9 @@ class InvitationCardController extends Controller
     public function create()
     {
         $brands = Brand::get();
-        $categories = Category::where('is_parent', 1)->get();
+        $categories = Category::where('is_parent', 1)
+            ->where('status', 'active')->orderBy('title', 'ASC')
+            ->get();
         return view('backend.invitation_cards.create', compact('categories', 'brands'));
     }
 
@@ -101,7 +106,10 @@ class InvitationCardController extends Controller
     {
         $brands = Brand::get();
         $product = Product::findOrFail($id);
-        $categories = Category::where('is_parent', 1)->get();
+        $categories = Category::where('is_parent', 1)
+            ->where('status', 'active')
+            ->orderBy('title', 'ASC')
+            ->get();
         $items = Product::where('id', $id)->get();
 
         return view('backend.invitation_cards.edit', compact('product', 'brands', 'categories', 'items'));
@@ -155,7 +163,7 @@ class InvitationCardController extends Controller
             ? 'Product Successfully updated'
             : 'Please try again!!';
 
-        return redirect()->route('invitation_cards.index',['page' => $request->page])->with(
+        return redirect()->route('invitation_cards.index', ['page' => $request->page])->with(
             $status ? 'success' : 'error',
             $message
         );
