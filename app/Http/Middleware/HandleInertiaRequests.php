@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
+use App\Models\Setting;
+
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -34,6 +36,8 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'settings' => Setting::first(),
+            'categories' => \App\Models\Category::where('status', 'active')->get(),
         ];
     }
 }

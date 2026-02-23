@@ -1,0 +1,22 @@
+[
+    "id",
+    "title",
+    "slug",
+    "summary",
+    "description",
+    "photo",
+    "condition",
+    "status",
+    "type",
+    "price",
+    "discount",
+    "is_featured",
+    "cat_id",
+    "child_cat_id",
+    "brand_id",
+    "added_by",
+    "modified_by",
+    "created_at",
+    "updated_at",
+    "deleted_at"
+]
