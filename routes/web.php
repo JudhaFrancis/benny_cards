@@ -95,6 +95,14 @@ Route::get('/contact', function () {
     return Inertia::render('Contact');
 })->name('contact');
 
+Route::get('/about', function () {
+    return Inertia::render('About');
+})->name('about');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/my-orders', [\App\Http\Controllers\OrderController::class, 'index'])->name('orders.index');
+});
+
 Route::post('/contact', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'name' => 'required|string|max:255',
