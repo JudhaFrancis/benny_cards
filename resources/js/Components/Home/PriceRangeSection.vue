@@ -22,11 +22,11 @@ defineProps({
                 <div class="h-1 w-20 bg-primary mx-auto rounded-full"></div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
                 <div
                     v-for="(range, index) in priceRanges"
                     :key="index"
-                    class="group relative h-64 rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-2"
+                    class="group relative h-48 sm:h-64 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 sm:hover:-translate-y-2"
                 >
                     <!-- Background Image -->
                     <img
@@ -61,18 +61,18 @@ defineProps({
 
                     <!-- Content -->
                     <div
-                        class="absolute inset-0 p-8 flex flex-col justify-end text-center"
+                        class="absolute inset-0 p-4 sm:p-8 flex flex-col justify-end text-center"
                     >
                         <h3
-                            class="text-2xl font-bold text-white mb-2 transform group-hover:scale-110 transition-transform duration-300"
+                            class="text-base sm:text-2xl font-bold text-white mb-1 sm:mb-2 transform group-hover:scale-110 transition-transform duration-300"
                         >
                             {{ range.label }}
                         </h3>
                         <div
-                            class="flex items-center justify-center gap-2 text-white/80 text-sm font-medium"
+                            class="flex items-center justify-center gap-2 text-white/80 text-[10px] sm:text-sm font-medium"
                         >
                             <span
-                                class="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/30"
+                                class="px-2 sm:px-3 py-0.5 sm:py-1 bg-white/20 backdrop-blur-md rounded-full border border-white/30 whitespace-nowrap"
                             >
                                 {{ range.count }} Products
                             </span>
@@ -80,7 +80,7 @@ defineProps({
 
                         <!-- Hover Button -->
                         <div
-                            class="mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                            class="mt-2 sm:mt-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden sm:block"
                         >
                             <span
                                 class="text-white text-sm font-semibold flex items-center justify-center gap-1"

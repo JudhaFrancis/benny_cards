@@ -21,6 +21,17 @@ const search = ref(page.props.search || "");
 const showingNavigationDropdown = ref(false);
 const isScrolled = ref(false);
 const isLoginModalOpen = ref(false);
+const initialRegister = ref(false);
+
+const openLoginModal = () => {
+    initialRegister.value = false;
+    isLoginModalOpen.value = true;
+};
+
+const openRegisterModal = () => {
+    initialRegister.value = true;
+    isLoginModalOpen.value = true;
+};
 
 // --- Autocomplete ---
 const categories = ref([]);
@@ -156,6 +167,14 @@ const handleScroll = () => {
 onMounted(() => {
     window.addEventListener("scroll", handleScroll);
     document.addEventListener("click", handleClickOutside);
+
+    // Check for login/register query params
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("login") === "1") {
+        openLoginModal();
+    } else if (params.get("register") === "1") {
+        openRegisterModal();
+    }
 });
 
 onUnmounted(() => {
@@ -806,7 +825,7 @@ const removeFromWishlist = (id) => {
                                         orders & more.
                                     </p>
                                     <button
-                                        @click="isLoginModalOpen = true"
+                                        @click="openLoginModal"
                                         class="flex w-full justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-white shadow-md hover:bg-primary/90 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary transition-all mb-6 transform hover:-translate-y-0.5"
                                     >
                                         Log In
@@ -815,12 +834,12 @@ const removeFromWishlist = (id) => {
                                         class="text-xs text-gray-500 font-medium pt-4 border-t border-gray-100"
                                     >
                                         New customer?
-                                        <Link
-                                            :href="route('register')"
+                                        <button
+                                            @click="openRegisterModal"
                                             class="font-bold text-primary hover:text-primary/80 transition-colors ml-1"
                                         >
                                             Sign Up
-                                        </Link>
+                                        </button>
                                     </div>
                                 </div>
                             </template>
@@ -860,6 +879,7 @@ const removeFromWishlist = (id) => {
 
         <LoginModal
             :is-open="isLoginModalOpen"
+            :initial-register="initialRegister"
             @close="isLoginModalOpen = false"
         />
     </nav>

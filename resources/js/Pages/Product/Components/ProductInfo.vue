@@ -1,6 +1,7 @@
 <script setup>
 import { router, usePage } from "@inertiajs/vue3";
 import { computed, ref } from "vue";
+import LoginModal from "@/Components/Auth/LoginModal.vue";
 
 const props = defineProps({
     product: {
@@ -19,6 +20,14 @@ const calculateOriginalPrice = (price, discount) => {
 
 const page = usePage();
 const quantity = ref(1);
+const isLoginModalOpen = ref(false);
+
+import { watch } from "vue";
+watch(quantity, (newVal) => {
+    if (newVal < 1 || isNaN(newVal)) {
+        quantity.value = 1;
+    }
+});
 
 const isInWishlist = computed(() => {
     return page.props.wishlist?.some(
@@ -28,7 +37,7 @@ const isInWishlist = computed(() => {
 
 const addToWishlist = () => {
     if (!page.props.auth.user) {
-        router.visit(route("login"));
+        isLoginModalOpen.value = true;
         return;
     }
 
@@ -45,7 +54,7 @@ const addToWishlist = () => {
 
 const addToCart = () => {
     if (!page.props.auth.user) {
-        router.visit(route("login"));
+        isLoginModalOpen.value = true;
         return;
     }
 
@@ -95,10 +104,48 @@ const addToCart = () => {
         </div>
 
         <h1
-            class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl mb-4"
+            class="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl mb-1"
         >
             {{ product.title }}
         </h1>
+
+        <!-- Rating Stars -->
+        <div
+            v-if="parseFloat(averageRating) > 0"
+            class="flex items-center gap-2 mb-4"
+        >
+            <div class="flex gap-0.5">
+                <svg
+                    v-for="i in 5"
+                    :key="i"
+                    class="w-4 h-4"
+                    :class="[
+                        Math.round(parseFloat(averageRating)) >= i
+                            ? 'text-pink-500 fill-current'
+                            : 'text-gray-200',
+                    ]"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                >
+                    <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.54 1.118l-3.976-2.888a1 1 0 00-1.175 0l-3.976 2.888c-.784.57-1.838-.196-1.539-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
+                    />
+                </svg>
+            </div>
+            <span class="text-xs font-bold text-gray-400"
+                >({{ averageRating }})</span
+            >
+        </div>
+        <div v-else class="mb-4">
+            <span
+                class="text-[10px] font-bold text-gray-400 uppercase tracking-widest"
+                >No reviews yet</span
+            >
+        </div>
 
         <div class="mt-6 flex items-baseline gap-4">
             <h2 class="sr-only">Product information</h2>
@@ -128,7 +175,7 @@ const addToCart = () => {
         <div class="mt-10 flex flex-col sm:flex-row gap-4">
             <!-- Quantity Selector -->
             <div
-                class="flex items-center bg-gray-100 rounded-xl p-1 border border-gray-200 w-full sm:w-32"
+                class="flex items-center bg-gray-100 rounded-xl p-1 border border-gray-200 w-full sm:w-32 shrink-0"
             >
                 <button
                     @click="quantity > 1 ? quantity-- : null"
@@ -136,9 +183,12 @@ const addToCart = () => {
                 >
                     -
                 </button>
-                <span class="flex-1 text-center font-black text-sm">{{
-                    quantity
-                }}</span>
+                <input
+                    v-model.number="quantity"
+                    type="number"
+                    min="1"
+                    class="flex-1 w-full border-none bg-transparent text-center font-black text-sm focus:ring-0 p-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                />
                 <button
                     @click="quantity++"
                     class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm transition-all text-gray-500 font-bold"
@@ -147,56 +197,63 @@ const addToCart = () => {
                 </button>
             </div>
 
-            <button
-                @click="addToCart"
-                type="button"
-                class="flex-1 bg-cyan-400 border border-transparent rounded-xl py-3 px-8 flex items-center justify-center text-base font-bold text-white hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-all transform hover:scale-[1.01] active:scale-95 shadow-lg shadow-cyan-200"
-            >
-                <svg
-                    class="w-5 h-5 mr-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
+            <div class="flex flex-row gap-4 w-full">
+                <button
+                    @click="addToCart"
+                    type="button"
+                    class="flex-1 bg-cyan-400 border border-transparent rounded-xl py-3 px-4 sm:px-8 flex items-center justify-center text-base font-bold text-white hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-all transform hover:scale-[1.01] active:scale-95 shadow-lg shadow-cyan-200"
                 >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
-                    />
-                </svg>
-                Add to Cart
-            </button>
+                    <svg
+                        class="w-5 h-5 mr-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                        />
+                    </svg>
+                    Add to Cart
+                </button>
 
-            <button
-                @click="addToWishlist"
-                type="button"
-                class="w-full sm:w-14 bg-white border-2 border-gray-100 rounded-xl py-3 flex items-center justify-center transition-all group shadow-sm"
-                :class="{
-                    'text-red-500 border-red-100 bg-red-50': isInWishlist,
-                    'text-gray-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50':
-                        !isInWishlist,
-                }"
-            >
-                <svg
-                    class="w-6 h-6"
+                <button
+                    @click="addToWishlist"
+                    type="button"
+                    class="w-14 shrink-0 bg-white border-2 border-gray-100 rounded-xl py-3 flex items-center justify-center transition-all group shadow-sm"
                     :class="{
-                        'fill-current': isInWishlist,
-                        'group-hover:fill-current': !isInWishlist,
+                        'text-red-500 border-red-100 bg-red-50': isInWishlist,
+                        'text-gray-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50':
+                            !isInWishlist,
                     }"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
                 >
-                    <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                    />
-                </svg>
-                <span class="sr-only">Add to wishlist</span>
-            </button>
+                    <svg
+                        class="w-6 h-6"
+                        :class="{
+                            'fill-current': isInWishlist,
+                            'group-hover:fill-current': !isInWishlist,
+                        }"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
+                        />
+                    </svg>
+                    <span class="sr-only">Add to wishlist</span>
+                </button>
+            </div>
         </div>
+
+        <LoginModal
+            :is-open="isLoginModalOpen"
+            @close="isLoginModalOpen = false"
+        />
     </div>
 </template>

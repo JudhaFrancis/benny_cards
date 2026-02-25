@@ -29,6 +29,25 @@ const updateQuantity = (item, delta) => {
     );
 };
 
+const setAbsoluteQuantity = (item) => {
+    // Ensure quantity is a valid number and at least 1
+    let newQuantity = parseInt(item.quantity);
+    if (isNaN(newQuantity) || newQuantity < 1) {
+        newQuantity = 1;
+        item.quantity = 1; // reset the input visually
+    }
+
+    router.patch(
+        route("cart.update", item.id),
+        {
+            quantity: newQuantity,
+        },
+        {
+            preserveScroll: true,
+        },
+    );
+};
+
 const removeItem = (id) => {
     router.delete(route("cart.destroy", id), {
         preserveScroll: true,
@@ -91,7 +110,7 @@ const removeItem = (id) => {
             </div>
         </div>
 
-        <div class="py-12 bg-gray-50/50 min-h-screen">
+        <div class="py-20 md:py-24 bg-gray-50/50 min-h-screen">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div
                     v-if="cartItems.length > 0"
@@ -139,10 +158,14 @@ const removeItem = (id) => {
                                     >
                                         -
                                     </button>
-                                    <span
-                                        class="w-10 text-center font-black text-sm"
-                                        >{{ item.quantity }}</span
-                                    >
+                                    <input
+                                        type="number"
+                                        v-model.number="item.quantity"
+                                        @blur="setAbsoluteQuantity(item)"
+                                        @keyup.enter="setAbsoluteQuantity(item)"
+                                        min="1"
+                                        class="w-12 text-center font-black text-sm bg-transparent border-none p-0 focus:ring-0 appearance-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                                    />
                                     <button
                                         @click="updateQuantity(item, 1)"
                                         class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm transition-all text-gray-500"
@@ -190,12 +213,6 @@ const removeItem = (id) => {
                                     <span>₹{{ subtotal }}</span>
                                 </div>
                                 <div
-                                    class="flex justify-between text-gray-500 font-bold uppercase text-[10px] tracking-widest"
-                                >
-                                    <span>Shipping</span>
-                                    <span class="text-green-500">Free</span>
-                                </div>
-                                <div
                                     class="pt-4 border-t border-gray-100 flex justify-between items-center"
                                 >
                                     <span
@@ -208,11 +225,12 @@ const removeItem = (id) => {
                                     >
                                 </div>
                             </div>
-                            <button
-                                class="w-full bg-primary text-white font-black py-4 rounded-2xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all hover:-translate-y-0.5 uppercase tracking-widest text-xs"
+                            <Link
+                                :href="route('checkout.index')"
+                                class="w-full flex justify-center bg-primary text-white font-black py-4 rounded-2xl shadow-lg shadow-primary/25 hover:bg-primary/90 transition-all hover:-translate-y-0.5 uppercase tracking-widest text-xs"
                             >
                                 Proceed to Checkout
-                            </button>
+                            </Link>
                         </div>
                     </div>
                 </div>

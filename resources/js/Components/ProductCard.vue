@@ -154,35 +154,39 @@ const addToCart = () => {
         <!-- Product Info -->
         <Link
             :href="route('product.show', product.slug)"
-            class="p-4 text-center flex-1 flex flex-col justify-between hover:bg-gray-50/50 transition-colors"
+            class="p-2.5 sm:p-4 text-center flex-1 flex flex-col justify-between hover:bg-gray-50/50 transition-colors"
         >
             <h3
-                class="text-sm font-medium text-gray-700 mb-2 line-clamp-2 min-h-[2.5rem]"
+                class="text-xs sm:text-sm font-medium text-gray-700 mb-1 sm:mb-2 line-clamp-2 min-h-[2rem] sm:min-h-[2.5rem]"
             >
                 {{ product.title }}
             </h3>
 
             <!-- Price -->
-            <div class="flex items-center justify-center gap-2">
-                <p class="text-lg font-bold text-gray-900">
+            <div
+                class="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2"
+            >
+                <p class="text-sm sm:text-lg font-bold text-gray-900">
                     ₹{{ product.price }}
                 </p>
-                <p
+                <div
                     v-if="product.discount > 0"
-                    class="text-sm text-gray-400 line-through"
+                    class="flex items-center gap-1 sm:gap-2"
                 >
-                    ₹{{
-                        (product.price / (1 - product.discount / 100)).toFixed(
-                            2,
-                        )
-                    }}
-                </p>
-                <p
-                    v-if="product.discount > 0"
-                    class="text-sm font-bold text-red-500"
-                >
-                    ({{ product.discount }}% OFF)
-                </p>
+                    <p
+                        class="text-[10px] sm:text-sm text-gray-400 line-through"
+                    >
+                        ₹{{
+                            (
+                                product.price /
+                                (1 - product.discount / 100)
+                            ).toFixed(2)
+                        }}
+                    </p>
+                    <p class="text-[10px] sm:text-sm font-bold text-red-500">
+                        ({{ product.discount }}% OFF)
+                    </p>
+                </div>
             </div>
         </Link>
     </div>

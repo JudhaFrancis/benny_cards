@@ -1,6 +1,6 @@
 <script setup>
-import { ref } from "vue";
-import { useForm, Link } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
+import { useForm, Link, router } from "@inertiajs/vue3";
 import {
     Dialog,
     DialogPanel,
@@ -23,11 +23,24 @@ const props = defineProps({
         type: Boolean,
         default: true,
     },
+    initialRegister: {
+        type: Boolean,
+        default: false,
+    },
 });
 
 const emit = defineEmits(["close"]);
 
-const isRegister = ref(false);
+const isRegister = ref(props.initialRegister);
+
+watch(
+    () => props.isOpen,
+    (isOpen) => {
+        if (isOpen) {
+            isRegister.value = props.initialRegister;
+        }
+    },
+);
 
 const loginForm = useForm({
     email: "",
@@ -61,11 +74,22 @@ const toggleMode = () => {
     loginForm.clearErrors();
     registerForm.clearErrors();
 };
+
+const handleClose = () => {
+    emit("close");
+    // Remove query params login/register if they exist
+    const url = new URL(window.location.href);
+    if (url.searchParams.has("login") || url.searchParams.has("register")) {
+        url.searchParams.delete("login");
+        url.searchParams.delete("register");
+        window.history.replaceState({}, "", url.pathname + url.search);
+    }
+};
 </script>
 
 <template>
     <TransitionRoot as="template" :show="isOpen">
-        <Dialog as="div" class="relative z-[200]" @close="emit('close')">
+        <Dialog as="div" class="relative z-[200]" @close="handleClose">
             <!-- Backdrop -->
             <TransitionChild
                 as="template"
@@ -120,7 +144,7 @@ const toggleMode = () => {
                                     </p>
                                 </div>
                                 <button
-                                    @click="emit('close')"
+                                    @click="handleClose"
                                     class="p-2 bg-gray-100 rounded-xl text-gray-400 hover:text-gray-600 transition-colors"
                                 >
                                     <XMarkIcon class="h-5 w-5" />
@@ -237,7 +261,7 @@ const toggleMode = () => {
                                         v-if="canResetPassword"
                                         :href="route('password.request')"
                                         class="text-xs font-bold text-primary hover:underline"
-                                        @click="emit('close')"
+                                        @click="handleClose"
                                     >
                                         Forgot password?
                                     </Link>

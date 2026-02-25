@@ -54,7 +54,7 @@ class HandleInertiaRequests extends Middleware
             'cart_count' => $request->user()
                 ? \App\Models\Cart::where('user_id', $request->user()->id)
                     ->where('status', 'new')
-                    ->sum('quantity')
+                    ->count()
                 : 0,
             'flash' => [
                 'success' => $request->session()->get('success'),

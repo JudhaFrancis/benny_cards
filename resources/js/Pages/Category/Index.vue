@@ -8,7 +8,9 @@ import MobileFilterDrawer from "./Partials/MobileFilterDrawer.vue";
 import {
     AdjustmentsHorizontalIcon,
     ChevronDownIcon,
+    CheckIcon,
 } from "@heroicons/vue/24/outline";
+import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 
 const props = defineProps({
     categories: Array,
@@ -57,6 +59,19 @@ const updateSort = (sortBy) => {
 const clearFilters = () => {
     updateFilters({ sortBy: props.filterState.sortBy });
 };
+
+const sortOptions = [
+    { value: "newest", label: "Newest First" },
+    { value: "price_low_high", label: "Price: Low to High" },
+    { value: "price_high_low", label: "Price: High to Low" },
+];
+
+const currentSortLabel = computed(() => {
+    const current = sortOptions.find(
+        (opt) => opt.value === props.filterState.sortBy,
+    );
+    return current ? current.label : "Sort by";
+});
 </script>
 
 <template>
@@ -139,52 +154,114 @@ const clearFilters = () => {
                     <main class="flex-1">
                         <!-- Toolbar -->
                         <div
-                            class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100"
+                            class="mb-6 lg:mb-8 bg-white p-4 sm:p-6 rounded-[1.5rem] lg:rounded-[2rem] shadow-sm border border-gray-100"
                         >
-                            <div class="flex items-center gap-4">
-                                <button
-                                    @click="isMobileFilterOpen = true"
-                                    class="lg:hidden flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl shadow-gray-200"
+                            <div
+                                class="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                            >
+                                <!-- Results Text -->
+                                <div
+                                    class="order-2 sm:order-1 flex items-center justify-center sm:justify-start"
                                 >
-                                    <AdjustmentsHorizontalIcon
-                                        class="w-4 h-4"
-                                    />
-                                    Filters
-                                </button>
-                                <span class="text-sm font-bold text-gray-500">
-                                    Showing
-                                    <span class="text-gray-900">{{
-                                        products.length
-                                    }}</span>
-                                    Results
-                                </span>
-                            </div>
+                                    <span
+                                        class="text-xs sm:text-sm font-bold text-gray-500"
+                                    >
+                                        Showing
+                                        <span class="text-gray-900">{{
+                                            products.length
+                                        }}</span>
+                                        Results
+                                    </span>
+                                </div>
 
-                            <!-- Sorting Dropdown -->
-                            <div class="relative group">
-                                <select
-                                    :value="filterState.sortBy"
-                                    @change="updateSort($event.target.value)"
-                                    class="appearance-none w-full sm:w-64 px-6 py-3.5 bg-gray-50 border-none rounded-2xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20 cursor-pointer transition-all pr-12"
+                                <!-- Mobile: Grid 2 cols for buttons. Desktop: Flex row -->
+                                <div
+                                    class="order-1 sm:order-2 w-full sm:w-auto grid grid-cols-2 sm:flex sm:items-center gap-3 sm:gap-4"
                                 >
-                                    <option value="newest">Newest First</option>
-                                    <option value="price_low_high">
-                                        Price: Low to High
-                                    </option>
-                                    <option value="price_high_low">
-                                        Price: High to Low
-                                    </option>
-                                </select>
-                                <ChevronDownIcon
-                                    class="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none group-hover:text-primary transition-colors"
-                                />
+                                    <button
+                                        @click="isMobileFilterOpen = true"
+                                        class="lg:hidden w-full sm:w-auto flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-6 py-3.5 bg-gray-900 text-white rounded-xl sm:rounded-2xl text-[10px] sm:text-xs font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl shadow-gray-200"
+                                    >
+                                        <AdjustmentsHorizontalIcon
+                                            class="w-4 h-4 sm:w-4 sm:h-4"
+                                        />
+                                        Filters
+                                    </button>
+
+                                    <!-- Professional Sorting Dropdown using Headless UI -->
+                                    <Menu
+                                        as="div"
+                                        class="relative inline-block text-left w-full sm:w-auto"
+                                    >
+                                        <div>
+                                            <MenuButton
+                                                class="inline-flex w-full sm:w-64 justify-between items-center gap-x-1.5 rounded-xl sm:rounded-2xl bg-gray-50 px-4 sm:px-6 py-3.5 text-xs sm:text-sm font-bold text-gray-700 shadow-sm ring-1 ring-inset ring-gray-200 hover:bg-gray-100 transition-all focus:outline-none focus:ring-2 focus:ring-primary/20"
+                                            >
+                                                {{ currentSortLabel }}
+                                                <ChevronDownIcon
+                                                    class="-mr-1 h-4 w-4 text-gray-400"
+                                                    aria-hidden="true"
+                                                />
+                                            </MenuButton>
+                                        </div>
+
+                                        <transition
+                                            enter-active-class="transition ease-out duration-100"
+                                            enter-from-class="transform opacity-0 scale-95"
+                                            enter-to-class="transform opacity-100 scale-100"
+                                            leave-active-class="transition ease-in duration-75"
+                                            leave-from-class="transform opacity-100 scale-100"
+                                            leave-to-class="transform opacity-0 scale-95"
+                                        >
+                                            <MenuItems
+                                                class="absolute right-0 z-50 mt-2 w-full origin-top-right rounded-2xl bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none overflow-hidden"
+                                            >
+                                                <div class="py-1">
+                                                    <MenuItem
+                                                        v-for="option in sortOptions"
+                                                        :key="option.value"
+                                                        v-slot="{ active }"
+                                                    >
+                                                        <button
+                                                            @click="
+                                                                updateSort(
+                                                                    option.value,
+                                                                )
+                                                            "
+                                                            :class="[
+                                                                active
+                                                                    ? 'bg-primary/5 text-primary'
+                                                                    : 'text-gray-700',
+                                                                option.value ===
+                                                                filterState.sortBy
+                                                                    ? 'bg-primary/10 font-black text-primary'
+                                                                    : 'font-medium',
+                                                                'group flex w-full items-center justify-between px-4 py-3 text-sm transition-colors',
+                                                            ]"
+                                                        >
+                                                            {{ option.label }}
+                                                            <CheckIcon
+                                                                v-if="
+                                                                    option.value ===
+                                                                    filterState.sortBy
+                                                                "
+                                                                class="h-4 w-4 text-primary"
+                                                                aria-hidden="true"
+                                                            />
+                                                        </button>
+                                                    </MenuItem>
+                                                </div>
+                                            </MenuItems>
+                                        </transition>
+                                    </Menu>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Product Grid -->
                         <div
                             v-if="products.length > 0"
-                            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
+                            class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6"
                         >
                             <div
                                 v-for="product in products"

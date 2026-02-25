@@ -65,4 +65,20 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the customer details associated with the order.
+     */
+    public function customerDetail()
+    {
+        return $this->hasOne(OrderCustomerDetail::class);
+    }
+
+    /**
+     * Get the items for the order.
+     */
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class);
+    }
 }

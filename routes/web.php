@@ -130,6 +130,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/cart', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
     Route::patch('/cart/{id}', [\App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
     Route::delete('/cart/{id}', [\App\Http\Controllers\CartController::class, 'destroy'])->name('cart.destroy');
+
+    Route::get('/checkout', [\App\Http\Controllers\OrderController::class, 'create'])->name('checkout.index');
+    Route::post('/checkout', [\App\Http\Controllers\OrderController::class, 'store'])->name('checkout.store');
 });
 
 

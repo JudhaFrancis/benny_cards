@@ -28,6 +28,17 @@ defineProps({
 const emit = defineEmits(["close"]);
 
 const isLoginModalOpen = ref(false);
+const initialRegister = ref(false);
+
+const openLoginModal = () => {
+    initialRegister.value = false;
+    isLoginModalOpen.value = true;
+};
+
+const openRegisterModal = () => {
+    initialRegister.value = true;
+    isLoginModalOpen.value = true;
+};
 
 const mainLinks = [
     { name: "Home", href: "/", icon: HomeIcon },
@@ -156,7 +167,7 @@ const mainLinks = [
                                 </div>
 
                                 <button
-                                    @click="isLoginModalOpen = true"
+                                    @click="openLoginModal"
                                     class="w-full flex items-center justify-center gap-2 py-3 bg-primary text-white font-black text-[11px] uppercase tracking-widest rounded-2xl shadow-lg shadow-primary/20 active:scale-95 transition-all hover:bg-primary/90"
                                 >
                                     <UserCircleIcon class="w-4 h-4" />
@@ -165,12 +176,12 @@ const mainLinks = [
 
                                 <p class="text-center text-xs text-gray-500">
                                     New customer?
-                                    <Link
-                                        :href="route('register')"
+                                    <button
+                                        @click="openRegisterModal"
                                         class="font-black text-primary hover:underline ml-0.5"
-                                        @click="emit('close')"
-                                        >Sign Up</Link
                                     >
+                                        Sign Up
+                                    </button>
                                 </p>
                             </div>
 
@@ -287,5 +298,9 @@ const mainLinks = [
     </TransitionRoot>
 
     <!-- Login Modal -->
-    <LoginModal :is-open="isLoginModalOpen" @close="isLoginModalOpen = false" />
+    <LoginModal
+        :is-open="isLoginModalOpen"
+        :initial-register="initialRegister"
+        @close="isLoginModalOpen = false"
+    />
 </template>
