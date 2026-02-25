@@ -88,6 +88,7 @@ Route::get('/', function () {
 Route::get('/category/{slug?}', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
 
 Route::get('/product/{slug}', [\App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
+Route::post('/product/{product}/review', [\App\Http\Controllers\ProductReviewController::class, 'store'])->name('product.review.store');
 
 
 
@@ -120,6 +121,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::get('/wishlist', [\App\Http\Controllers\WishlistController::class, 'index'])->name('wishlist.index');
+    Route::post('/wishlist', [\App\Http\Controllers\WishlistController::class, 'store'])->name('wishlist.store');
+    Route::delete('/wishlist/{id}', [\App\Http\Controllers\WishlistController::class, 'destroy'])->name('wishlist.destroy');
+
+    Route::get('/cart', [\App\Http\Controllers\CartController::class, 'index'])->name('cart.index');
+    Route::post('/cart', [\App\Http\Controllers\CartController::class, 'store'])->name('cart.store');
+    Route::patch('/cart/{id}', [\App\Http\Controllers\CartController::class, 'update'])->name('cart.update');
+    Route::delete('/cart/{id}', [\App\Http\Controllers\CartController::class, 'destroy'])->name('cart.destroy');
 });
 
 

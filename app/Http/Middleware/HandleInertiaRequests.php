@@ -38,6 +38,28 @@ class HandleInertiaRequests extends Middleware
             ],
             'settings' => Setting::first(),
             'categories' => \App\Models\Category::where('status', 'active')->get(),
+            'wishlist' => $request->user()
+                ? \App\Models\Wishlist::where('user_id', $request->user()->id)
+                    ->with('product')
+                    ->latest()
+                    ->get()
+                : [],
+            'cart' => $request->user()
+                ? \App\Models\Cart::where('user_id', $request->user()->id)
+                    ->where('status', 'new')
+                    ->with('product')
+                    ->latest()
+                    ->get()
+                : [],
+            'cart_count' => $request->user()
+                ? \App\Models\Cart::where('user_id', $request->user()->id)
+                    ->where('status', 'new')
+                    ->sum('quantity')
+                : 0,
+            'flash' => [
+                'success' => $request->session()->get('success'),
+                'error' => $request->session()->get('error'),
+            ],
         ];
     }
 }

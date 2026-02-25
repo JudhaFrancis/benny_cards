@@ -52,14 +52,14 @@ const values = ref([
     </Head>
 
     <AuthenticatedLayout :transparent-header="false">
-        <!-- Hero Section -->
-        <div class="relative bg-gray-900 py-20 md:py-32 overflow-hidden">
+        <!-- Compact Hero Section (Synced with Contact Us) -->
+        <div class="relative bg-gray-900 py-12 md:py-20 overflow-hidden">
             <div class="absolute inset-0 z-0">
                 <div
-                    class="absolute top-0 -left-4 w-72 h-72 bg-primary/20 rounded-full blur-3xl opacity-20 animate-blob"
+                    class="absolute top-0 -left-4 w-48 h-48 bg-primary/20 rounded-full blur-3xl opacity-20 animate-blob"
                 ></div>
                 <div
-                    class="absolute bottom-0 -right-4 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl opacity-20 animate-blob animation-delay-2000"
+                    class="absolute bottom-0 -right-4 w-48 h-48 bg-blue-500/20 rounded-full blur-3xl opacity-20 animate-blob animation-delay-2000"
                 ></div>
             </div>
 
@@ -67,16 +67,16 @@ const values = ref([
                 class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white"
             >
                 <h1
-                    class="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-4"
+                    class="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3"
                 >
                     Our Story
                 </h1>
-                <h2 class="text-4xl md:text-6xl font-black mb-6 leading-tight">
+                <h2 class="text-3xl md:text-4xl font-black mb-4">
                     Crafting Memories Since
                     <span class="text-primary italic">2018</span>
                 </h2>
                 <p
-                    class="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed opacity-90"
+                    class="text-gray-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed opacity-80"
                 >
                     Benny's Cards started with a simple vision: to make every
                     celebration unforgettable through beautifully designed

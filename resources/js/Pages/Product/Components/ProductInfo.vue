@@ -1,5 +1,8 @@
 <script setup>
-defineProps({
+import { router, usePage } from "@inertiajs/vue3";
+import { computed, ref } from "vue";
+
+const props = defineProps({
     product: {
         type: Object,
         required: true,
@@ -12,6 +15,50 @@ defineProps({
 
 const calculateOriginalPrice = (price, discount) => {
     return (price / (1 - discount / 100)).toFixed(0);
+};
+
+const page = usePage();
+const quantity = ref(1);
+
+const isInWishlist = computed(() => {
+    return page.props.wishlist?.some(
+        (item) => item.product_id === props.product.id,
+    );
+});
+
+const addToWishlist = () => {
+    if (!page.props.auth.user) {
+        router.visit(route("login"));
+        return;
+    }
+
+    router.post(
+        route("wishlist.store"),
+        {
+            product_id: props.product.id,
+        },
+        {
+            preserveScroll: true,
+        },
+    );
+};
+
+const addToCart = () => {
+    if (!page.props.auth.user) {
+        router.visit(route("login"));
+        return;
+    }
+
+    router.post(
+        route("cart.store"),
+        {
+            product_id: props.product.id,
+            quantity: quantity.value,
+        },
+        {
+            preserveScroll: true,
+        },
+    );
 };
 </script>
 
@@ -79,7 +126,29 @@ const calculateOriginalPrice = (price, discount) => {
         </div>
 
         <div class="mt-10 flex flex-col sm:flex-row gap-4">
+            <!-- Quantity Selector -->
+            <div
+                class="flex items-center bg-gray-100 rounded-xl p-1 border border-gray-200 w-full sm:w-32"
+            >
+                <button
+                    @click="quantity > 1 ? quantity-- : null"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm transition-all text-gray-500 font-bold"
+                >
+                    -
+                </button>
+                <span class="flex-1 text-center font-black text-sm">{{
+                    quantity
+                }}</span>
+                <button
+                    @click="quantity++"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg hover:bg-white hover:shadow-sm transition-all text-gray-500 font-bold"
+                >
+                    +
+                </button>
+            </div>
+
             <button
+                @click="addToCart"
                 type="button"
                 class="flex-1 bg-cyan-400 border border-transparent rounded-xl py-3 px-8 flex items-center justify-center text-base font-bold text-white hover:bg-cyan-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-500 transition-all transform hover:scale-[1.01] active:scale-95 shadow-lg shadow-cyan-200"
             >
@@ -100,11 +169,21 @@ const calculateOriginalPrice = (price, discount) => {
             </button>
 
             <button
+                @click="addToWishlist"
                 type="button"
-                class="w-full sm:w-14 bg-white border-2 border-gray-100 rounded-xl py-3 flex items-center justify-center text-gray-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50 transition-all group shadow-sm"
+                class="w-full sm:w-14 bg-white border-2 border-gray-100 rounded-xl py-3 flex items-center justify-center transition-all group shadow-sm"
+                :class="{
+                    'text-red-500 border-red-100 bg-red-50': isInWishlist,
+                    'text-gray-400 hover:text-red-500 hover:border-red-100 hover:bg-red-50':
+                        !isInWishlist,
+                }"
             >
                 <svg
-                    class="w-6 h-6 group-hover:fill-current"
+                    class="w-6 h-6"
+                    :class="{
+                        'fill-current': isInWishlist,
+                        'group-hover:fill-current': !isInWishlist,
+                    }"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

@@ -134,7 +134,7 @@ const emit = defineEmits([
                                                 : 'bg-white/50 border-gray-100 text-gray-500 hover:border-gray-900 hover:text-gray-900'
                                         "
                                     >
-                                        {{ brand.name }}
+                                        {{ brand.title }}
                                     </button>
                                 </div>
                             </div>

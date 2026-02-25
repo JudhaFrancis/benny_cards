@@ -104,7 +104,7 @@ const emit = defineEmits(["toggleBrand", "updatePriceRange", "updateRating"]);
                         </div>
                         <span
                             class="ml-4 text-sm font-bold text-gray-500 group-hover:text-gray-900 transition-colors"
-                            >{{ brand.name }}</span
+                            >{{ brand.title }}</span
                         >
                     </label>
                 </div>

@@ -177,7 +177,7 @@ const submitReview = () => {
                 <div class="flex items-center">
                     <button
                         @click="showReviewForm = true"
-                        class="inline-flex items-center gap-2 bg-[#df1172] hover:bg-[#c61065] text-white font-bold px-7 py-3 rounded-2xl transition-all duration-200 shadow-lg shadow-pink-100/50 group"
+                        class="inline-flex items-center gap-2 bg-[#df1172] hover:bg-[#c61065] text-white text-sm font-bold px-5 py-2.5 rounded-xl transition-all duration-200 shadow-lg shadow-pink-100/50 group"
                     >
                         <svg
                             class="w-5 h-5 transition-transform group-hover:rotate-12"
@@ -507,18 +507,18 @@ const submitReview = () => {
                 </div>
 
                 <!-- Actions -->
-                <div class="flex items-center justify-end gap-4 pt-4">
+                <div class="flex items-center justify-end gap-3 pt-4">
                     <button
                         type="button"
                         @click="showReviewForm = false"
-                        class="px-8 py-3.5 border-2 border-pink-500 text-pink-500 font-bold rounded-2xl hover:bg-pink-50 transition-all active:scale-95"
+                        class="px-5 py-2.5 border-2 border-pink-500 text-pink-500 text-sm font-bold rounded-xl hover:bg-pink-50 transition-all active:scale-95"
                     >
                         Cancel
                     </button>
                     <button
                         type="submit"
                         :disabled="reviewForm.processing"
-                        class="px-8 py-3.5 bg-pink-600 text-white font-bold rounded-2xl hover:bg-pink-700 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-pink-100 disabled:opacity-50 disabled:cursor-not-allowed"
+                        class="px-6 py-2.5 bg-pink-600 text-white text-sm font-bold rounded-xl hover:bg-pink-700 transition-all active:scale-95 flex items-center gap-2 shadow-lg shadow-pink-100 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <svg
                             v-if="!reviewForm.processing"

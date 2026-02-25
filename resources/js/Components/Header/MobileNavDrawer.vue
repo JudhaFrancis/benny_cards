@@ -32,7 +32,7 @@ const isLoginModalOpen = ref(false);
 const mainLinks = [
     { name: "Home", href: "/", icon: HomeIcon },
     { name: "About Us", href: "/about", icon: InformationCircleIcon },
-    { name: "Wishlist", href: "#", icon: HeartIcon },
+    { name: "Wishlist", href: route("wishlist.index"), icon: HeartIcon },
     { name: "Cart", href: "#", icon: ShoppingBagIcon },
 ];
 </script>

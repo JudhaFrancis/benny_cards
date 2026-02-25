@@ -191,6 +191,12 @@ const searchInputClasses = computed(() => {
 const logoClasses = computed(() => {
     return "text-gray-800";
 });
+
+const removeFromWishlist = (id) => {
+    router.delete(route("wishlist.destroy", id), {
+        preserveScroll: true,
+    });
+};
 </script>
 
 <template>
@@ -546,10 +552,11 @@ const logoClasses = computed(() => {
 
                 <!-- Right Side Icons -->
                 <div class="hidden sm:flex sm:items-center sm:ms-6 space-x-6">
-                    <!-- Wishlist Icon -->
+                    <!-- Wishlist Dropdown -->
+                    <!-- Wishlist Link -->
                     <Link
-                        href="#"
-                        class="group relative flex items-center justify-center h-10 w-10 rounded-full transition-all duration-200 ease-out hover:bg-white/10"
+                        :href="route('wishlist.index')"
+                        class="group relative flex items-center justify-center h-10 w-10 rounded-full transition-all duration-200 ease-out hover:bg-white/10 focus:outline-none"
                         :class="textClasses"
                     >
                         <span class="sr-only">Wishlist</span>
@@ -567,19 +574,17 @@ const logoClasses = computed(() => {
                                 d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
                             ></path>
                         </svg>
-                        <span class="absolute top-2 right-2 flex h-2.5 w-2.5">
-                            <span
-                                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"
-                            ></span>
-                            <span
-                                class="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500 ring-2 ring-white"
-                            ></span>
+                        <span
+                            v-if="$page.props.wishlist?.length > 0"
+                            class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white shadow-sm ring-2 ring-white"
+                        >
+                            {{ $page.props.wishlist.length }}
                         </span>
                     </Link>
 
                     <!-- Cart Icon -->
                     <Link
-                        href="#"
+                        :href="route('cart.index')"
                         class="group relative flex items-center justify-center h-10 w-10 rounded-full transition-all duration-200 ease-out hover:bg-white/10"
                         :class="textClasses"
                     >
@@ -599,9 +604,11 @@ const logoClasses = computed(() => {
                             ></path>
                         </svg>
                         <span
-                            class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-secondary text-[10px] font-bold text-white shadow-sm ring-2 ring-white"
-                            >2</span
+                            v-if="$page.props.cart_count > 0"
+                            class="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white shadow-sm ring-2 ring-white"
                         >
+                            {{ $page.props.cart_count }}
+                        </span>
                     </Link>
 
                     <!-- Profile Icon / Dropdown -->
@@ -637,11 +644,20 @@ const logoClasses = computed(() => {
                                     class="px-6 py-5 border-b border-gray-100/80 bg-gray-50/50"
                                 >
                                     <div class="flex items-center gap-4">
-                                        <!-- Placeholder for Logo if needed, mapped to ApplicationLogo or simple icon -->
+                                        <!-- Header Logo in Dropdown -->
                                         <div
                                             class="h-10 w-10 flex-shrink-0 bg-white rounded-xl shadow-sm border border-gray-100 flex items-center justify-center p-1.5"
                                         >
+                                            <img
+                                                v-if="
+                                                    $page.props.settings?.logo
+                                                "
+                                                :src="$page.props.settings.logo"
+                                                alt="Logo"
+                                                class="w-full h-full object-contain"
+                                            />
                                             <ApplicationLogo
+                                                v-else
                                                 class="w-full h-full object-contain"
                                             />
                                         </div>

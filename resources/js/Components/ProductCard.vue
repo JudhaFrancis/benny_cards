@@ -1,12 +1,55 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 
-defineProps({
+const props = defineProps({
     product: {
         type: Object,
         required: true,
     },
 });
+
+const page = usePage();
+const isInWishlist = computed(() => {
+    return page.props.wishlist?.some(
+        (item) => item.product_id === props.product.id,
+    );
+});
+
+const addToWishlist = () => {
+    if (!page.props.auth.user) {
+        // You might want to show a login modal here or redirect
+        router.visit(route("login"));
+        return;
+    }
+
+    router.post(
+        route("wishlist.store"),
+        {
+            product_id: props.product.id,
+        },
+        {
+            preserveScroll: true,
+        },
+    );
+};
+const addToCart = () => {
+    if (!page.props.auth.user) {
+        router.visit(route("login"));
+        return;
+    }
+
+    router.post(
+        route("cart.store"),
+        {
+            product_id: props.product.id,
+            quantity: 1,
+        },
+        {
+            preserveScroll: true,
+        },
+    );
+};
 </script>
 
 <template>
@@ -62,6 +105,7 @@ defineProps({
             <!-- Add to Cart Icon (Bottom Right, always visible) -->
             <div class="absolute bottom-3 right-3 z-20">
                 <button
+                    @click.stop.prevent="addToCart"
                     class="p-2.5 bg-cyan-400 hover:bg-cyan-500 text-white rounded-lg shadow-lg transition-all duration-300 flex items-center justify-center hover:scale-110"
                     title="Add to Cart"
                 >
@@ -84,12 +128,17 @@ defineProps({
 
         <!-- Wishlist Heart Button (Top Right) -->
         <button
+            @click="addToWishlist"
             class="absolute top-3 right-3 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors z-20"
+            :class="{
+                'text-red-500': isInWishlist,
+                'text-gray-700': !isInWishlist,
+            }"
             title="Add to wishlist"
         >
             <svg
-                class="w-5 h-5 text-gray-700"
-                fill="none"
+                class="w-5 h-5"
+                :fill="isInWishlist ? 'currentColor' : 'none'"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
             >

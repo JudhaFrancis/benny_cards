@@ -27,7 +27,7 @@ class ProductReviewController extends Controller
 
         $imageNames = [];
         if ($request->hasFile('images')) {
-            $destinationPath = 'C:/xampp/htdocs/benny-cards-admin-panel/public/uploads/reviews';
+            $destinationPath = rtrim(env('ADMIN_UPLOAD_PATH'), '/') . '/reviews';
             if (!file_exists($destinationPath)) {
                 mkdir($destinationPath, 0777, true);
             }
@@ -43,7 +43,7 @@ class ProductReviewController extends Controller
             'user_id' => auth()->id(),
             'reviewer_name' => $request->name ?? (auth()->check() ? auth()->user()->name : 'Anonymous'),
             'title' => $request->title,
-            'description' => $request->content,
+            'description' => $request->input('content'),
             'rating' => $request->rating,
             'image' => $imageNames, // Will be cast to JSON/array by model
             'status' => 'active',

@@ -18,7 +18,12 @@ class ProductController extends Controller
     {
         $product = Product::where('slug', $slug)
             ->where('status', 'active')
-            ->with('category')
+            ->with([
+                'category',
+                'reviews' => function ($query) {
+                    $query->where('status', 'active')->latest();
+                }
+            ])
             ->firstOrFail();
 
         $relatedProducts = Product::where('cat_id', $product->cat_id)
@@ -27,9 +32,17 @@ class ProductController extends Controller
             ->limit(4)
             ->get();
 
+        // Calculate average rating
+        $averageRating = '0.0';
+        if ($product->reviews->count() > 0) {
+            $averageRating = number_format($product->reviews->avg('rating'), 1);
+        }
+
         return Inertia::render('Product/Show', [
             'product' => $product,
             'relatedProducts' => $relatedProducts,
+            'averageRating' => $averageRating,
+            'imageBaseUrl' => rtrim(env('VITE_IMAGE_BASE_URL'), '/') . '/reviews/',
         ]);
     }
 }

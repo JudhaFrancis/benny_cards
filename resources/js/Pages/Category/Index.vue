@@ -1,34 +1,71 @@
 <script setup>
-import { Head, Link } from "@inertiajs/vue3";
+import { Head, Link, router } from "@inertiajs/vue3";
+import { ref, watch, computed } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import ProductCard from "@/Components/ProductCard.vue";
+import CategorySidebar from "./Partials/CategorySidebar.vue";
+import MobileFilterDrawer from "./Partials/MobileFilterDrawer.vue";
+import {
+    AdjustmentsHorizontalIcon,
+    ChevronDownIcon,
+} from "@heroicons/vue/24/outline";
 
 const props = defineProps({
-    categories: {
-        type: Array,
-        default: () => [],
-    },
-    selectedCategory: {
-        type: Object,
-        default: () => null,
-    },
-    products: {
-        type: Array,
-        default: () => [],
-    },
+    categories: Array,
+    selectedCategory: Object,
+    products: Array,
+    brands: Array,
+    priceRanges: Array,
+    filterState: Object,
 });
+
+const isMobileFilterOpen = ref(false);
+
+const updateFilters = (filters) => {
+    router.get(
+        route("category.index", props.selectedCategory.slug),
+        {
+            ...filters,
+        },
+        {
+            preserveScroll: true,
+            preserveState: true,
+            replace: true,
+        },
+    );
+};
+
+const toggleBrand = (brandId) => {
+    const brands = [...props.filterState.brands];
+    const index = brands.indexOf(brandId.toString());
+    if (index > -1) {
+        brands.splice(index, 1);
+    } else {
+        brands.push(brandId.toString());
+    }
+    updateFilters({ ...props.filterState, brands: brands.join(",") });
+};
+
+const updatePriceRange = (rangeSlug) => {
+    updateFilters({ ...props.filterState, price_range: rangeSlug });
+};
+
+const updateSort = (sortBy) => {
+    updateFilters({ ...props.filterState, sortBy });
+};
+
+const clearFilters = () => {
+    updateFilters({ sortBy: props.filterState.sortBy });
+};
 </script>
 
 <template>
     <Head :title="selectedCategory ? selectedCategory.title : 'Categories'" />
 
     <AuthenticatedLayout>
-        <!-- Compact Hero Section (Synced with Contact Us Design) -->
-        <div
-            class="relative bg-gray-900 py-12 md:py-16 overflow-hidden"
-            v-if="selectedCategory"
-        >
-            <!-- Decorative Background Elements -->
+        <!-- Compact Hero Section (Synced with Contact Us) -->
+        <div class="relative bg-gray-900 py-12 md:py-20 overflow-hidden">
+            <!-- Decorative Elements -->
             <div class="absolute inset-0 z-0">
                 <div
                     class="absolute top-0 -left-4 w-48 h-48 bg-primary/20 rounded-full blur-3xl opacity-20 animate-blob"
@@ -42,208 +79,187 @@ const props = defineProps({
                 class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-white"
             >
                 <!-- Breadcrumbs -->
-                <nav
-                    class="flex justify-center mb-4 text-xs font-bold uppercase tracking-[0.2em] text-gray-500"
-                    aria-label="Breadcrumb"
-                >
-                    <ol class="flex items-center space-x-2">
+                <nav class="flex justify-center mb-6" aria-label="Breadcrumb">
+                    <ol class="flex items-center space-x-3">
                         <li>
                             <Link
                                 :href="route('home')"
-                                class="hover:text-primary transition-colors"
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500 hover:text-primary transition-colors"
                                 >Home</Link
                             >
                         </li>
-                        <li>
-                            <svg
-                                class="w-2.5 h-2.5 text-gray-700"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
+                        <li class="flex items-center space-x-3">
+                            <span class="text-gray-800">/</span>
+                            <span
+                                class="text-[10px] font-black uppercase tracking-[0.2em] text-primary"
+                                >{{ selectedCategory?.title }}</span
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="3"
-                                    d="M9 5l7 7-7 7"
-                                />
-                            </svg>
                         </li>
-                        <li class="text-primary">Categories</li>
                     </ol>
                 </nav>
 
-                <h1
-                    class="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-2"
-                >
-                    Shopping Experience
-                </h1>
-                <h2 class="text-3xl md:text-5xl font-black mb-4">
-                    {{ selectedCategory.title }}
-                    <span class="text-primary italic">Collection</span>
-                </h2>
-                <p
-                    class="text-gray-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed opacity-80"
-                    v-if="selectedCategory.summary"
-                >
-                    {{ selectedCategory.summary }}
-                </p>
-
-                <!-- Product Count Badge -->
-                <div
-                    class="mt-6 inline-flex items-center gap-2 px-6 py-2.5 bg-white/5 backdrop-blur-xl border border-white/10 rounded-full text-sm font-bold text-gray-400"
-                >
-                    <span
-                        class="w-2 h-2 rounded-full bg-primary animate-pulse"
-                    ></span>
-                    <span>{{ products.length }} Products Available</span>
+                <div class="space-y-4">
+                    <h1
+                        class="text-xs font-bold uppercase tracking-[0.3em] text-primary mb-3"
+                    >
+                        Premium Collection
+                    </h1>
+                    <h2 class="text-3xl md:text-4xl font-black mb-4">
+                        {{ selectedCategory?.title }}
+                        <span class="text-primary italic">Collection</span>
+                    </h2>
+                    <p
+                        class="text-gray-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed opacity-80"
+                    >
+                        Explore our curated selection of
+                        {{ selectedCategory?.title.toLowerCase() }} designed for
+                        every special occasion.
+                    </p>
                 </div>
             </div>
         </div>
 
-        <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="flex flex-col md:flex-row gap-8">
-                    <!-- Sidebar: Categories -->
-                    <aside class="w-full md:w-64 flex-shrink-0">
-                        <div
-                            class="bg-white overflow-hidden shadow-sm sm:rounded-lg sticky top-24"
-                        >
-                            <div class="p-6">
-                                <h3
-                                    class="font-bold text-lg mb-4 text-gray-900 border-b pb-2"
-                                >
-                                    Categories
-                                </h3>
-                                <ul class="space-y-3">
-                                    <li
-                                        v-for="category in categories"
-                                        :key="category.id"
-                                    >
-                                        <Link
-                                            :href="
-                                                route(
-                                                    'category.index',
-                                                    category.slug,
-                                                )
-                                            "
-                                            class="flex items-center gap-3 p-2 rounded-lg transition-all duration-200 group"
-                                            :class="{
-                                                'bg-primary/10 text-primary font-semibold':
-                                                    selectedCategory?.id ===
-                                                    category.id,
-                                                'hover:bg-gray-50 text-gray-600':
-                                                    selectedCategory?.id !==
-                                                    category.id,
-                                            }"
-                                        >
-                                            <div
-                                                class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-gray-100 border border-gray-200"
-                                            >
-                                                <img
-                                                    v-if="category.photo"
-                                                    :src="category.photo"
-                                                    :alt="category.title"
-                                                    class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                                                />
-                                                <div
-                                                    v-else
-                                                    class="w-full h-full flex items-center justify-center bg-primary/5"
-                                                >
-                                                    <svg
-                                                        class="w-5 h-5 text-primary/40"
-                                                        fill="none"
-                                                        stroke="currentColor"
-                                                        viewBox="0 0 24 24"
-                                                    >
-                                                        <path
-                                                            stroke-linecap="round"
-                                                            stroke-linejoin="round"
-                                                            stroke-width="2"
-                                                            d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
-                                                        ></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                            <span class="text-sm truncate">{{
-                                                category.title
-                                            }}</span>
-                                            <span
-                                                class="ml-auto text-[10px] bg-gray-100 px-1.5 py-0.5 rounded-full text-gray-400 group-hover:bg-primary/10 group-hover:text-primary transition-colors"
-                                            >
-                                                {{ category.products_count }}
-                                            </span>
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+        <div class="bg-gray-50 min-h-screen">
+            <div class="max-w-7xl mx-auto px-4 py-12">
+                <div class="flex flex-col lg:flex-row gap-8">
+                    <!-- Desktop Sidebar -->
+                    <aside class="w-full lg:w-80 flex-shrink-0">
+                        <CategorySidebar
+                            :categories="categories"
+                            :selectedCategory="selectedCategory"
+                            :brands="brands"
+                            :priceRanges="priceRanges"
+                            :filterState="filterState"
+                            @toggleBrand="toggleBrand"
+                            @updatePriceRange="updatePriceRange"
+                        />
                     </aside>
 
-                    <!-- Main Content: Products -->
+                    <!-- Main Content -->
                     <main class="flex-1">
-                        <div v-if="products.length > 0">
-                            <!-- Cards Grid -->
-                            <div
-                                class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
-                            >
-                                <div
-                                    v-for="product in products"
-                                    :key="product.id"
+                        <!-- Toolbar -->
+                        <div
+                            class="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-[2rem] shadow-sm border border-gray-100"
+                        >
+                            <div class="flex items-center gap-4">
+                                <button
+                                    @click="isMobileFilterOpen = true"
+                                    class="lg:hidden flex items-center gap-2 px-6 py-3 bg-gray-900 text-white rounded-2xl text-xs font-black uppercase tracking-widest active:scale-95 transition-all shadow-xl shadow-gray-200"
                                 >
-                                    <ProductCard :product="product" />
-                                </div>
+                                    <AdjustmentsHorizontalIcon
+                                        class="w-4 h-4"
+                                    />
+                                    Filters
+                                </button>
+                                <span class="text-sm font-bold text-gray-500">
+                                    Showing
+                                    <span class="text-gray-900">{{
+                                        products.length
+                                    }}</span>
+                                    Results
+                                </span>
+                            </div>
+
+                            <!-- Sorting Dropdown -->
+                            <div class="relative group">
+                                <select
+                                    :value="filterState.sortBy"
+                                    @change="updateSort($event.target.value)"
+                                    class="appearance-none w-full sm:w-64 px-6 py-3.5 bg-gray-50 border-none rounded-2xl text-sm font-bold text-gray-700 focus:ring-2 focus:ring-primary/20 cursor-pointer transition-all pr-12"
+                                >
+                                    <option value="newest">Newest First</option>
+                                    <option value="price_low_high">
+                                        Price: Low to High
+                                    </option>
+                                    <option value="price_high_low">
+                                        Price: High to Low
+                                    </option>
+                                </select>
+                                <ChevronDownIcon
+                                    class="absolute right-6 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none group-hover:text-primary transition-colors"
+                                />
                             </div>
                         </div>
 
+                        <!-- Product Grid -->
                         <div
-                            v-else
-                            class="bg-white rounded-2xl p-12 text-center shadow-sm border border-gray-100"
+                            v-if="products.length > 0"
+                            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
                         >
                             <div
-                                class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-4"
+                                v-for="product in products"
+                                :key="product.id"
+                                class="animate-fade-in"
                             >
-                                <svg
+                                <ProductCard :product="product" />
+                            </div>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div
+                            v-else
+                            class="bg-white rounded-[3rem] p-16 text-center border border-gray-100 shadow-sm"
+                        >
+                            <div
+                                class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-8"
+                            >
+                                <AdjustmentsHorizontalIcon
                                     class="w-10 h-10 text-gray-300"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                                    ></path>
-                                </svg>
+                                />
                             </div>
                             <h3
-                                class="text-xl font-semibold text-gray-900 mb-2"
+                                class="text-2xl font-black text-gray-900 mb-4 tracking-tight"
                             >
-                                No products found
+                                No matching products
                             </h3>
-                            <p class="text-gray-500">
-                                We couldn't find any products in this category
-                                at the moment.
+                            <p class="text-gray-500 max-w-sm mx-auto mb-10">
+                                We couldn't find any products matching your
+                                current filter selection.
                             </p>
-                            <Link
-                                :href="route('home')"
-                                class="mt-6 inline-flex items-center text-primary font-medium hover:underline"
+                            <button
+                                @click="clearFilters"
+                                class="px-8 py-4 bg-primary text-white rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-gray-900 transition-all active:scale-95 shadow-xl shadow-primary/20"
                             >
-                                ← Back to shopping
-                            </Link>
+                                Clear All Filters
+                            </button>
                         </div>
                     </main>
                 </div>
             </div>
         </div>
+
+        <!-- Mobile Filter Drawer -->
+        <MobileFilterDrawer
+            :isOpen="isMobileFilterOpen"
+            :categories="categories"
+            :selectedCategory="selectedCategory"
+            :brands="brands"
+            :priceRanges="priceRanges"
+            :filterState="filterState"
+            @close="isMobileFilterOpen = false"
+            @toggleBrand="toggleBrand"
+            @updatePriceRange="updatePriceRange"
+            @clearFilters="clearFilters"
+        />
     </AuthenticatedLayout>
 </template>
 
 <style scoped>
-.sticky {
-    top: 6rem;
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
 }
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @keyframes blob {
     0% {
         transform: translate(0px, 0px) scale(1);
