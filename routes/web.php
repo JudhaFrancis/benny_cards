@@ -57,6 +57,7 @@ Route::get('/', function () {
 
         return [
             'label' => $range->title,
+            'slug' => $range->slug,
             'min' => $range->min_price,
             'max' => $range->max_price,
             'photo' => $range->photo, // Using trait to get URL

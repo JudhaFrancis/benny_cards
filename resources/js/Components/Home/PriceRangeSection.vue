@@ -1,4 +1,5 @@
 <script setup>
+import { Link } from "@inertiajs/vue3";
 defineProps({
     priceRanges: {
         type: Array,
@@ -23,9 +24,10 @@ defineProps({
             </div>
 
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-8">
-                <div
+                <Link
                     v-for="(range, index) in priceRanges"
                     :key="index"
+                    :href="route('category.index', { price_range: range.slug })"
                     class="group relative h-48 sm:h-64 rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-1 sm:hover:-translate-y-2"
                 >
                     <!-- Background Image -->
@@ -102,7 +104,7 @@ defineProps({
                             </span>
                         </div>
                     </div>
-                </div>
+                </Link>
             </div>
         </div>
     </div>
