@@ -11,11 +11,12 @@ const props = defineProps({
 });
 
 const subtotal = computed(() => {
-    return props.cartItems.reduce((acc, item) => acc + item.amount, 0);
+    return props.cartItems.reduce((acc, item) => acc + parseFloat(item.amount || 0), 0);
 });
 
 const updateQuantity = (item, delta) => {
-    const newQuantity = item.quantity + delta;
+    const currentQty = parseInt(item.quantity) || 0;
+    const newQuantity = currentQty + delta;
     if (newQuantity < 1) return;
 
     router.patch(
@@ -52,6 +53,14 @@ const removeItem = (id) => {
     router.delete(route("cart.destroy", id), {
         preserveScroll: true,
     });
+};
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+    }).format(price);
 };
 </script>
 
@@ -144,7 +153,7 @@ const removeItem = (id) => {
                                     {{ item.product.title }}
                                 </Link>
                                 <p class="text-sm font-bold text-primary mt-1">
-                                    ₹{{ item.price }}
+                                    {{ formatPrice(item.price) }}
                                 </p>
                             </div>
 
@@ -210,7 +219,7 @@ const removeItem = (id) => {
                                     class="flex justify-between text-gray-500 font-bold uppercase text-[10px] tracking-widest"
                                 >
                                     <span>Subtotal</span>
-                                    <span>₹{{ subtotal }}</span>
+                                    <span>{{ formatPrice(subtotal) }}</span>
                                 </div>
                                 <div
                                     class="pt-4 border-t border-gray-100 flex justify-between items-center"
@@ -221,7 +230,7 @@ const removeItem = (id) => {
                                     >
                                     <span
                                         class="text-2xl font-black text-primary"
-                                        >₹{{ subtotal }}</span
+                                        >{{ formatPrice(subtotal) }}</span
                                     >
                                 </div>
                             </div>

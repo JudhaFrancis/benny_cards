@@ -44,7 +44,7 @@ const mainLinks = [
     { name: "Home", href: "/", icon: HomeIcon },
     { name: "About Us", href: "/about", icon: InformationCircleIcon },
     { name: "Wishlist", href: route("wishlist.index"), icon: HeartIcon },
-    { name: "Cart", href: "#", icon: ShoppingBagIcon },
+    { name: "Cart", href: route("cart.index"), icon: ShoppingBagIcon },
 ];
 </script>
 

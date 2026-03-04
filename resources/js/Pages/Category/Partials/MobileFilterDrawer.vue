@@ -90,6 +90,17 @@ const emit = defineEmits([
                                 </h3>
                                 <div class="grid grid-cols-2 gap-3">
                                     <Link
+                                        :href="route('category.index')"
+                                        class="flex items-center gap-3 p-4 rounded-2xl border transition-all duration-300 active:scale-95 shadow-sm"
+                                        :class="
+                                            !selectedCategory
+                                                ? 'bg-primary border-primary text-white shadow-lg shadow-primary/20 ring-4 ring-primary/10'
+                                                : 'bg-white/50 border-gray-100 text-gray-600 hover:border-primary/30'
+                                        "
+                                    >
+                                        <span class="text-xs font-black truncate">All</span>
+                                    </Link>
+                                    <Link
                                         v-for="category in categories"
                                         :key="category.id"
                                         :href="

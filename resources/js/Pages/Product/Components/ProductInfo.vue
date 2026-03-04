@@ -69,6 +69,14 @@ const addToCart = () => {
         },
     );
 };
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+    }).format(price);
+};
 </script>
 
 <template>
@@ -149,12 +157,18 @@ const addToCart = () => {
 
         <div class="mt-6 flex items-baseline gap-4">
             <h2 class="sr-only">Product information</h2>
-            <p class="text-2xl font-black text-primary">₹{{ product.price }}</p>
+            <p class="text-2xl font-black text-primary">
+                {{ formatPrice(product.price) }}
+            </p>
             <p
                 v-if="product.discount > 0"
                 class="text-lg text-gray-400 line-through"
             >
-                ₹{{ calculateOriginalPrice(product.price, product.discount) }}
+                {{
+                    formatPrice(
+                        calculateOriginalPrice(product.price, product.discount),
+                    )
+                }}
             </p>
             <span
                 v-if="product.discount > 0"

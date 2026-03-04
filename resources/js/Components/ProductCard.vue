@@ -50,6 +50,13 @@ const addToCart = () => {
         },
     );
 };
+const formatPrice = (price) => {
+    return new Intl.NumberFormat('en-IN', {
+        style: 'currency',
+        currency: 'INR',
+        minimumFractionDigits: 2,
+    }).format(price);
+};
 </script>
 
 <template>
@@ -167,7 +174,7 @@ const addToCart = () => {
                 class="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2"
             >
                 <p class="text-sm sm:text-lg font-bold text-gray-900">
-                    ₹{{ product.price }}
+                    {{ formatPrice(product.price) }}
                 </p>
                 <div
                     v-if="product.discount > 0"
@@ -176,11 +183,10 @@ const addToCart = () => {
                     <p
                         class="text-[10px] sm:text-sm text-gray-400 line-through"
                     >
-                        ₹{{
-                            (
-                                product.price /
-                                (1 - product.discount / 100)
-                            ).toFixed(2)
+                        {{
+                            formatPrice(
+                                product.price / (1 - product.discount / 100),
+                            )
                         }}
                     </p>
                     <p class="text-[10px] sm:text-sm font-bold text-red-500">

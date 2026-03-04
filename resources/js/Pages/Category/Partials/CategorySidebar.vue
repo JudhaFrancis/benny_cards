@@ -35,6 +35,28 @@ const emit = defineEmits(["toggleBrand", "updatePriceRange", "updateRating"]);
                 </h3>
                 <nav class="space-y-1">
                     <Link
+                        :href="route('category.index')"
+                        class="flex items-center justify-between group px-4 py-3 rounded-2xl transition-all duration-300"
+                        :class="
+                            !selectedCategory
+                                ? 'bg-primary text-white shadow-xl shadow-primary/20 scale-[1.02]'
+                                : 'text-gray-600 hover:bg-primary/5 hover:text-primary hover:translate-x-1'
+                        "
+                    >
+                        <span class="text-sm font-bold">All Categories</span>
+                        <span
+                            class="text-[9px] font-black px-2 py-0.5 rounded-full transition-colors"
+                            :class="
+                                !selectedCategory
+                                    ? 'bg-white/20 text-white'
+                                    : 'bg-gray-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'
+                            "
+                        >
+                            {{ categories.reduce((total, cat) => total + cat.products_count, 0) }}
+                        </span>
+                    </Link>
+
+                    <Link
                         v-for="category in categories"
                         :key="category.id"
                         :href="route('category.index', category.slug)"

@@ -1,6 +1,7 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
+import WhatsAppFAB from '@/Components/WhatsAppFAB.vue';
 </script>
 
 <template>
@@ -18,5 +19,6 @@ import { Link } from '@inertiajs/vue3';
         >
             <slot />
         </div>
+        <WhatsAppFAB />
     </div>
 </template>

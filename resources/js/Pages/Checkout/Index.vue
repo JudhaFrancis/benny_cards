@@ -27,8 +27,16 @@ const form = useForm({
 });
 
 const subtotal = computed(() => {
-    return props.cartItems.reduce((acc, item) => acc + item.amount, 0);
+    return props.cartItems.reduce((acc, item) => acc + parseFloat(item.amount || 0), 0);
 });
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+    }).format(price);
+};
 
 const submitOrder = () => {
     form.post(route("checkout.store"), {
@@ -494,7 +502,7 @@ const submitOrder = () => {
                                         <p
                                             class="text-sm font-bold text-primary mt-1"
                                         >
-                                            ₹{{ item.price }}
+                                            {{ formatPrice(item.price) }}
                                         </p>
                                     </div>
                                 </div>
@@ -507,7 +515,7 @@ const submitOrder = () => {
                                     class="flex justify-between text-gray-500 font-bold uppercase text-[10px] tracking-widest"
                                 >
                                     <span>Subtotal</span>
-                                    <span>₹{{ subtotal }}</span>
+                                    <span>{{ formatPrice(subtotal) }}</span>
                                 </div>
                                 <div
                                     class="pt-4 border-t border-gray-100 flex justify-between items-center"
@@ -518,7 +526,7 @@ const submitOrder = () => {
                                     >
                                     <span
                                         class="text-2xl font-black text-primary"
-                                        >₹{{ subtotal }}</span
+                                        >{{ formatPrice(subtotal) }}</span
                                     >
                                 </div>
                             </div>

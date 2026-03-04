@@ -216,6 +216,14 @@ const removeFromWishlist = (id) => {
         preserveScroll: true,
     });
 };
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+    }).format(price);
+};
 </script>
 
 <template>
@@ -537,7 +545,7 @@ const removeFromWishlist = (id) => {
                                                     v-if="product.price"
                                                     class="text-xs text-primary font-bold mt-0.5"
                                                 >
-                                                    ₹{{ product.price }}
+                                                    {{ formatPrice(product.price) }}
                                                 </p>
                                             </div>
                                             <svg

@@ -25,7 +25,7 @@ const isMobileFilterOpen = ref(false);
 
 const updateFilters = (filters) => {
     router.get(
-        route("category.index", props.selectedCategory.slug),
+        route("category.index", props.selectedCategory?.slug),
         {
             ...filters,
         },
@@ -70,7 +70,11 @@ const currentSortLabel = computed(() => {
     const current = sortOptions.find(
         (opt) => opt.value === props.filterState.sortBy,
     );
-    return current ? current.label : "Sort by";
+    // If the current sortBy is empty or doesn't match a label, show 'Sort By'
+    if (!props.filterState.sortBy || props.filterState.sortBy === 'newest') {
+        return "Sort By";
+    }
+    return current ? current.label : "Sort By";
 });
 </script>
 
@@ -107,7 +111,7 @@ const currentSortLabel = computed(() => {
                             <span class="text-gray-800">/</span>
                             <span
                                 class="text-[10px] font-black uppercase tracking-[0.2em] text-primary"
-                                >{{ selectedCategory?.title }}</span
+                                >{{ selectedCategory ? selectedCategory.title : 'All Categories' }}</span
                             >
                         </li>
                     </ol>
@@ -120,14 +124,14 @@ const currentSortLabel = computed(() => {
                         Premium Collection
                     </h1>
                     <h2 class="text-3xl md:text-4xl font-black mb-4">
-                        {{ selectedCategory?.title }}
+                        {{ selectedCategory ? selectedCategory.title : 'All Categories' }}
                         <span class="text-primary italic">Collection</span>
                     </h2>
                     <p
                         class="text-gray-400 text-base md:text-lg max-w-xl mx-auto leading-relaxed opacity-80"
                     >
                         Explore our curated selection of
-                        {{ selectedCategory?.title.toLowerCase() }} designed for
+                        {{ selectedCategory ? selectedCategory.title.toLowerCase() : 'all premium cards' }} designed for
                         every special occasion.
                     </p>
                 </div>

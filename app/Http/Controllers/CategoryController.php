@@ -22,16 +22,16 @@ class CategoryController extends Controller
         $selectedCategory = null;
         if ($slug) {
             $selectedCategory = Category::where('slug', $slug)->first();
-        } else if ($categories->isNotEmpty()) {
-            $selectedCategory = $categories->first();
+            if (!$selectedCategory) {
+                abort(404);
+            }
         }
 
-        if (!$selectedCategory) {
-            abort(404);
+        $query = Product::where('status', 'active');
+        
+        if ($selectedCategory) {
+            $query->where('cat_id', $selectedCategory->id);
         }
-
-        $query = Product::where('status', 'active')
-            ->where('cat_id', $selectedCategory->id);
 
         // Filtering
         if ($request->brands) {

@@ -69,11 +69,6 @@ onUnmounted(() => {
                     class="w-full h-auto transform scale-105 transition-transform duration-[20000ms] ease-linear"
                     :class="currentSlide === index ? 'scale-110' : 'scale-100'"
                 />
-
-                <!-- Gradient Overlay -->
-                <div
-                    class="absolute inset-0 bg-gradient-to-t from-gray-900/90 via-gray-900/40 to-transparent"
-                ></div>
             </div>
 
             <!-- Slider Controls -->

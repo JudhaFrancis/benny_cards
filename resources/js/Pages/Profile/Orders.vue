@@ -22,6 +22,14 @@ const getStatusColor = (status) => {
     };
     return colors[status] || "bg-gray-100 text-gray-800";
 };
+
+const formatPrice = (price) => {
+    return new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: "INR",
+        minimumFractionDigits: 2,
+    }).format(price);
+};
 </script>
 
 <template>
@@ -191,7 +199,7 @@ const getStatusColor = (status) => {
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 border-b-0"
                                         >
-                                            ₹{{ order.total_amount }}
+                                            {{ formatPrice(order.total_amount) }}
                                         </td>
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm border-b-0"
