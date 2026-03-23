@@ -20,6 +20,7 @@ class ProductController extends Controller
             ->where('status', 'active')
             ->with([
                 'category',
+                'images',
                 'reviews' => function ($query) {
                     $query->where('status', 'active')->latest();
                 }

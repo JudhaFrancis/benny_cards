@@ -157,12 +157,12 @@ const formatPrice = (price) => {
 
         <div class="mt-6 flex items-baseline gap-4">
             <h2 class="sr-only">Product information</h2>
-            <p class="text-2xl font-black text-primary">
+            <p class="text-2xl font-bold font-[Poppins] text-primary tracking-tight">
                 {{ formatPrice(product.price) }}
             </p>
             <p
                 v-if="product.discount > 0"
-                class="text-lg text-gray-400 line-through"
+                class="text-lg text-gray-400 line-through font-[Poppins] font-semibold"
             >
                 {{
                     formatPrice(

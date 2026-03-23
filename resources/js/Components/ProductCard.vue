@@ -173,7 +173,7 @@ const formatPrice = (price) => {
             <div
                 class="flex flex-col sm:flex-row items-center justify-center gap-0.5 sm:gap-2"
             >
-                <p class="text-sm sm:text-lg font-bold text-gray-900">
+                <p class="text-sm sm:text-lg font-bold font-[Poppins] text-gray-900 tracking-tight">
                     {{ formatPrice(product.price) }}
                 </p>
                 <div
@@ -181,7 +181,7 @@ const formatPrice = (price) => {
                     class="flex items-center gap-1 sm:gap-2"
                 >
                     <p
-                        class="text-[10px] sm:text-sm text-gray-400 line-through"
+                        class="text-[10px] sm:text-sm text-gray-400 line-through font-[Poppins] font-semibold"
                     >
                         {{
                             formatPrice(

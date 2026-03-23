@@ -97,7 +97,7 @@ const currentYear = new Date().getFullYear();
                         </li>
                         <li>
                             <Link
-                                href="#"
+                                :href="route('about')"
                                 class="text-sm text-gray-400 hover:text-primary transition-colors"
                             >
                                 About Us
