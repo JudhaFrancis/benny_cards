@@ -15,15 +15,8 @@ class OrderCustomerDetail extends Model
         'name',
         'email',
         'phone',
-        'country',
-        'city_1',
-        'state_1',
-        'post_code_1',
         'address_1',
         'address_2',
-        'city_2',
-        'state_2',
-        'post_code_2',
         'remarks',
     ];
 

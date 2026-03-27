@@ -89,6 +89,7 @@ Route::get('/', function () {
 Route::get('/category/{slug?}', [\App\Http\Controllers\CategoryController::class, 'index'])->name('category.index');
 
 Route::get('/product/{slug}', [\App\Http\Controllers\ProductController::class, 'show'])->name('product.show');
+Route::get('/api/search-suggestions', [\App\Http\Controllers\SearchController::class, 'suggestions']);
 Route::post('/product/{product}/review', [\App\Http\Controllers\ProductReviewController::class, 'store'])->name('product.review.store');
 
 

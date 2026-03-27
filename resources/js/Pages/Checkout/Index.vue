@@ -15,14 +15,7 @@ const form = useForm({
     email: "",
     phone: "",
     address_1: "",
-    city_1: "",
-    state_1: "Tamil Nadu",
-    post_code_1: "",
-    country: "India",
     address_2: "",
-    city_2: "",
-    state_2: "",
-    post_code_2: "",
     remarks: "",
 });
 
@@ -214,15 +207,15 @@ const submitOrder = () => {
                                         <div>
                                             <label
                                                 class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wider"
-                                                >Street Address *</label
+                                                >Address *</label
                                             >
-                                            <input
+                                            <textarea
                                                 v-model="form.address_1"
-                                                type="text"
+                                                rows="3"
                                                 class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-sm"
                                                 required
-                                                placeholder="123 Main St, Apt 4B"
-                                            />
+                                                placeholder="Enter your full address here"
+                                            ></textarea>
                                             <p
                                                 v-if="form.errors.address_1"
                                                 class="mt-2 text-[10px] text-red-500 font-bold uppercase"
@@ -230,96 +223,10 @@ const submitOrder = () => {
                                                 {{ form.errors.address_1 }}
                                             </p>
                                         </div>
-                                        <div
-                                            class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                                        >
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wider"
-                                                    >City *</label
-                                                >
-                                                <input
-                                                    v-model="form.city_1"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-sm"
-                                                    required
-                                                    placeholder="Mumbai"
-                                                />
-                                                <p
-                                                    v-if="form.errors.city_1"
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{ form.errors.city_1 }}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wider"
-                                                    >State / Province *</label
-                                                >
-                                                <input
-                                                    v-model="form.state_1"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-sm"
-                                                    required
-                                                />
-                                                <p
-                                                    v-if="form.errors.state_1"
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{ form.errors.state_1 }}
-                                                </p>
-                                            </div>
-                                        </div>
-                                        <div
-                                            class="grid grid-cols-1 md:grid-cols-2 gap-6"
-                                        >
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wider"
-                                                    >Country *</label
-                                                >
-                                                <input
-                                                    v-model="form.country"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-sm font-bold"
-                                                    required
-                                                />
-                                                <p
-                                                    v-if="form.errors.country"
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{ form.errors.country }}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-600 mb-2 uppercase tracking-wider"
-                                                    >Post Code *</label
-                                                >
-                                                <input
-                                                    v-model="form.post_code_1"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-sm text-sm"
-                                                    required
-                                                    placeholder="400001"
-                                                />
-                                                <p
-                                                    v-if="
-                                                        form.errors.post_code_1
-                                                    "
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{
-                                                        form.errors.post_code_1
-                                                    }}
-                                                </p>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
 
-                                <!-- Extra / Secondary Address -->
+                                <!-- Secondary Address -->
                                 <div
                                     class="bg-gray-50/20 p-6 md:p-8 rounded-[2rem] border border-gray-100/30"
                                 >
@@ -341,79 +248,20 @@ const submitOrder = () => {
                                         <div>
                                             <label
                                                 class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider"
-                                                >Street Address (Extra)</label
+                                                >Secondary Address</label
                                             >
-                                            <input
+                                            <textarea
                                                 v-model="form.address_2"
-                                                type="text"
+                                                rows="3"
                                                 class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all text-sm"
                                                 placeholder="Any secondary location details"
-                                            />
+                                            ></textarea>
                                             <p
                                                 v-if="form.errors.address_2"
                                                 class="mt-2 text-[10px] text-red-500 font-bold uppercase"
                                             >
                                                 {{ form.errors.address_2 }}
                                             </p>
-                                        </div>
-                                        <div
-                                            class="grid grid-cols-1 md:grid-cols-3 gap-6"
-                                        >
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider"
-                                                    >City (Extra)</label
-                                                >
-                                                <input
-                                                    v-model="form.city_2"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all text-sm"
-                                                />
-                                                <p
-                                                    v-if="form.errors.city_2"
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{ form.errors.city_2 }}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider"
-                                                    >State (Extra)</label
-                                                >
-                                                <input
-                                                    v-model="form.state_2"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all text-sm"
-                                                />
-                                                <p
-                                                    v-if="form.errors.state_2"
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{ form.errors.state_2 }}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <label
-                                                    class="block text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider"
-                                                    >Post Code (Extra)</label
-                                                >
-                                                <input
-                                                    v-model="form.post_code_2"
-                                                    type="text"
-                                                    class="w-full bg-white border border-gray-200 rounded-2xl px-5 py-3.5 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary transition-all text-sm"
-                                                />
-                                                <p
-                                                    v-if="
-                                                        form.errors.post_code_2
-                                                    "
-                                                    class="mt-2 text-[10px] text-red-500 font-bold uppercase"
-                                                >
-                                                    {{
-                                                        form.errors.post_code_2
-                                                    }}
-                                                </p>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

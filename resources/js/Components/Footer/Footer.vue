@@ -86,11 +86,11 @@ const currentYear = new Date().getFullYear();
                 <!-- Quick Links -->
                 <div>
                     <h3 class="text-white font-semibold mb-6">Quick Links</h3>
-                    <ul class="space-y-4">
+                    <ul class="space-y-3">
                         <li>
                             <Link
                                 :href="route('home')"
-                                class="text-sm text-gray-400 hover:text-primary transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5"
                             >
                                 Home
                             </Link>
@@ -98,7 +98,7 @@ const currentYear = new Date().getFullYear();
                         <li>
                             <Link
                                 :href="route('about')"
-                                class="text-sm text-gray-400 hover:text-primary transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5"
                             >
                                 About Us
                             </Link>
@@ -106,7 +106,7 @@ const currentYear = new Date().getFullYear();
                         <li>
                             <Link
                                 :href="route('category.index')"
-                                class="text-sm text-gray-400 hover:text-primary transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5"
                             >
                                 Shop Categories
                             </Link>
@@ -114,7 +114,7 @@ const currentYear = new Date().getFullYear();
                         <li>
                             <Link
                                 :href="route('contact')"
-                                class="text-sm text-gray-400 hover:text-primary transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5"
                             >
                                 Contact Us
                             </Link>
@@ -125,31 +125,31 @@ const currentYear = new Date().getFullYear();
                 <!-- Our Branches -->
                 <div>
                     <h3 class="text-white font-semibold mb-6">Our Branches</h3>
-                    <ul class="space-y-4 text-sm text-gray-400">
+                    <ul class="space-y-3">
                         <li>
                             <span
-                                class="block hover:text-white transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5 cursor-default"
                             >
                                 Nagercoil
                             </span>
                         </li>
                         <li>
                             <span
-                                class="block hover:text-white transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5 cursor-default"
                             >
                                 Marthandam
                             </span>
                         </li>
                         <li>
                             <span
-                                class="block hover:text-white transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5 cursor-default"
                             >
                                 Thirunelveli
                             </span>
                         </li>
                         <li>
                             <span
-                                class="block hover:text-white transition-colors"
+                                class="text-sm text-gray-400 hover:text-white transition-colors block py-0.5 cursor-default"
                             >
                                 Chennai
                             </span>

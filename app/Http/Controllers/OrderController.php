@@ -52,15 +52,8 @@ class OrderController extends Controller
             'name' => 'required|string|max:191',
             'email' => 'nullable|email|max:191',
             'phone' => 'required|string|max:191',
-            'country' => 'required|string|max:191',
-            'city_1' => 'required|string|max:191',
-            'state_1' => 'required|string|max:191',
-            'post_code_1' => 'required|string|max:255',
             'address_1' => 'required|string|max:191',
             'address_2' => 'nullable|string|max:191',
-            'city_2' => 'nullable|string|max:191',
-            'state_2' => 'nullable|string|max:191',
-            'post_code_2' => 'nullable|string|max:191',
             'remarks' => 'nullable|string',
         ]);
 
@@ -101,12 +94,11 @@ class OrderController extends Controller
         }
 
         $orderNumber = $orderPrefix . $nextIncrement;
-        $trackingNumber = $trackingPrefix . $nextIncrement;
+        // $trackingNumber = $trackingPrefix . $nextIncrement; // Removed since it's not in the production DB
 
         // Create the order
         $order = Order::create([
             'order_number' => $orderNumber,
-            'tracking_number' => $trackingNumber,
             'user_id' => $user->id,
             'items_count' => $itemsCount,
             'total_quantity' => $totalQuantity,
@@ -123,15 +115,8 @@ class OrderController extends Controller
             'name' => $validatedData['name'],
             'email' => $validatedData['email'],
             'phone' => $validatedData['phone'],
-            'country' => $validatedData['country'],
-            'city_1' => $validatedData['city_1'],
-            'state_1' => $validatedData['state_1'],
-            'post_code_1' => $validatedData['post_code_1'],
             'address_1' => $validatedData['address_1'],
             'address_2' => $validatedData['address_2'] ?? null,
-            'city_2' => $validatedData['city_2'] ?? null,
-            'state_2' => $validatedData['state_2'] ?? null,
-            'post_code_2' => $validatedData['post_code_2'] ?? null,
             'remarks' => $validatedData['remarks'] ?? null,
         ]);
 

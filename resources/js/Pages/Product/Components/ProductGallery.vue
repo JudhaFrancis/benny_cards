@@ -12,14 +12,23 @@ const mainImage = ref(props.product.photo);
 const productImages = ref([]);
 
 onMounted(() => {
-    if (props.product.images && props.product.images.length > 0) {
-        // Use the images from the database which have the correct live URL
-        productImages.value = props.product.images.map(img => img.image_path);
-        mainImage.value = productImages.value[0];
-    } else {
-        // Fallback to the original photo
-        productImages.value = [props.product.photo];
+    // Combine main photo with all gallery images
+    const images = [];
+    if (props.product.photo) {
+        images.push(props.product.photo);
     }
+    
+    if (props.product.images && props.product.images.length > 0) {
+        props.product.images.forEach(img => {
+            // Avoid duplicating main photo if it's already in the gallery
+            if (img.image_path !== props.product.photo) {
+                images.push(img.image_path);
+            }
+        });
+    }
+    
+    productImages.value = images;
+    // mainImage is already initialized to props.product.photo
 });
 
 const setMainImage = (image) => {

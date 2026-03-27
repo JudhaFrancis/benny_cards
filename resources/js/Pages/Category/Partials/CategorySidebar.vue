@@ -52,7 +52,7 @@ const emit = defineEmits(["toggleBrand", "updatePriceRange", "updateRating"]);
                                     : 'bg-gray-100 text-gray-400 group-hover:bg-primary/10 group-hover:text-primary'
                             "
                         >
-                            {{ categories.reduce((total, cat) => total + cat.products_count, 0) }}
+                            {{ categories.reduce((total, cat) => total + Number(cat.products_count), 0) }}
                         </span>
                     </Link>
 

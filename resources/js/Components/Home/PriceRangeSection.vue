@@ -49,7 +49,7 @@ defineProps({
                     </div>
 
                     <!-- Content -->
-                    <div class="px-5 pb-5 pt-0 sm:px-6 sm:pb-6 sm:pt-0 -mt-2 relative z-20 text-center flex flex-col items-center">
+                    <div class="px-5 pb-6 pt-5 sm:px-6 sm:pb-7 sm:pt-6 mt-0 relative z-20 text-center flex flex-col items-center">
                         <h3 class="text-sm sm:text-lg font-black text-gray-900 mb-1">
                             {{ range.label }}
                         </h3>
