@@ -71,34 +71,9 @@ class OrderController extends Controller
         $totalQuantity = $cartItems->sum('quantity');
         $totalAmount = $cartItems->sum('amount'); // amount in cart is already price * quantity
 
-        $dateString = now()->format('dmY');
-        $orderPrefix = "ORD-{$dateString}-";
-        $trackingPrefix = "TRK-{$dateString}-";
-
-        // Find the absolute latest order to determine the next increment, regardless of the date
-        $latestOrder = Order::orderBy('id', 'desc')->first();
-
-        $nextIncrement = 1;
-        if ($latestOrder) {
-            // Get the last number used (priority to order_number, fallback to tracking_number)
-            $lastNum = $latestOrder->order_number ?: $latestOrder->tracking_number;
-
-            if ($lastNum) {
-                // Extract the increment number from the latest string (e.g. ORD-05022026-X or TRK-05022026-X)
-                $parts = explode('-', $lastNum);
-                $lastIncrementValue = end($parts);
-                if (is_numeric($lastIncrementValue)) {
-                    $nextIncrement = intval($lastIncrementValue) + 1;
-                }
-            }
-        }
-
-        $orderNumber = $orderPrefix . $nextIncrement;
-        // $trackingNumber = $trackingPrefix . $nextIncrement; // Removed since it's not in the production DB
-
-        // Create the order
+        // Create the order with a temporary number
         $order = Order::create([
-            'order_number' => $orderNumber,
+            'order_number' => 'TEMP-' . time(),
             'user_id' => $user->id,
             'items_count' => $itemsCount,
             'total_quantity' => $totalQuantity,
@@ -109,6 +84,12 @@ class OrderController extends Controller
             'payment_status' => 'unpaid',
             'order_date' => now(),
         ]);
+
+        // Generate the final order number using the ID
+        $dateString = now()->format('dmY');
+        $orderNumber = "ORD{$order->id}-{$dateString}";
+
+        $order->update(['order_number' => $orderNumber]);
 
         // Save detailed customer info into `order_customer_details` table
         $order->customerDetail()->create([

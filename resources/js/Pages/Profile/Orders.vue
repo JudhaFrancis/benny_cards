@@ -183,7 +183,7 @@ const formatPrice = (price) => {
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-b-0"
                                         >
-                                            #{{ order.order_number }}
+                                            {{ order.order_number }}
                                         </td>
                                         <td
                                             class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-b-0"
