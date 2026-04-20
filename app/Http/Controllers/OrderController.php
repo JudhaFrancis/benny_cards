@@ -15,7 +15,8 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $orders = Order::where('user_id', Auth::id())
+        $orders = Order::with(['customerDetail', 'orderItems.product'])
+            ->where('user_id', Auth::id())
             ->latest('order_date') // Assuming we want newest first, usually based on date or created_at
             ->get();
 

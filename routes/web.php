@@ -15,7 +15,7 @@ use App\Models\PriceRange;
 Route::get('/', function () {
     $banners = Banner::where('status', 'active')->orderBy('id', 'desc')->get();
     $products = Product::where('status', 'active')
-        ->where('condition', 'new')
+        ->orderByRaw("CASE WHEN `condition` = 'new' THEN 0 ELSE 1 END")
         ->orderBy('id', 'desc')
         ->limit(8)
         ->get();
